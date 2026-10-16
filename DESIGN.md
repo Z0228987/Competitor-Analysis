@@ -64,26 +64,36 @@
 - **本轮改动**：不再是"3橙+4紫"的同色系堆叠，已改为 7 个分散在色相环上的颜色（橙/紫/蓝/青绿/橄榄/棕/藕紫），解决了旧版相邻色号区分度低的问题。
 - **遗留问题**：`#18a9e7`（蓝）、`#12caae`（青绿）两个颜色不在 AUMOVIO 官方橙/紫色板（`--o100~500` / `--p100~400`）内，属于品牌色板之外新增的颜色，与 8.6 节 Don't 红线冲突，但由于也被 Cash Flow Benchmark / Working Capital / Cash Flow Structure 三张图的系列色复用，牵连较广，暂未处理（见第 9 节）。
 
-### 2.3 高亮 / 选中状态——**已按用户最新要求简化**
+### 2.3 高亮 / 选中状态——**已按用户最新要求简化，并扩展到全部对比类图表**
 
-- **浅色表格**（`tr.sel`）：通过内联 CSS 变量 `--sel-color / --sel-bg1 / --sel-bg2` 注入该公司专属色，竖线+渐变底色+加粗文字。
+- **浅色表格**（`tr.sel`）：通过内联 CSS 变量 `--sel-color / --sel-bg` 注入该公司专属色，整行低透明度渐变底色+左侧色条+加粗文字（见 5.5 节，**本轮已改为圆角卡片+更低透明度**）。
 - **深色市场表格**（`.market-table tr.sel`）：同逻辑，变量名 `--sel-bg-dark`。
-- **柱状图**（Revenue Benchmark、Cash Flow Benchmark、Working Capital）：选中公司用其专属色，其余统一降为中性灰紫 `rgba(148,138,168,.38)` 或坐标轴文字变灰。
-- **气泡图**：选中公司描边加粗（3.5px vs 2px），填充色保持公司本色+透明度，未选中不降饱和（与柱状图逻辑不完全一致，但影响较小，未处理）。
+- **柱状图 X 轴公司名高亮**（统一规则，**本轮已补全到全部 5 张对比图**）：选中公司对应的 X 轴刻度文字变为该公司专属色 + 字重 800，其余公司名保持中性灰 `#756f86` + 常规字重。适用范围：
+  - Revenue Benchmark（柱）
+  - Cash Flow Benchmark（柱）
+  - **Margin Benchmark（柱，本轮补齐）**
+  - **Current Ratio / R&D Intensity / SG&A Intensity（共用 `sm()` 函数，本轮补齐）**
+  - 柱体本身：选中公司用其专属色，其余统一降为中性灰紫 `rgba(148,138,168,.38)`
+- **气泡图（Growth–Profitability Positioning）——本轮增强**：
+  - 未选中气泡：填充透明度降至 27%，描边变细灰色，视觉上退到背景
+  - 选中气泡：保持饱满专属色、加粗描边（3.5px）
+  - 气泡旁公司名标签：选中变大（11px）+ 加粗 + 深色描边，未选中变小（9px）+ 变淡，效果与柱状图的"公司名跟随高亮"语义等价
 - **股价趋势线**：非选中公司线条透明度降至 `4d`（约30%），选中公司保持实色加粗。
-- **Benchmark Heatmap 表格**：不做相对排名染色，只做"选中即整行高亮"（见 5.5 节），逻辑与浅色表格 `tr.sel` 完全一致。
+- **Benchmark Heatmap 表格**：不做相对排名染色，只做"选中即整行高亮"（见 5.5 节），**本轮已改为圆角+低透明度**，逻辑与浅色表格 `tr.sel` 一致但视觉更柔和。
 
 **已处理的历史反馈**：
 1. ✅ 深色模块文字偏暗——已将 `--dn2/--dn3/--dn4` 的取值改为白色系 `rgba(255,255,255,.96/.84/.66)`，Chart.js 配置项里原先用 `var(--dn2)` 这种 CSS 变量语法（Canvas 无法解析，会静默回退黑色）的 4 处已替换为对应的真实 rgba 值。
 2. ✅ "无法用专属色区分选中项时的退路方案"——按用户最新决定，**不再需要** `.focus-outline` 灰色描边方案，已从代码和本文档中移除；选中态统一只用"该行/该项整体高亮"的方式（见 2.3、5.5）。
 3. ✅ Benchmark Heatmap 不再使用相对排名三色（绿/黄/红）染色，`heat()` 函数固定返回空字符串，`.good/.mid/.bad/.na` 四个 CSS 类已删除（死代码清理）。
-4. ⚠️ **仍未处理**：同一张图表内紫+橙（或紫+橙+第三色）混用的问题（Cash Flow Benchmark、Working Capital、Cash Flow Structure、Revenue/Profit History 四张图），详见第 6、9 节。
+4. ✅ **本轮新增**：Margin Benchmark、Current Ratio、R&D Intensity、SG&A Intensity 四张图补齐了"选中公司名高亮"规则，与 Cash Flow Benchmark 等保持一致；Growth–Profitability Positioning 气泡图的选中/未选中对比度大幅增强。
+5. ✅ **本轮新增**：Benchmark Heatmap 高亮改为圆角卡片（`border-radius:10px`）+ 更低透明度背景（`--sel-bg` 透明度 `.09`，原为两段渐变 `.14→.05`），视觉上不再"拉满"，更柔和。
+6. ⚠️ **仍未处理**：同一张图表内紫+橙（或紫+橙+第三色）混用的问题（Cash Flow Benchmark、Working Capital、Cash Flow Structure、Revenue/Profit History 四张图），详见第 6、9 节。用户已明确表示**本轮不处理此项**（见第 9 节标注）。
 
 ---
 
 ## 3. 字体系统
 
-- **字体族**：`Inter, "Segoe UI", "Microsoft YaHei", sans-serif`（全站统一，无衬线）。
+- **字体族**：`Inter, "Segoe UI", "Microsoft YaHei", sans-serif`（全站统一，无衬线）——这是**HTML 文字**的字体，通过 `body{font-family:...}` 设置并由子元素继承。
 - **字号层级**（现状，未成体系，散落定义）：
 
 | 用途 | 字号 | 字重 |
@@ -99,6 +109,24 @@
 | 市场模块 metric 数字 | 20px | 继承 |
 
 **问题点**：字号梯度过密且随意（29/24/20/15/11/10px 之间没有统一比例），字重两极化（400 或 850/900，缺少中间层级如 600），数字没有使用等宽数字特性（`font-variant-numeric: tabular-nums`），财务表格数字对不齐。
+
+### 3.1 图表（Chart.js）文字字体——**本轮已修复的关键问题**
+
+**根因**：Chart.js 用 `<canvas>` 绘制图例/坐标轴文字，**不会继承页面 CSS 的 `font-family`**（CSS 字体继承只对真实 DOM 文字生效，对 Canvas 内部绘制的像素文字无效）。每张图表必须在自己的 JS 配置里显式声明字体，没写的会自动退回 Chart.js 内置默认值（**12px、Helvetica、`#666`灰**），这就是用户反馈"不同图表之间字的样子不太一样"的直接原因——7 张图表里原来只有 3 张认真写了 `font:{size:10}` + `color:'#756f86'`，其余（Margin Benchmark、Cash Flow Benchmark/Structure 的图例、Growth–Profitability 气泡图图例）用的是 Chart.js 默认字体。
+
+**修复方式**：在 Chart.js 初始化处统一设置**全局默认值**（而不是逐图补字体，避免再次遗漏）：
+
+```js
+Chart.register(ChartDataLabels);
+Chart.defaults.font.family = "Inter,'Segoe UI','Microsoft YaHei',sans-serif";
+Chart.defaults.font.size = 10;
+Chart.defaults.color = '#756f86';
+```
+
+**效果**：
+- 所有"没有单独指定字体"的图表（图例、坐标轴刻度等）现在自动使用 10px / Inter / `#756f86`，与全站 HTML 文字风格统一。
+- 已经单独配置过的样式（例如选中态公司名变专属色+加粗 800，见 2.3 节）**不受影响**——Chart.js 的局部配置优先级高于全局默认值，二者不冲突。
+- 这是**全局一次性设置**，以后新增图表不需要再逐个声明基础字体，只有需要特殊效果（如选中高亮）时才需要额外写局部配置。
 
 ---
 
@@ -174,10 +202,10 @@
 
 | 图表 | 系列与颜色 | 问题 |
 |---|---|---|
-| Revenue Benchmark（柱） | 选中=公司色，其余=`rgba(148,138,168,.38)`灰紫 | OK，单一强调色逻辑 |
-| Margin Benchmark（柱，3系列） | 紫`#4827af` + 浅紫`#a08ae5` + 橙`#ff6938` | ⚠️ 紫橙混用，撞色 |
-| Growth-Profitability 气泡图 | 每家公司各自专属色 | 7色混合，图例拥挤 |
-| Current Ratio / R&D / SG&A（3个单系列小图） | 选中=公司色，其余灰紫 | OK |
+| Revenue Benchmark（柱） | 选中=公司色，其余=`rgba(148,138,168,.38)`灰紫；X轴公司名选中高亮 | OK，单一强调色逻辑 |
+| Margin Benchmark（柱，3系列） | ✅已改为纯Purple阶梯：`--p400`主/`--p300`/`--p100`；X轴公司名选中高亮（本轮补齐） | 已解决撞色问题 |
+| Growth-Profitability Positioning（气泡图） | 各公司专属色（`COMPANY_COLORS`）；**本轮调整**：容器900px宽/480px高，四象限背景统一为紫橙双色阶梯（左上紫8%→右上紫20%，右下橙14%→左下橙5.5%），不再是绿/黄/紫/红四色混搭；选中气泡保持本色+粗描边，未选中透明度降至27%+细灰边；公司名标签随选中变大加粗 | 象限配色已统一，比例更紧凑 |
+| Current Ratio / R&D / SG&A（3个单系列小图，共用`sm()`函数） | 选中=公司色，其余灰紫；X轴公司名选中高亮（本轮补齐） | OK |
 | Cash Flow Benchmark（柱，3系列：OCF/ICF/FCF） | 紫 + 橙(.84) + 橙(.82,稍浅) | ⚠️ 紫+双橙，层次含混 |
 | Cash Flow Structure（柱，2系列：OCF margin/FCF margin） | 绿`#22c55e` + 紫`#4827af` | 绿色是全站唯一一处"非品牌色"系列色 |
 | Working Capital（柱，3系列：AR/AP/NWC） | 紫 + 橙 + 绿`#22c55e` | ⚠️ 紫橙绿三色混合 |
@@ -275,8 +303,14 @@ font-feature-settings: "tnum" 1;
 - [x] Benchmark Heatmap 去除相对排名染色，改为仅"选中整行高亮"；`.good/.mid/.bad/.na` 死代码已删除
 - [x] 选中态退路方案 `.focus-outline` 已按用户决定废弃并从代码中移除（不再需要）
 - [x] KPI/表格/市场模块数字已有 `font-variant-numeric: tabular-nums`
+- [x] **Executive Signals 模块位置调整**：从"持仓分析"区块后移到 Executive Overview KPI 卡片正下方，决策结论前置；底色从专属深紫+红渐变插卡（`.insight`）改为与其他面板一致的透明/白底 `.panel`；文字放大（标题11→14px，说明10→12px，序号图标34→42px）
+- [x] **年份下拉框过滤**：Reporting period 下拉框只显示 2026Q1 及以后的期间（`pk(period)>=20261`），2025年及更早数据不再出现在选择器里，同比计算不受影响
+- [x] **Margin Benchmark / Current Ratio / R&D Intensity / SG&A Intensity 补齐"选中公司名高亮"**：与 Cash Flow Benchmark 一致，X轴公司名选中变专属色+加粗，其余保持灰色常规字重
+- [x] **Growth–Profitability Positioning 气泡图增强**：未选中气泡降低透明度+细灰边退到背景，选中气泡保持饱满色+粗边框，公司名标签随选中变大/变小；容器比例收窄为900×480px；四象限背景统一为紫橙双色阶梯，不再有绿/黄等品牌外颜色
+- [x] **Benchmark Heatmap 选中态视觉优化**：由"满宽渐变+直角"改为"圆角卡片+更低透明度"（`--sel-bg` 透明度 `.09`），视觉更柔和
+- [x] **全站图表字体统一**：Chart.js 初始化处新增 `Chart.defaults.font.family/size/color` 全局默认值（Inter / 10px / `#756f86`），修复了 Margin Benchmark、Cash Flow Benchmark/Structure 图例、Growth–Profitability 气泡图图例此前使用 Chart.js 内置默认字体（12px Helvetica灰）导致的"各图表字体不一致"问题
 - [ ] `:root` 角色变量重命名（8.1，`--dn2/3/4` 等仍是旧命名，只是取值已改）——优先级低，暂缓
-- [ ] Margin Benchmark 已改为纯 Purple 阶梯（✅ 已完成）；但 **Cash Flow Benchmark / Working Capital / Cash Flow Structure / Revenue-Profit History 四张图仍是紫+橙+蓝/青绿混用**，未按 8.2 方案收敛（下一轮重点）
-- [ ] `COMPANY_COLORS` 里的 `#18a9e7`（蓝）、`#12caae`（青绿）不在官方色板内，是否替换为橙/紫色阶需与用户确认（替换会影响区分度，需权衡）
+- [ ] **Cash Flow Benchmark / Working Capital / Cash Flow Structure / Revenue-Profit History 四张图仍是紫+橙+蓝/青绿混用**，未按 8.2 方案收敛——**用户已明确表示本轮不处理此项**，保留现状
+- [ ] `COMPANY_COLORS` 里的 `#18a9e7`（蓝）、`#12caae`（青绿）不在官方色板内——同上，用户未要求处理，暂缓
 - [ ] 圆角/阴影/间距统一阶梯（`--radius-xs/sm/md/lg`）——未开始，优先级低
 
