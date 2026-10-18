@@ -1,5 +1,6 @@
 # AUMOVIO 竞争情报项目 — 完整知识文档
-> 最后更新：2026-10 | 适用于下次对话直接喂给 AI 使用
+> 最后更新：2026-10-19 | 适用于下次对话直接喂给 AI 使用
+> 本次更新：Executive Signals 重构、全局玻璃质感 UI、可折叠侧边栏、手动录入三板块（股权/员工/产品线）、A股真实数据预置、CSV 导入体验修复
 
 ---
 
@@ -10,18 +11,20 @@
 | 仓库 | 用途 |
 |---|---|
 | `financial_auto_project_v3`（本地） | 数据处理流水线：PDF下载→标准化→瘦身→归档 |
-| `Z0228987/Competitor-Analysis`（GitHub） | 前端看板：`index.html` + `data/` 目录下的CSV文件，GitHub Pages 托管 |
+| `Z0228987/Competitor-Analysis`（GitHub） | 前端看板：`index.html` + `data/` 目录下的 CSV，GitHub Pages 托管 |
+
+**工作流约定**：前端改动直接在本地 workspace 改 `index.html`（以 GitHub 上最新版为基准下载），确认后整体推回仓库根目录即上线（Pages 自动生效）。本地与线上版本可能存在时间差，改版前先核对 `raw.githubusercontent.com` 上的最新文件。
 
 ### 覆盖公司（7家）
 
 | 公司 | 交易所 | 币种 | 备注 |
 |---|---|---|---|
 | Aumovio | 欧洲 | EUR | 德国公司，IFRS准则，季报PDF手动放入根目录 |
-| BTL | 深交所 | CNY | |
-| Baolong 宝龙 | 深交所 | CNY | |
-| HASCO 华域 | 上交所 | CNY | |
+| BTL 伯特利 | 深交所 | CNY | |
+| Baolong 保隆 | 深交所 | CNY | |
+| HASCO 均胜/华域 | 上交所 | CNY | |
 | Luxshare 立讯 | 深交所 | CNY | |
-| NASN 耐世特 | 港交所 | HKD | 港股，单独脚本处理 |
+| NASN | 港交所 | HKD | 2026-08 上市，报表货币为人民币，走 convert_nasn.py 单独处理 |
 | Tuopu 拓普 | 上交所 | CNY | |
 
 ---
@@ -40,53 +43,170 @@ PATH = {
 }
 ```
 
-> ⚠️ **重要**：`init()` 函数里用 `fc=PATH.fin.length` 动态计算偏移量，
-> 不能硬编码 `x[0].concat(x[1])`，否则所有后续变量全部错位，导致
-> Trend / Capital Market / Heatmap / Cash Flow 全部无数据。
+> ⚠️ **重要**：`init()` 用 `fc=PATH.fin.length` 动态计算偏移量，不能硬编码
+> `x[0].concat(x[1])`，否则后续变量全部错位，Trend/Capital Market/Heatmap/Cash Flow 全部无数据。
 
 ### 汇率换算规则
 
-- AUMOVIO（EUR）：用户界面设置的 `eurRate`（默认 8.35）
-- NASN（HKD）：用户界面设置的 `hkdRate`（默认 0.855）
+- AUMOVIO（EUR）：界面 `eurRate` 输入框（默认 8.35）
+- NASN（HKD）：界面 `hkdRate` 输入框（默认 0.855）
 - 其余公司：固定 1（本身人民币）
 
-### 8个看板模块
+### 看板模块（11 个，页面自上而下顺序）
 
-| 模块 | 数据来源 | 核心指标 |
-|---|---|---|
-| Executive Overview | `fin` + `sales` + `profit` | KPI卡片、营收/利润趋势、气泡图、Executive Signals |
-| Profitability | `fin` | 营收对标、毛利率/营业利润率/净利率 |
-| Historical Trends | `sales` + `profit` | 年度/季度历史走势 |
-| Working Capital | `fin` | AR/AP/净营运资本 |
-| Capital Markets | `market` + `marketHistory` | 股价、市值、PE、PB、YTD涨幅 |
-| Cash Flow | `fin` | OCF/ICF/FCF对标，现金转化率 |
-| Liquidity & Efficiency | `fin` | 流动比率、研发强度、SG&A强度 |
-| Benchmark Heatmap | `fin` | 同业热力图（相对排名着色） |
+| # | 导航/section id | 数据来源 | 核心内容 |
+|---|---|---|---|
+| 01 | Executive Overview `overview` | fin+sales+profit | Hero（公司/季度/汇率控制）+ **Executive Signals（8 张大数字卡）** |
+| 02 | Historical Trends `history` | sales+profit | 年度(FY)/季度(Q)营收与净利润走势 |
+| 03 | Profitability `benchmark` | fin | 营收对标、毛利率/营业利润率/净利率、增长-盈利气泡图 |
+| 04 | Working Capital `working-capital` | fin | AR/AP/净营运资本 |
+| 05 | Positioning `positioning` | fin | 估值定位 |
+| 06 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成两张环形图（手动录入） |
+| 07 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + ASP 线（手动录入） |
+| 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 |
+| 09 | Cash Flow `cashflow` | fin | OCF/ICF/FCF、现金转化率 |
+| 10 | Liquidity & Efficiency `liquidity` | fin | 流动比率、研发强度、SG&A 强度 |
+| 11 | Benchmark Table `heatmap` | fin | 6 项指标同业相对排名热力图 |
+
+### Executive Signals（2026-10-19 重构后的首屏核心）
+
+- 位置：Hero 之后、其他模块之前，是**打开页面看到的第一组数字**
+- 8 张卡，按「规模 → 盈利链 → 现金 → 资产负债」排列：
+  1. **Revenue scale（主卡，占2列，48px 大数字，单位 B CNY）**
+  2. Gross margin → 3. Operating margin → 4. Net margin → 5. Cash conversion → 6. Working capital → 7. R&D intensity → 8. Current ratio
+- 每张卡：大数字 + 排名 pill（`#1 / 7`，第一名紫色填充）+ vs 同业中位数偏离（pp）+ 一句话解读 + 底部排名进度条（#1 满格→#7 空格）
+- 异常 flag（橙色）：`REVENUE DOWN` / `OPERATING LOSS` / `NET LOSS` / `OCF < PROFIT` / `BELOW 1.0x`
+- 颜色语义只有一条线：**紫=常态、橙=警示、青绿=正向**
+- 原 KPI 卡行（Peer metric detail）已删除，其独有指标（毛利率/营业利润率/流动比率）已并入信号卡；Executive 区只保留一个通栏写字区（`data-note-key="overview-notes"`，旧 signals-notes 会自动迁移）
 
 ### 核心计算公式
 
 | 指标 | 公式 | 备注 |
 |---|---|---|
 | 毛利率 | `gross / revenue` | gross 优先取 IS_GROSS_PROFIT，没有则 revenue-\|cost\| |
-| 营业利润率 | `op / revenue` | |
-| 净利率 | `np / revenue` | |
+| 营业利润率 / 净利率 | `op / revenue`、`np / revenue` | |
 | OCF Margin | `ocf / revenue` | |
 | 流动比率 | `ca / cl` | |
-| 研发强度 | `rnd / revenue` | |
-| SG&A强度 | `(\|sell\|+\|admin\|) / revenue` | |
+| 研发强度 / SG&A强度 | `rnd / revenue`、`(\|sell\|+\|admin\|) / revenue` | |
 | 自由现金流 | `ocf + icf` | ⚠️近似值，非严格定义 |
 | 同比增长率 | `本期/去年同期 - 1` | |
 | YoY pp | `本期比率 - 去年同期比率` | 单位百分点，非增长率 |
 
 ### ⚠️ 3个已知计算"坑"
 
-1. **FCF 是近似值**：用 `ocf+icf` 代替严格的 `ocf-capex`，投资活动净额里包含并购等非资本开支项目
-2. **NASN 净利润替代**：净利润缺失时用 `-|税前亏损|` 近似，不是真实净利润
-3. **热力图是相对排名**：颜色是当期所有公司的三分位排名，不是绝对达标标准
+1. **FCF 是近似值**：用 `ocf+icf` 代替严格的 `ocf-capex`
+2. **NASN 净利润替代**：净利润缺失时用 `-|税前亏损|` 近似
+3. **热力图是相对排名**：颜色是当期所有公司的排名着色，不是绝对达标标准
 
 ---
 
-## 三、数据处理流水线（run.bat）
+## 三、手动录入板块（2026-10-19 新增）
+
+### 3.1 三个板块与数据模型
+
+所有数据存浏览器 localStorage，键格式 `公司代码|季度`（如 `HASCO|2026Q2`），**编辑后才落盘；未编辑时显示预置默认值（MANUAL_SEED），不写存储**。
+
+| 板块 | localStorage 键 | 值结构 |
+|---|---|---|
+| Shareholding Structure（股权环形图） | `ciEquityStructure` | `{"HASCO|2026Q2":[{n:"均胜集团",v:33.57,c:-0.42},...]}`，c=环比 pp 变动，可省略 |
+| Headcount Mix（员工构成环形图） | `ciHeadcountMix` | 同上（c 不用），单位：人数 |
+| 产品线名称 | `ciProductLineName` | `{"HASCO":"Thermal management module"}`，按公司记忆 |
+| 产品线数据 | `ciProductLineData` | `{"HASCO|2026Q2":{rev:531.4, price:3760}}`，rev=百万元CNY，price=ASP 元 |
+
+交互细节：
+- 顶部全局「公司+季度」选择器驱动三个板块；股权/员工板块另有**独立期间下拉 `#ownPeriod`**（= 全局期 ∪ 该公司已录期）
+- 员工构成是**年报口径**：自动显示 ≤ 当前期的最近一个有数据年份（`hcPeriod` 只认合计>0 的期），副标题显示 `FYxxxx annual report · N employees · YoY%`
+- 股权图例带变动徽标：紫色 `+` 增持、珊瑚色 `−` 减持；TOTAL ≠ 100% 标警示色
+- 每张卡 Edit 展开行编辑器（名称+数值，可增删行、Clear quarter）
+- 产品线季度轴 = 全局下拉选项 ∪ 已录数据键（下拉里没有的季度也能显示）；已录季度以 chip 展示、可单删
+
+### 3.2 CSV 数据契约（Import / Export / Template 共用）
+
+```
+block,company,period,name,value,revenue,price,change
+equity,HASCO,2026Q2,均胜集团,33.57,,,-0.42
+headcount,HASCO,2025Q4,生产人员,35259,,,
+productline,HASCO,2026Q2,热管理模块,,531.4,3760,
+```
+
+- `block`：`equity` / `headcount` / `productline`（也接受中文：股权/员工/产品线）
+- `company`：支持中文与代码，自动映射（ALIAS 表）：均胜电子→HASCO、立讯精密→Luxshare、拓普集团→Tuopu、保隆科技→Baolong、伯特利→BTL、安波福→Aumovio、拿森→NASN；也接受 `600699`/`600699.SH` 等代码
+- `change`：股权环比 pp 变动，可留空；**首期必须留空**（否则显示假变动）
+- 文件编码：UTF-8（带 BOM 也可）；自动识别 GBK（Excel 另存不会乱码）
+- 同一 `block+company+period` 的导入会**整组替换**已有数据；Export 会导出预置+手录的全部数据（含 SEED）
+
+### 3.3 导入体验（2026-10-19 修复）
+
+- 导入成功后**自动跳转**到有数据的公司+最新期间并平滑滚动到板块（`applyImport`），toast 提示 `Imported 262 rows · 5 companies · showing BTL 2026Q2`
+- 板块标题下有一排**公司 chips**（`#coChips`）：有点 = 该公司有数据（当前选中高亮紫色），虚线灰 = 无数据，点击即切换公司
+- 选中公司无数据时空态会提示 `data on file: 2025Q4 / 2026Q1 / 2026Q2`（该公司其他有数据的期间）
+- `#company` 下拉为空时（如 file:// 打开、data CSV 加载失败）会用公司池兜底填充，手动板块仍可用
+
+### 3.4 预置数据（MANUAL_SEED，2026-10-19 采集）
+
+| 数据 | 覆盖 | 来源 |
+|---|---|---|
+| 股权结构 | 5 家A股 × 2024Q4–2026Q2 共 7 期，前五大股东+其他股东（含 pp 变动） | 东方财富 datacenter `RPT_F10_EH_HOLDERS`（十大股东历史） |
+| 员工构成 | FY2024 + FY2025 年报口径，按职能（生产/销售/技术研发/财务/行政） | 年报 PDF（`pdf.dfcfw.com/pdf/H2_{art_code}_1.pdf`，pdfplumber 抽"专业构成"表），明细合计与报告总人数全部核对一致 |
+
+- ⚠️ **知了财报有人机验证墙**（curl 和 headless 浏览器都过不去），以后别再尝试直接抓它
+- PDF 解析锚点：必须以 **"专业构成类别"** 为准（"专业构成"首次出现在小节标题里会误匹配）；跨页表拼接 idx..idx+3 页
+- 生成脚本在本地 `.workbuddy/tmp/em/`（`build_equity.py` / `parse_hc.py` / `make_seed.py`），输出 `05_output/manual_blocks/manual_blocks_A股股权与员工.csv`（262行）+ `manual_blocks_template.csv`
+- MANUAL_SEED 直接内联在 index.html 里（`window.MANUAL_SEED`），**更新数据 = 重新生成 seed 并替换该行**
+
+---
+
+## 四、设计系统（2026-10-19 版，玻璃质感）
+
+### CSS 变量（`:root`，9 阶 ramp，低饱和）
+
+```
+紫(主)  --p50 #EEEDFE / --p400 #7F77DD / --p600 #534AB7 / --p800 #3C3489 / --p900 #26215C
+珊瑚(警示/下跌) --c200 #F0997B / --c400 #D85A30 / --c600 #993C1D
+青绿(正向) --t200 #5DCAA5 / --t400 #1D9E75 / --t600 #0F6E56
+金(强调) --a200 #FAC775 / --a400 #BA7517
+蓝 --b400 #378ADD
+文字 --ink #2B2750 / --text #4A4763 / --muted #6E6B84 / --faint #918DA6
+--up=青绿 --down=珊瑚（涨跌语义）
+```
+
+### 玻璃配方（所有卡片统一）
+
+```css
+background: linear-gradient(180deg,rgba(255,255,255,.76),rgba(255,255,255,.54));
+backdrop-filter: blur(22px) saturate(145%);
+border: 1px solid rgba(255,255,255,.78);      /* 白色高光描边 */
+box-shadow: 0 22px 44px -30px rgba(43,39,80,.42), inset 0 1px 0 rgba(255,255,255,.86);
+```
+页面 body 铺三团 radial 渐变色雾（紫/青/珊瑚）+ `#F6F5FB` 底色，颜色透过半透明卡片渗出 = 透明感来源。阴影一律极浅。
+
+### 公司色（JS `COMPANY_COLORS`，与 CSS ramp 同源）
+
+```
+Aumovio #D85A30 · Luxshare #534AB7 · HASCO #378ADD · Tuopu #1D9E75
+Baolong #BA7517 · BTL #D4537E · NASN #639922
+```
+工具函数：`companyColor(c)`、`companyTint(c, alpha)`（转 rgba 半透明背景）。指标类图表（非公司对比）用同色相深浅阶梯；公司对比类图表颜色=身份，允许多彩。
+
+### 布局
+
+- `.app` = grid `246px + 1fr`；侧边栏 sticky 100vh，玻璃底
+- **可折叠目录**：`#sideToggle` 手柄吸附侧栏右缘；`body.nav-collapsed` 时 246px→78px（grid 过渡动画），导航只显示 01–09 数字 chip，hover 弹出 `data-label` 浮标；状态存 `localStorage('ciNavCollapsed')`
+- ≤960px：侧栏变顶部横向滚动条，手柄隐藏；`.side/.nav` 必须有 `min-width:0`，否则横向导航会把页面撑宽（已踩过）
+- 侧栏品牌 logo 是白字 → `.brand` 用紫渐变底（p600→p900）
+- 侧栏导航顺序与页面 section 顺序一致（11 项），scrollspy 用 IntersectionObserver 同步选中
+
+### 历史色板（官方 AUMOVIO Power BI JSON，备用权威来源）
+
+`dataColors` 32 色与语义色（bad=#D82822 / good=#32CB70 / neutral=#FFD600）仍有效，改色优先从这里取值；**不要靠截图 OCR 识别色值（不可靠，已废弃）**。当前版本色板与官方 32 色是两套并行体系：CSS ramp 是主动设定的低饱和体系，官方色板留作品牌校准参考。
+
+---
+
+## 五、数据处理流水线（run.bat / run_pipeline.py）
+
+> ⚠️ **版本差异提示（2026-10-18 核实）**：本地 v3 副本的 `03_scripts/` 共 12 个脚本，
+> `run_pipeline.py` 实际到 **Step 4d 结束**，输出目录是 `02_processed_data/dashboard_data/`；
+> 未找到下述 Step 4e/4f 与 `dashboard_ready/`。以另一台机器上的最新版本为准，此节描述以那台机器为权威。
 
 ### 完整步骤
 
@@ -104,14 +224,10 @@ run.bat
         ├── Step 4c：extract_aumovio.py → AUMOVIO季报PDF → aumovio_financials.csv
         ├── Step 4d：build_dashboard_tables.py
         │           → fact_sales_history.csv + fact_profit_history.csv
-        ├── Step 4e：filter_dashboard_fields.py
+        ├── Step 4e：filter_dashboard_fields.py        （以另一台机器版本为准）
         │           → dashboard_ready/（瘦身版：8列，按item_code白名单过滤）
-        │           → dashboard_ready/fact_financials_combined.csv（两表合并）
-        ├── Step 4f：archive_dashboard_history.py
-        │           → A. 扫描 final_facts/_history/<季度>/ → 瘦身 → 归档
-        │           → B. 叠加本季度 dashboard_ready/ 数据
-        │           → C. 写出 dashboard_history/*_history.csv（本地累积备份）
-        │           → D. 回写到 dashboard_ready/fact_financials_combined.csv（含全历史）
+        ├── Step 4f：archive_dashboard_history.py      （以另一台机器版本为准）
+        │           → 历史累积 → dashboard_ready/fact_financials_combined.csv（含全历史）
         └── Step 5：质量报告
 ```
 
@@ -120,189 +236,118 @@ run.bat
 ```
 【自动化（run.bat）】
 PDF（深交所/上交所）→ raw_extracted/ → fact_financials_all.csv ┐
-PDF（AUMOVIO，手动放入根目录）→ aumovio_financials.csv        ┤
-                                                                ├→ Step 4e 瘦身
-final_facts/_history/<Q>/ （手动归档上季度数据）               ┘   → Step 4f 历史累积
-                                                                    → dashboard_ready/fact_financials_combined.csv
+PDF（AUMOVIO，手动放入根目录）→ aumovio_financials.csv        ┤→ 瘦身/合并
+final_facts/_history/<Q>/（手动归档上季度）                    ┘→ fact_financials_combined.csv
 
 【人工维护（run.bat 不覆盖）】
 GitHub workflow 自动抓取 → market_data_verified.csv + market_history.csv
 
+【手动录入（不走流水线，直接在看板录入/CSV导入）】
+股权结构 / 员工构成 / 产品线 → 浏览器 localStorage（可导出CSV备份）
+
 【部署】
-dashboard_ready/*.csv + fact_sales_history.csv + fact_profit_history.csv
-→ 手动推送到 Competitor-Analysis/data/ 目录 → GitHub Pages
+combined + sales_history + profit_history → 手动推送到 Competitor-Analysis/data/ → GitHub Pages
 ```
 
 ---
 
-## 四、关键文件说明
+## 六、关键文件说明
 
 ### 本地项目（financial_auto_project_v3）
 
 | 文件/目录 | 说明 |
 |---|---|
-| `00_source_registry/mapping_display_4.csv` | 科目映射表：各公司原始科目名 → 标准 item_code |
-| `00_source_registry/item_code_mini.xlsx` | HTML 白名单：25个 item_code，只有这些会进入 dashboard_ready/ |
-| `00_source_registry/fact_sales_history.csv` | 手工补的历史年度营收（2021~当季前） |
-| `02_processed_data/final_facts/` | 完整大表（所有科目，保留用于 build_dashboard_tables） |
-| `02_processed_data/final_facts/_history/<Q>/` | 手动归档的历史季度完整大表 |
-| `02_processed_data/dashboard_ready/` | 瘦身版（推送到GitHub的那份） |
-| `02_processed_data/dashboard_history/` | 本地历史累积备份（不推送） |
-| `03_scripts/filter_dashboard_fields.py` | Step 4e：行过滤（白名单）+ 列裁剪（8列）+ 合并两表 |
-| `03_scripts/archive_dashboard_history.py` | Step 4f：历史归档 + 回写全历史到 dashboard_ready/ |
+| `index.html` | **看板前端最新工作副本**（改完推 GitHub 根目录） |
+| `data/` | 从 GitHub 下载的 5 个 CSV 镜像，供本地起 http 服务预览 |
+| `00_source_registry/mapping_display_4.csv` | 科目映射表：原始科目名 → 标准 item_code |
+| `00_source_registry/fact_sales_history.csv` | 手工补的历史年度营收 |
+| `02_processed_data/final_facts/` | 完整大表（所有科目） |
+| `02_processed_data/dashboard_data/` | 本地 Step 4d 输出（sales/profit_history 等） |
+| `05_output/manual_blocks/manual_blocks_A股股权与员工.csv` | 预置数据的 CSV 版（262行），可 Import 进看板 |
+| `05_output/manual_blocks/manual_blocks_template.csv` | 空模板 |
+| `.workbuddy/tmp/em/` | 股权/员工数据采集脚本（东财+年报PDF），可复跑 |
+| `.workbuddy/tmp/index_before_v*.html` | 每轮 UI 改版前的备份 |
 
-### dashboard_ready/ 产出的8列结构
+### dashboard 8 列结构
 
 ```
 company | statement_type | period | item_code | item | item_en | value | currency
 ```
-
-- `currency`：AUMOVIO=EUR，NASN=HKD，其余=CNY（filter 脚本自动补）
-- 去重键：`(company, statement_type, period, item_code)`
+- `currency`：AUMOVIO=EUR，NASN=HKD，其余=CNY；去重键 `(company, statement_type, period, item_code)`
 
 ### GitHub 仓库（Competitor-Analysis/data/）
 
 | 文件 | 来源 | 说明 |
 |---|---|---|
-| `fact_financials_combined.csv` | run.bat → Step 4f 回写 | **主数据文件**，含全历史所有公司 |
-| `fact_sales_history.csv` | run.bat → Step 4d | 营收历史趋势 |
-| `fact_profit_history.csv` | run.bat → Step 4d | 利润历史趋势 |
-| `market_data_verified.csv` | GitHub workflow | 股价快照（真实数据） |
-| `market_history.csv` | GitHub workflow | 每日收盘价历史 |
-| `aumovio_financials.csv` | ~~已弃用~~ | HTML 已改为读 combined，此文件不再需要更新 |
-| `fact_financials_all.csv` | ~~已弃用~~ | 同上 |
+| `fact_financials_combined.csv` | 流水线 | **主数据文件**（⚠️ 当前线上版本仅 459 行/19 个 item_code，A股只有 2025Q1/Q2/Q4+2026Q1/Q2，缺 2025Q3 与 2024 全年，历史趋势靠 sales/profit 两张历史表支撑） |
+| `fact_sales_history.csv` / `fact_profit_history.csv` | 流水线 | 年度+季度历史趋势 |
+| `market_data_verified.csv` / `market_history.csv` | GitHub workflow | 股价（每日自动更新） |
 
 ---
 
-## 五、每季度操作手册
+## 七、每季度操作手册
 
 ```
 1. 把新季度 PDF 放入根目录（AUMOVIO）或 01_raw_data_*/ 目录（A股/港股）
 2. 把上季度的 final_facts/*.csv 手动归入 final_facts/_history/<上季度>/
 3. 双击 run.bat（Step 0 加 --download 参数才会自动下载 PDF）
-4. 检查 terminal 输出，确认 Step 4e/4f 正常完成
-5. 把以下文件推送到 GitHub Competitor-Analysis/data/：
-   - fact_financials_combined.csv（含全历史）
-   - fact_sales_history.csv
-   - fact_profit_history.csv
-6. GitHub workflow 会自动更新 market_data_verified.csv 和 market_history.csv
+4. 检查 terminal 输出，确认各 Step 正常完成
+5. 推送 data/ 三个财务 CSV 到 GitHub；workflow 自动更新股价
+6. 手动板块数据（股权/员工）：新季度直接在看板上选公司+季度录入，
+   或更新 MANUAL_SEED + 重新生成 CSV；录完 Export CSV 留备份
+7. index.html 有改动时一并推送根目录
 ```
 
 ---
 
-## 六、已知问题与待办
+## 八、已知问题与坑
+
+### 流水线 / 数据
 
 | 问题 | 状态 | 说明 |
 |---|---|---|
-| `venv` 损坏 | ⚠️ 待修复 | `venv\Scripts\python.exe` 指向不存在路径，目前 fallback 用系统 python，建议重建 venv |
-| 股价数据仍是人工维护 | ⚠️ 部分自动化 | GitHub workflow 已自动抓取，但 workflow 逻辑不在 run.bat 里，是独立维护 |
-| AUMOVIO 主表合并来源不明 | ⚠️ 待确认 | `aumovio_financials.csv` 主表（含多季度）不清楚是哪个脚本合并的，已弃用此文件，改用 combined |
-| market_data.csv 是假数据 | ✅ 已知 | 标注 ILLUSTRATIVE_DEMO，HTML 不读它，已无影响 |
-| FCF 口径不严格 | ✅ 已知 | 用 ocf+icf 近似，团队内部已知晓 |
+| `venv` 指向旧项目 | ⚠️ | 跑脚本用 `PYTHONPATH=旧venv/Lib/site-packages` + 管理版 python |
+| mapping 中 row_type='header' 不一定是真标题 | ✅已处理 | 标准化代码只删无数值的 header 行，勿回退 |
+| A股 Q1 对比列是上年同期数但列头写期末日期 | ✅已处理 | 非 BS 报表强制 derive_comparison_period |
+| 半年度列头（"2026年半年度"→Q2）解析 | ✅已处理 | 否则 IS/CF 期间整体左移一期 |
+| combined 表期间覆盖不全 | ⚠️待补 | 缺 2025Q3/2024 全年；A股Q1 数据看板未同步 |
+| NASN 源头缺 2025Q2/2026Q2 | ⚠️ | 线上历史表有，本地 workspace 无法复现 |
+| 净利润口径 | ⚠️ | combined 主表 IS_NP（含少数股东）vs 历史表归母优先，两处不同口径 |
+| CCC 分析层（DSO/DPO/DIO） | 📝设计稿 | `05_output/analysis_layer_design.md`；依赖的 BS_CA_INV 等不在 19 个 item_code 白名单，落地需先扩白名单 |
+| `00_source_registry/mdna_notes.csv` / `product_lines.csv` | ⚠️ | 实为 xlsx 改后缀，CSV 读取会报错 |
+| 知了财报 | 🚫 | 有人机验证墙，抓不到，用东财 F10 + 巨潮/东财年报 PDF 替代 |
+
+### index.html 前端坑（改版时注意）
+
+| 坑 | 说明 |
+|---|---|
+| 全局函数名 = 元素 id | `function kpis()` 与 `id="kpis"` 同名时，全局绑定被函数占用，`kpis.innerHTML` 赋到函数对象上，**静默不渲染**。同类 id 一律 `document.getElementById()` 访问 |
+| `[hidden]` 被 display 覆盖 | `.pie-empty`/`.entry` 等 `display:grid/flex` 的元素必须配 `.xxx[hidden]{display:none}`，否则 hidden 属性失效、空态常显 |
+| 移动端横向溢出 | flex/grid 子项要 `min-width:0`（.side/.nav 踩过） |
+| 图例 Total 行 | `.pie-legend li.lg-total` 需单独 `grid-template-columns`（4列图例与2列 Total 不同构） |
+| 全 0 模板行 | 股权/员工首次渲染给 0 值模板行，判断"有数据"必须按合计>0（`blockHas`/`hcPeriod`），否则 0 行抢占期间选择 |
+| 变动基准 | 股权环比基准取上一期**全部十大股东**映射，避免"进入前五"被误判为增持；首期 change 必须为空 |
+| 主应用异步填充下拉 | 手动板块脚本用 MutationObserver 监听 `#company/#period` 的 childList 重建后重渲染 |
 
 ---
 
-## 七、index.html UI 改动记录（本次对话完成）
+## 九、变更记录
+
+### 2026-10-19（本轮）
 
 | 改动 | 详情 |
 |---|---|
-| 数据源统一 | `PATH.fin` 从两文件改为 `['data/fact_financials_combined.csv']` |
-| `init()` 修复 | 用 `fc=PATH.fin.length` 动态计算偏移量，修复所有模块数据错位问题 |
-| 图表配色统一 | 红→紫渐变：Luxshare `#6837d8`，HASCO `#9b6ef0`，Tuopu `#4827af`，Baolong `#c44bff`，BTL `#ff7840`，NASN `#b07aff` |
-| 表格选中行高亮 | 左侧红线 + 公司名红色 |
-| 导航 active 同步 | scrollspy（IntersectionObserver）随滚动自动更新左侧导航选中状态 |
-| Note 区域简化 | 去掉 "MANAGEMENT NOTE" 标题、h4 子标题、空白 head 区域；Clear 按钮绝对定位在右上角，hover 时显示 |
-| Note placeholder 清空 | 空白时不显示 "Add interpretation..." 提示文字 |
+| Executive Signals 前移重构 | 8 张大数字卡（营收主卡 2 列 48px），排名 pill + vs 中位数偏离 + 排名进度条 + 异常 flag；KPI 行删除、指标并入；Executive 区只留一个写字区 |
+| 全局玻璃质感 UI | 9 阶低饱和 ramp + 半透明白卡 + backdrop blur + 三团色雾底；Capital Markets 从深色 Bloomberg 风改为浅色玻璃；JS 公司色/图表网格色同步 remap |
+| 可折叠侧边栏 | 手柄 + 78px 细条态 + 数字 chip + hover 浮标 + localStorage 记忆；导航重排为与页面顺序一致（11 项） |
+| 手动录入三板块 | 股权/员工双环形图 + 产品线柱线混合图；行编辑器、独立期间下拉、chip 删除、Export/Import/Template |
+| A股真实数据预置 | 5 家 × 7 期股权（含 pp 变动）+ FY2024/2025 员工构成；来源东财 F10 + 年报 PDF，全部核对 |
+| CSV 导入体验修复 | 导入后自动切到有数据的公司+最新期间并滚动定位；公司 chips 一览数据覆盖；toast 提示；空态提示该公司其他有数据期间；GBK/UTF-8 自动识别；`#company` 空时兜底填充 |
+| 隐藏 bug 修复 | `function kpis` 与 `id="kpis"` 同名导致 KPI 从未渲染；`.pie-empty[hidden]` 失效；Total 行错位；首期假变动 +18.24 |
 
----
+### 2026-10 前期（历史记录，见 git log 与旧版文档）
 
-## 八、下一步 UI 优化方向（待做）
-
-- [ ] 加载骨架屏（数据未就绪时显示 skeleton 动画）
-- [ ] 响应式适配移动端
-
----
-
-## 九、UI 配色改造全过程记录（2026-10，本轮对话）
-
-> 背景：用户要求参考 `awesome-design-md-main/` 和官方 AUMOVIO Power BI 主题 JSON，
-> 把 `index.html` 的颜色体系从"随意渐变、紫橙撞色"改造成"统一色板、公司色全局一致、
-> 深色模块可读"。过程分好几轮，下面按时间顺序记录每一步的结论，避免下次重复踩坑。
-
-### 9.1 设计参考资料
-
-| 资料 | 用途 | 结论 |
-|---|---|---|
-| `awesome-design-md-main/`（28份金融类DESIGN.md） | 风格选型 | 最终选定 **Mercury**（深浅双世界体系）+ **Stripe**（数字对齐、克制渐变）作为参考基准 |
-| `DESIGN_COMMONALITIES_SUMMARY.md` | 横向方法论 | 提炼出5条可落地原则（见9.4），已写入 `DESIGN.md` 第8节 |
-| AUMOVIO 官方 Power BI 主题 JSON（用户提供） | **权威色值来源** | 见9.2，这是本项目目前唯一确认过的官方色板，以后改色优先从这里取值 |
-
-### 9.2 AUMOVIO 官方色板（Power BI 主题 JSON，权威来源，务必复用）
-
-```
-dataColors（32色，专为分类数据设计）：
- 1.#FF4208(橙/品牌主色) 2.#FFB7A1(浅橙) 3.#4827AF(紫/品牌辅色) 4.#A08AE5(浅紫)
- 5.#18A9E7(蓝)         6.#A3DDF5(浅蓝)  7.#12CAAE(青绿)        8.#A1F7EA(浅青绿)
- 9.#CEC43A(黄橄榄)    10.#ECE9B5(浅黄) 11.#DA3806(深橙)       12.#FF906E(中橙)
-13.#341C7D(深紫)      14.#7E60DC(中紫) 15.#1B8DBE(深蓝)       16.#75CCF0(中蓝)
-17.#16B69E(深青)      18.#68F3DE(中青) 19.#AEA633(深黄)       20.#E2DD8C(中黄)
-21.#168980(深青绿)    22.#293537(深灰) 23.#BB4A4A(暗红)       24.#B59525(暗金)
-25.#475052(灰)        26.#6A9FB0(灰蓝) 27.#BD7150(棕橙)       28.#7B4F71(藕紫)
-29.#1B4D5C(深蓝灰)    30.#706060(灰棕) 31.#0F5C55(深青)       32.#1C2325(近黑)
-
-语义色：bad=#D82822(红警示)  good=#32CB70(绿正向)  neutral=#FFD600(黄中性)
-```
-
-⚠️ 之前通过截图 OCR 识别色值的方式（多次重复识别、结果互相矛盾）**不可靠，已废弃**，
-以后有新色板需求，优先要求用户提供 JSON/文字版色值，不要再靠读图识别小字 HEX。
-
-### 9.3 已完成且确认生效的改动
-
-| 改动 | 具体内容 | 状态 |
-|---|---|---|
-| 颜色源统一 | 删除 `renderMarket()` 内部重复的 `colors={}`，全部改用顶部 `companyColor()`，解决"同一公司在不同模块颜色不同"的问题 | ✅已验证生效 |
-| 7家公司专属色（一眼可辨） | Aumovio橙`#ff4208`（固定）、Luxshare紫`#4827af`、HASCO蓝`#18a9e7`、Tuopu青绿`#12caae`、Baolong黄橄榄`#aea633`、BTL棕橙`#bd7150`、NASN藕紫`#7b4f71`——全部取自官方32色板，色相跨度大 | ✅已验证生效 |
-| `companyTint(company, alpha)` | 新增工具函数，把公司色转 rgba 半透明，用于高亮背景 | ✅已验证生效 |
-| 表格选中高亮 | 从"统一品牌红"改为"该公司自己的颜色"：竖线+文字+淡背景，浅色表格与深色Capital Market表格各一套CSS变量（`--sel-color/--sel-bg1/--sel-bg2` 和 `--sel-bg-dark`） | ✅已验证生效 |
-| 指标类图表单色阶梯（非公司对比） | Margin Benchmark/Cash Flow Benchmark/Cash Flow Structure/Working Capital：系列含义是"指标类型"不是"公司"，改用同色相深浅区分，避免紫橙乱撞；Cash Flow Benchmark 的 OCF/ICF/FCF 三色故意选了紫/橙/青绿三个不同色相（因为同图里3个系列必须互相区分） | ✅已验证生效 |
-| 股价趋势线 Peer Trend | 选中公司线条加粗不透明，其余公司线条降到30%透明度，做"聚焦"效果 | ✅已验证生效 |
-| Revenue/Profit History 图 | 季度柱改浅紫`#a08ae5`，和"全年"柱（深紫）区分层级，不再跟"亏损警示"橙色混淆 | ✅已验证生效 |
-| `.focus-outline` 退路样式 | 半透明浅灰描边+浅灰底，供以后无法用强调色区分时使用（目前尚未在实际场景中启用，只是预留了CSS） | ✅已写入CSS，待用 |
-| 财务数字等宽对齐 | KPI大数字、表格数字列、市场模块metric数字加 `tabular-nums` | ✅已验证生效 |
-| 删除冗余区域 | 用户要求删除"Valuation Positioning估值气泡图"+"Executive Market Signals"卡片区域（HTML容器+对应JS渲染逻辑一并清理，避免报错） | ✅已验证生效 |
-
-### 9.4 DESIGN_COMMONALITIES_SUMMARY 原则 → 本项目落地对照
-
-| 通用原则 | 落地状态 |
-|---|---|
-| 颜色按角色命名（而非外观命名），如 `--color-accent-brand` | ✅已在 `DESIGN.md` 第8.1节写入角色别名方案，**尚未应用到 index.html 代码**（目前代码仍是 `--o100/--p400` 色号命名），下次可以做这层重命名 |
-| 一个主强调色+灰阶，避免同图多个高饱和色乱撞 | ✅已落地到指标类图表（9.3），公司对比类图表例外（颜色=身份，本来就该多彩） |
-| 财务数字用 tabular-nums | ✅已落地 |
-| 退化方案：无法用颜色区分时用浅灰半透明描边 | ✅CSS已写（`.focus-outline`），**尚未应用到具体场景** |
-| Do's and Don'ts 红线清单 | ✅已写入 `DESIGN.md` 第8.6节 |
-
-### 9.5 用户最新反馈（2026-10，尚未处理，下次优先解决）
-
-根据用户提供的最新截图反馈，以下问题**依然存在，尚未修复**：
-
-1. **Capital Market Intelligence 模块仍然偏暗**：虽然已经把 `--dn2/--dn3/--dn4` 的白色透明度从 88/68/48% 提到 96/84/66%，但用户反馈这个区域的文字/元素视觉上还是暗，需要进一步加亮，可能需要重新审查该模块里具体是哪些元素（表头？说明文字？图例？坐标轴？价格趋势线 peerTrend 的配色？）仍在用偏暗的颜色，而不是只调整几个全局变量就够。
-   - 排查方向：搜索 `renderMarket` 函数、`.market-dark-card`、`peerTrend` 相关代码，逐个元素检查实际渲染色值，而不是只改CSS变量定义（有可能某些地方是硬编码颜色，没有用变量，所以调变量没生效）。
-
-2. **Heatmap（Benchmark Heatmap 模块）的高亮方式"很丑"**：用户原话反馈，需要重新设计。当前实现是"相对排名三分位着色"（见第二节"3个已知计算坑"的第3条），具体视觉实现方式需要重新审查：
-   - 需要找到 heatmap 单元格的 CSS/渲染逻辑（可能是 `.heat-good/.heat-mid/.heat-bad` 这类class，或者是inline style直接赋色）
-   - 结合官方色板（good=#32CB70绿、bad=#D82822红、neutral=#FFD600黄，这是官方JSON里自带的语义色，之前没有用上）重新设计单元格底色/文字色/边框，参考 Mercury/Stripe 这类克制风格做法（低饱和度背景色块+深色文字，而不是大面积高饱和纯色块）
-
-3. **临时调试文件需要清理**：本轮对话过程中为了核对代码片段生成了多个临时文件，**这些不是项目正式文件，下次对话可以直接删除**：
-   `tmp_find.py` `tmp_find2.py` `tmp_find3.py` `tmp_find_css.py` `tmp_find_peer.py`
-   `tmp_find_peertrend.py` `tmp_find_peertrend2.py` `tmp_find_table.py` `tmp_hex.py`
-   `tmp_market_bottom.txt` `tmp_peertrend_out.txt`
-
-### 9.6 下次对话建议处理顺序
-
-1. 先删除上面列出的临时调试文件（清理工作区）
-2. 排查 Capital Market 模块里"仍然偏暗"的具体元素（极可能是硬编码色值未用变量，或 `peerTrend` 图表的配色函数没有覆盖到）
-3. 重新设计 Heatmap 高亮方案，引入官方语义色（good/bad/neutral）+ 低饱和度背景块
-4. 待以上确认完成后，再考虑是否要做 9.4 里提到的"颜色角色重命名"这类非紧急重构
+数据源统一为 combined 单文件、init() 偏移动态计算修复、公司色全局统一、选中行高亮改公司色、单色阶梯、tabular-nums、Valuation Positioning/Executive Market Signals 删除等。
 
 ---
 
@@ -310,6 +355,7 @@ dataColors（32色，专为分类数据设计）：
 
 | 文档 | 内容 |
 |---|---|
-| `PROJECT_KNOWLEDGE.md`（本文件） | 项目全貌、数据流水线、UI改造历史记录 |
-| `DESIGN.md` | index.html 当前设计系统现状 + 第8节的改进决定（角色变量、单色阶梯、focus-outline等方案） |
-| `awesome-design-md-main/` | 外部参考资料库，28份金融类产品的DESIGN.md范本 |
+| `PROJECT_KNOWLEDGE.md`（本文件） | 项目全貌、数据契约、设计系统、手动板块、变更记录 |
+| `DESIGN.md` | 旧设计系统记录（官方色板 JSON、通用原则、红线清单），部分已被第四节取代 |
+| `awesome-design-md-main/` | 外部设计参考库（Mercury/Stripe 等范式） |
+| `05_output/analysis_layer_design.md` | CCC/异动信号分析层设计稿（未实现） |
