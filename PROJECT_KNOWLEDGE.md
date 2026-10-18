@@ -344,6 +344,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | A股真实数据预置 | 5 家 × 7 期股权（含 pp 变动）+ FY2024/2025 员工构成；来源东财 F10 + 年报 PDF，全部核对 |
 | CSV 导入体验修复 | 导入后自动切到有数据的公司+最新期间并滚动定位；公司 chips 一览数据覆盖；toast 提示；空态提示该公司其他有数据期间；GBK/UTF-8 自动识别；`#company` 空时兜底填充 |
 | 隐藏 bug 修复 | `function kpis` 与 `id="kpis"` 同名导致 KPI 从未渲染；`.pie-empty[hidden]` 失效；Total 行错位；首期假变动 +18.24 |
+| 股价趋势图坐标/图例修复 | 趋势图 tick/标题/图例原为白色（深色卡遗留）在浅色卡上不可见 → 改主题色 `#6E6B84` + 网格 `rgba(83,74,183,.10)` + 坐标轴线；Chart.js 内置图例换成图表下方 HTML 网格图例（3 列、色条对齐、点击显示/隐藏数据集、选中公司高亮，状态存 `window.__trendHidden`）；tooltip 补 titleColor/bodyColor |
 
 ### 2026-10 前期（历史记录，见 git log 与旧版文档）
 
