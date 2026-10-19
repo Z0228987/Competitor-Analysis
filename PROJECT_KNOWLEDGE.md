@@ -1,6 +1,6 @@
 # AUMOVIO 竞争情报项目 — 完整知识文档
 > 最后更新：2026-10-19 | 适用于下次对话直接喂给 AI 使用
-> 本次更新：Executive Signals 重构、全局玻璃质感 UI、可折叠侧边栏、手动录入三板块（股权/员工/产品线）、A股真实数据预置、CSV 导入体验修复
+> 本次更新：Executive Signals 重构、全局玻璃质感 UI、可折叠侧边栏、手动录入三板块（股权/员工/产品线）、A股真实数据预置、CSV 导入体验修复、Capital Markets 新增 A股底盘零部件行业 PE/PB 均值对比卡片
 
 ---
 
@@ -63,10 +63,23 @@ PATH = {
 | 05 | Positioning `positioning` | fin | 估值定位 |
 | 06 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成两张环形图（手动录入） |
 | 07 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + ASP 线（手动录入） |
-| 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 |
+| 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 + A股底盘零部件行业 PE/PB 均值对比（见下方） |
 | 09 | Cash Flow `cashflow` | fin | OCF/ICF/FCF、现金转化率 |
 | 10 | Liquidity & Efficiency `liquidity` | fin | 流动比率、研发强度、SG&A 强度 |
 | 11 | Benchmark Table `heatmap` | fin | 6 项指标同业相对排名热力图 |
+
+### Capital Markets · 行业 PE/PB 均值对比卡（2026-10-19 新增）
+
+- 位置：Capital Markets 区块内，紧跟 Peer Market Snapshot / Market Metrics Explained 两张卡之后，Share Price Trend 之前
+- 卡片 id：`industryBenchCard`，4 个指标格 + 1 行手动输入区：
+  - **Peer Avg P/E / P/B**：自动计算，取 `market_data_verified.csv` 中 5 家 A 股标的（BTL、Baolong、HASCO、Luxshare、Tuopu，**不含 Aumovio 和 NASN**）当期 pe/pb 的简单平均，随 CSV 更新自动刷新，无需手动维护
+  - **Industry Avg P/E / P/B**：手动录入的"A股底盘与汽车零部件行业"整体估值均值（例如申万行业指数或东方财富板块估值），每个报告期录入一次即可，不随公司切换变化
+- 手动录入方式：在 `industryPeInput` / `industryPbInput` 两个输入框填数字，点击 Save；存入 `localStorage['ciIndustryBench_<period>']`（如 `ciIndustryBench_2026Q2`），按报告期隔离，不同季度互不覆盖
+- 实现要点：
+  - JS 函数 `renderIndustryBench()`：在 `renderMarket()` 末尾调用，随公司/期间切换、FX 调整自动重新计算 Peer Avg 并读取该期已存的 Industry Avg
+  - `avg(arr)`：简单平均工具函数
+  - 不进流水线、不进 CSV、不影响 `market_data_verified.csv` 的数据契约——这是看板本地展示层的手动基准线，和股权/员工/产品线手动板块同一思路（localStorage，按期间 key 隔离）
+- 每季度维护：打开 Capital Markets 卡片，手动从行业数据源（申万/东财等）查到当季度底盘与汽车零部件行业平均 PE、PB，填入两个输入框并点 Save
 
 ### Executive Signals（2026-10-19 重构后的首屏核心）
 
@@ -295,6 +308,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 5. 推送 data/ 三个财务 CSV 到 GitHub；workflow 自动更新股价
 6. 手动板块数据（股权/员工）：新季度直接在看板上选公司+季度录入，
    或更新 MANUAL_SEED + 重新生成 CSV；录完 Export CSV 留备份
+6b. Capital Markets 行业 PE/PB：打开看板 Capital Markets 区块，在"A-Share Chassis & Auto-Parts Industry Benchmark"卡片填入当季度行业平均 PE/PB（来源如申万行业指数/东方财富板块估值），点 Save（存 localStorage，按季度隔离，不随 CSV 更新）
 7. index.html 有改动时一并推送根目录
 ```
 
@@ -345,6 +359,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | CSV 导入体验修复 | 导入后自动切到有数据的公司+最新期间并滚动定位；公司 chips 一览数据覆盖；toast 提示；空态提示该公司其他有数据期间；GBK/UTF-8 自动识别；`#company` 空时兜底填充 |
 | 隐藏 bug 修复 | `function kpis` 与 `id="kpis"` 同名导致 KPI 从未渲染；`.pie-empty[hidden]` 失效；Total 行错位；首期假变动 +18.24 |
 | 股价趋势图坐标/图例修复 | 趋势图 tick/标题/图例原为白色（深色卡遗留）在浅色卡上不可见 → 改主题色 `#6E6B84` + 网格 `rgba(83,74,183,.10)` + 坐标轴线；Chart.js 内置图例换成图表下方 HTML 网格图例（3 列、色条对齐、点击显示/隐藏数据集、选中公司高亮，状态存 `window.__trendHidden`）；tooltip 补 titleColor/bodyColor |
+| Capital Markets 新增行业 PE/PB 均值卡 | `industryBenchCard`：自动算 5 家 A 股同业（BTL/Baolong/HASCO/Luxshare/Tuopu）PE/PB 简单平均，并提供两个输入框手动录入"行业整体"PE/PB 均值（每季度一次，存 `localStorage['ciIndustryBench_<period>']`）；不进 CSV、不进流水线，纯前端展示层 |
 
 ### 2026-10 前期（历史记录，见 git log 与旧版文档）
 
