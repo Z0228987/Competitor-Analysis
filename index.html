@@ -432,7 +432,7 @@ main{padding:18px}
 .adive-card.is-open .adive-chev{transform:rotate(90deg)}
 .adive-body{display:none;padding:0 16px 16px}
 .adive-card.is-open .adive-body{display:block}
-.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+.profile-stats{display:grid;grid-template-columns:repeat(var(--ad-cols,4),1fr);gap:10px;margin-bottom:10px}
 .profile-stat{padding:12px;border:1px solid rgba(83,74,183,.10);border-radius:12px;background:rgba(238,237,254,.42);text-align:center}
 .profile-stat .pv{color:var(--ink);font-size:22px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .profile-stat .pl{margin-top:3px;color:var(--faint);font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
@@ -447,7 +447,7 @@ main{padding:18px}
 .seg-table td:first-child{font-weight:700;color:var(--ink)}
 .seg-table tr:last-child td{border-bottom:0}
 .adive-empty-row{display:grid;place-content:center;min-height:90px;color:var(--faint);font-size:10px;text-align:center;line-height:1.7}
-@media(max-width:860px){.profile-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:860px){.profile-stats{grid-template-columns:repeat(2,1fr)}.adive-head h3{white-space:normal}.adive-head{flex-wrap:wrap}}
 @media(max-width:1180px){
 .entry-grid{grid-template-columns:1fr}
 .pl-grid{grid-template-columns:1fr}
@@ -1566,7 +1566,7 @@ function renderRegion(){
       (totalRev>0?'<div style="margin-top:8px;height:6px;border-radius:4px;background:rgba(83,74,183,.08);overflow:hidden"><div style="width:'+share.toFixed(1)+'%;height:100%;background:linear-gradient(90deg,var(--p600),var(--p800))"></div></div><div style="margin-top:4px;color:var(--faint);font-size:8.5px">'+share.toFixed(0)+'% of recorded revenue</div>':'')+
     '</div>';
   }).join('');
-  box.innerHTML='<div class="profile-stats" style="grid-template-columns:repeat('+Math.min(rows.length,4)+',1fr)">'+cards+'</div>';
+  box.innerHTML='<div class="profile-stats" style="--ad-cols:'+Math.min(rows.length||1,4)+'">'+cards+'</div>';
 }
 
 function renderSegment(){
@@ -1637,7 +1637,14 @@ if(adChipsBox) adChipsBox.addEventListener('click',function(e){
   if(preferred) elYear.value=preferred;
   render();
 });
-elCo.addEventListener('change',function(){elYear.removeAttribute('data-sig');render()});
+elCo.addEventListener('change',function(){
+  elYear.removeAttribute('data-sig');
+  buildYearOptions();
+  var preferred=latestYearWithData(co());
+  var empty=['profile','customer','region','segment'].every(function(b){return !rowsFor(b).length});
+  if(preferred&&empty) elYear.value=preferred;
+  render();
+});
 elYear.addEventListener('change',render);
 
 /* ---------- CSV import / export (separate file from the ownership/headcount/product-line CSV) ---------- */
@@ -1692,7 +1699,6 @@ function adImportData(text){
       var gm=Number(String(r[iG]==null?'':r[iG]).replace(/[,%\s]/g,''));
       if(isFinite(rev))item.rev=rev;
       if(isFinite(gm))item.gm=gm;
-      if(!('rev' in item)&&!('gm' in item)){skipped++;return}
     }
     (db[b][k]=db[b][k]||[]);
     var exist=db[b][k].findIndex(function(x){return x.n===nm});
