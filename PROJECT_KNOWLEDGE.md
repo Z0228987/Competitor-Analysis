@@ -24,7 +24,7 @@
 | Baolong 保隆 | 深交所 | CNY | |
 | HASCO 均胜/华域 | 上交所 | CNY | |
 | Luxshare 立讯 | 深交所 | CNY | |
-| NASN | 港交所 | HKD | 2026-08 上市，报表货币为人民币，走 convert_nasn.py 单独处理 |
+| NASN | 港交所 | 财务=CNY，股价/市值=HKD | 2026-08 上市，报表以人民币列示（营收 6.15 亿元与招股书/媒体口径一致）；走 convert_nasn.py 单独处理 |
 | Tuopu 拓普 | 上交所 | CNY | |
 
 ---
@@ -49,24 +49,25 @@ PATH = {
 ### 汇率换算规则
 
 - AUMOVIO（EUR）：界面 `eurRate` 输入框（默认 8.35）
-- NASN（HKD）：界面 `hkdRate` 输入框（默认 0.855）
+- NASN：`hkdRate` 输入框（默认 0.855）**只作用于股价/市值（HKD）**；财务数据报表本身是 CNY，companyRate 对 `currency=CNY` 的 NASN 行返回 1 不折算
 - 其余公司：固定 1（本身人民币）
 
-### 看板模块（11 个，页面自上而下顺序）
+### 看板模块（12 个，页面自上而下顺序；2026-10-19 重排为「总览 → 增长 → 盈利 → 定位 → 现金 → 营运 → 流动性 → 资本市场 → 结构数据 → 年报 → 附表」的分析叙事线）
 
 | # | 导航/section id | 数据来源 | 核心内容 |
 |---|---|---|---|
 | 01 | Executive Overview `overview` | fin+sales+profit | Hero（公司/季度/汇率控制）+ **Executive Signals（8 张大数字卡）** |
 | 02 | Historical Trends `history` | sales+profit | 年度(FY)/季度(Q)营收与净利润走势 |
-| 03 | Profitability `benchmark` | fin | 营收对标、毛利率/营业利润率/净利率、增长-盈利气泡图 |
-| 04 | Working Capital `working-capital` | fin | AR/AP/净营运资本 |
-| 05 | Positioning `positioning` | fin | 估值定位 |
-| 06 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成两张环形图（手动录入） |
-| 07 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + ASP 线（手动录入） |
+| 03 | Profitability `benchmark` | fin | 营收对标、毛利率/营业利润率/净利率 |
+| 04 | Positioning `positioning` | fin | 增长-盈利气泡图（四象限，综合 02+03） |
+| 05 | Cash Flow `cashflow` | fin | **合并单图**：OCF/ICF/融资现金流柱（左轴 CNY bn）+ OCF/自由现金流利润率线（右轴 % of revenue） |
+| 06 | Working Capital `working-capital` | fin | AR/AP/净营运资本 |
+| 07 | Liquidity & Efficiency `liquidity` | fin | 流动比率、研发强度、SG&A 强度 |
 | 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 + A股底盘零部件行业 PE/PB 均值对比（见下方） |
-| 09 | Cash Flow `cashflow` | fin | OCF/ICF/FCF、现金转化率 |
-| 10 | Liquidity & Efficiency `liquidity` | fin | 流动比率、研发强度、SG&A 强度 |
-| 11 | Benchmark Table `heatmap` | fin | 6 项指标同业相对排名热力图 |
+| 09 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成两张环形图（手动录入） |
+| 10 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + ASP 线（手动录入） |
+| 11 | Annual Deep-Dive `annual-deep-dive` | **localStorage** | 年报口径四卡（见 3.5 节） |
+| 12 | Benchmark Table `heatmap` | fin | 6 项指标同业相对排名热力图（数据附录，收尾） |
 
 ### Capital Markets · 行业 PE/PB 均值对比卡（2026-10-19 新增）
 
@@ -167,6 +168,17 @@ productline,HASCO,2026Q2,热管理模块,,531.4,3760,
 - 生成脚本在本地 `.workbuddy/tmp/em/`（`build_equity.py` / `parse_hc.py` / `make_seed.py`），输出 `05_output/manual_blocks/manual_blocks_A股股权与员工.csv`（262行）+ `manual_blocks_template.csv`
 - MANUAL_SEED 直接内联在 index.html 里（`window.MANUAL_SEED`），**更新数据 = 重新生成 seed 并替换该行**
 
+### 3.5 Annual Deep-Dive 年度深度板块（2026-10-19 新增，现位于 Product Line 之后、Benchmark Table 之前）
+
+- 独立 IIFE `annualDeepDive()`（主脚本之后第二个 `<script>`），与季度板块完全解耦：独立年份下拉 `#adYear`、独立 localStorage keys、独立 CSV
+- 四张折叠卡（`data-card`，点击 `adive-head` 开合，`.is-open` 控制）：Company Profile（Plants/RD_Centers/Employees/Countries 大数字）、Customer Concentration（Top5 客户占比条形）、Regional Performance（中国 vs 海外营收+毛利率）、Product Segment P&L（分部营收/毛利率/占比表）
+- 数据模型（4 个 key）：`ciAdProfile / ciAdCustomer / ciAdRegion / ciAdSegment`，结构 `"Company|Year": [{n, v?, rev?, gm?}]`；profile/customer 用 `value`，region/segment 用 `revenue`+`gm`（**营收单位 CNY mn**）
+- CSV 契约：`block,company,year,name,value,revenue,gm`；block ∈ `profile/customer/region/segment`（接受中文别名）；company 走 AD_ALIAS（含代码 `600699.SH` 等）；UTF-8/GBK 自动识别；**同名 name 行覆盖不追加**
+- 模板/导出按钮复用 `#manualToast`；导入成功自动切到导入的公司+最新年份并滚动定位
+- 导航项 `#navAnnual`：无任何年度数据时加 `.is-ghost`（半透明），提示该板块还没启用
+- 公司 chips（`#adChips`）与季度板块 `#coChips` 行为一致；切公司时若无该年度数据自动跳到该公司最新有数年度
+- region/segment 允许只填 name 不填数字（如模板里的分部名占位行），导入不丢弃
+
 ---
 
 ## 四、设计系统（2026-10-19 版，玻璃质感）
@@ -262,6 +274,25 @@ GitHub workflow 自动抓取 → market_data_verified.csv + market_history.csv
 combined + sales_history + profit_history → 手动推送到 Competitor-Analysis/data/ → GitHub Pages
 ```
 
+### 5.1 随机抽查质检（`03_scripts/qa_spot_check.py`，2026-10-19 新增）
+
+> 目的：不重跑全量校验，每次随机抽几格，用**另一条独立抽取链路**反查我们的 PDF 解析结果；
+> 一旦对不上，就说明抓取/映射程序有缺陷。
+
+```
+venv/Scripts/python.exe 03_scripts/qa_spot_check.py            # 每家公司随机 1 格（默认）
+venv/Scripts/python.exe 03_scripts/qa_spot_check.py -n 2       # 每家公司 2 格
+venv/Scripts/python.exe 03_scripts/qa_spot_check.py --company Luxshare --period 2026Q1 --all
+venv/Scripts/python.exe 03_scripts/qa_spot_check.py --official --download   # 附巨潮官方PDF并定位页码
+```
+
+- **比对源**：A 股 5 家 → 东财 F10 结构化接口（`RPT_F10_FINANCE_GINCOME/GBALANCE/GCASHFLOW`，独立解析链路）；NASN → 东财港股 F10（IS/BS）；Aumovio 与 NASN 现金流量表无结构化源，不纳入自动抽查
+- **校验维度**：数值（相对容差 1e-6）、币种、期间；额外识别单位差（×100/千/万/亿）与符号相反（`FAIL_UNIT` / `FAIL_SIGN`）
+- **随机但收敛**：每次随机抽，优先抽台账里没抽过的格子；`02_processed_data/qa/spot_check_ledger.json` 记录覆盖进度，日志 `spot_check_log.csv` 逐条留痕。指定 `--seed` 时为纯随机可复现
+- **不一致时**：脚本自动给出巨潮资讯（官方披露平台）的定期报告 PDF 链接；`--download` 会下载并在原文定位该数字所在页码与上下文，用于裁定"是我们解析错"还是"第三方口径不同"
+- **退出码**：0 全过；1 有 FAIL（抓取程序可能有缺陷）；2 无可比对样本
+- 2026-10-19 首轮 376 格可自动核对格子**全量比对：0 不通过**（过程中发现并修正 3 个真实问题，见变更记录）
+
 ---
 
 ## 六、关键文件说明
@@ -286,7 +317,7 @@ combined + sales_history + profit_history → 手动推送到 Competitor-Analysi
 ```
 company | statement_type | period | item_code | item | item_en | value | currency
 ```
-- `currency`：AUMOVIO=EUR，NASN=HKD，其余=CNY；去重键 `(company, statement_type, period, item_code)`
+- `currency`：AUMOVIO=EUR，其余=CNY（**NASN 财务数据也是 CNY**，报表以人民币列示；只有 market_data 里 NASN 股价/市值为 HKD）；去重键 `(company, statement_type, period, item_code)`
 
 ### GitHub 仓库（Competitor-Analysis/data/）
 
@@ -331,6 +362,10 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | `00_source_registry/mdna_notes.csv` / `product_lines.csv` | ⚠️ | 实为 xlsx 改后缀，CSV 读取会报错 |
 | 知了财报 | 🚫 | 有人机验证墙，抓不到，用东财 F10 + 巨潮/东财年报 PDF 替代 |
 
+| A股 Q1 资产负债表列序 | ⚠️待修 | 立讯 2026Q1 的 6 个 BS 科目全部取到了上期（2025-12-31）列，已按官方 PDF 手工更正；根因在列序判定（期末列在左仍取错），重跑流水线可能复发，建议加回归用例 |
+| 自动抽查覆盖盲区 | ℹ️ | Aumovio 全部科目、NASN 现金流量表没有结构化第三方源，`qa_spot_check.py` 不纳入；这两类只能靠 `--official`/人工看 PDF |
+| NASN 报表币种 | ✅已修 | 报表以人民币列示（东财港股 F10 CURRENCY=CNY；营收 6.15 亿元与证券时报/中国商报/cibo 口径一致；上市/交易货币为港元是另一回事）。2026-10-19 底表 HKD→CNY，并同步修前端 `companyRate`：NASN 且 `currency=CNY` 返回 1 不再折算（此前一律 ×0.855，低估 ~14.5%） |
+
 ### index.html 前端坑（改版时注意）
 
 | 坑 | 说明 |
@@ -353,13 +388,22 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 |---|---|
 | Executive Signals 前移重构 | 8 张大数字卡（营收主卡 2 列 48px），排名 pill + vs 中位数偏离 + 排名进度条 + 异常 flag；KPI 行删除、指标并入；Executive 区只留一个写字区 |
 | 全局玻璃质感 UI | 9 阶低饱和 ramp + 半透明白卡 + backdrop blur + 三团色雾底；Capital Markets 从深色 Bloomberg 风改为浅色玻璃；JS 公司色/图表网格色同步 remap |
-| 可折叠侧边栏 | 手柄 + 78px 细条态 + 数字 chip + hover 浮标 + localStorage 记忆；导航重排为与页面顺序一致（11 项） |
+| 可折叠侧边栏 | 手柄 + 78px 细条态 + 数字 chip + hover 浮标 + localStorage 记忆；导航重排为与页面顺序一致（12 项，新增 Annual Deep-Dive） |
 | 手动录入三板块 | 股权/员工双环形图 + 产品线柱线混合图；行编辑器、独立期间下拉、chip 删除、Export/Import/Template |
 | A股真实数据预置 | 5 家 × 7 期股权（含 pp 变动）+ FY2024/2025 员工构成；来源东财 F10 + 年报 PDF，全部核对 |
 | CSV 导入体验修复 | 导入后自动切到有数据的公司+最新期间并滚动定位；公司 chips 一览数据覆盖；toast 提示；空态提示该公司其他有数据期间；GBK/UTF-8 自动识别；`#company` 空时兜底填充 |
 | 隐藏 bug 修复 | `function kpis` 与 `id="kpis"` 同名导致 KPI 从未渲染；`.pie-empty[hidden]` 失效；Total 行错位；首期假变动 +18.24 |
 | 股价趋势图坐标/图例修复 | 趋势图 tick/标题/图例原为白色（深色卡遗留）在浅色卡上不可见 → 改主题色 `#6E6B84` + 网格 `rgba(83,74,183,.10)` + 坐标轴线；Chart.js 内置图例换成图表下方 HTML 网格图例（3 列、色条对齐、点击显示/隐藏数据集、选中公司高亮，状态存 `window.__trendHidden`）；tooltip 补 titleColor/bodyColor |
 | Capital Markets 新增行业 PE/PB 均值卡 | `industryBenchCard`：自动算 5 家 A 股同业（BTL/Baolong/HASCO/Luxshare/Tuopu）PE/PB 简单平均，并提供两个输入框手动录入"行业整体"PE/PB 均值（每季度一次，存 `localStorage['ciIndustryBench_<period>']`）；不进 CSV、不进流水线，纯前端展示层 |
+| Cash Flow 双图合并 | Cash Flow Benchmark（OCF/ICF/融资现金流柱）与 Cash Conversion Benchmark（OCF/FCF 利润率柱）信息重复 → 合并为一张全宽组合图：3 组柱（左轴 CNY bn）+ OCF margin 实线 / Free CF margin 虚线（右轴 %）；删除第二张画布与 `cashFlowStructureChart/cfb/cfs`，改用 `cashFlowChart`+`charts.cf` |
+| 新增随机抽查质检 | `03_scripts/qa_spot_check.py`：每家公司随机抽格 → 对照东财 F10（独立链路）→ 不一致时自动给巨潮官方 PDF 链接并可下载定位页码；带覆盖台账与日志，退出码可接 CI |
+| 修正 NASN 币种标注 | 底表/销售历史/利润历史里 NASN 89+8+7 行 currency 由 HKD 改为 **CNY**（报表以人民币列示，数值与东财港股 F10 完全一致）；此前前端按 0.855 折算，导致 NASN 全部财务数字被低估约 14.5% |
+| Annual Deep-Dive FY2025 数据 | 生成 `05_output/manual_blocks/annual_deep_dive_FY2025.csv`（61 行，6 家公司全覆盖）：从 5 家 A 股 FY2025 年报 PDF（`02_processed_data/qa/annual_2025/`，巨潮下载）提取员工数/前五客户占比/分地区收入毛利率/分产品收入毛利率；NASN 取自内部竞品 deck。A 股财务明细以年报原文为准，Plants/RD_Centers 部分来自竞品 deck（Tuopu 100+/4、BTL 17/8、Baolong 12/15、NASN 3/1）；HASCO 员工 81,306=国内 54,621+海外 26,685（年报 p32 注）；region 收入单位 CNY mn、gm %；Node 模拟导入 61/61 行 0 skipped，headless 浏览器端到端验证渲染正常 |
+| 前端 NASN 汇率分支修复 | `companyRate` 原对 NASN 非 HKD 兜底也返回 hkdRate → 币种改 CNY 后仍被 ×0.855；已加 `cu==='CNY'→1` 分支，hero 汇率控件文案同步改为"NASN QUOTE FX · HKD/CNY（仅股价/市值）"；截图验证 2026Q2 营收 0.37B CNY 正确 |
+| 修正 Luxshare 2026Q1 资产负债表 | 6 个 BS 科目取到了**上期（2025-12-31）列**（如流动资产合计 196.02bn 应为 212.61bn）；已按一季报 PDF 第 5–6 页更正。⚠️ 流水线列序缺陷仍在，重跑可能复发 |
+| 统一 NASN 税前亏损符号 | `IS_LOSS_BEFORE_TAX` 7 期由正数改为负数，与 `IS_NP` 及外部源一致（前端 `-Math.abs()` 兜底逻辑不受影响） |
+| 板块顺序重排 | 12 个板块按分析叙事线重排：总览 → 历史趋势 → 盈利 → 增长-盈利定位 → **现金流** → 营运资本 → 流动性 → 资本市场 → 股权/员工 → 产品线 → 年度深度 → 基准表（附录收尾）；导航编号 01–12 同步重排（导航高亮按 nav 顺序=DOM 顺序映射，两者必须一致） |
+| Annual Deep-Dive 年度板块 | 年报口径四卡（公司概况/客户集中度/中国vs海外/产品分部 P&L），独立年份选择 + CSV Import/Export/Template + 公司 chips + 折叠卡 + 无数据时导航半透明；详见 3.5 节 |
 
 ### 2026-10 前期（历史记录，见 git log 与旧版文档）
 
