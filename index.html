@@ -414,6 +414,40 @@ main{padding:18px}
 .q-chip button{padding:0;border:0;color:var(--faint);background:transparent;font-size:11px;line-height:1;cursor:pointer}
 .q-chip button:hover{color:var(--c600)}
 .chip-empty{color:var(--faint);font-size:9px;line-height:1.6}
+
+/* ===== Annual Deep-Dive: company profile, customer concentration, regional, segment P&L ===== */
+.annual-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:999px;background:rgba(186,117,23,.12);color:#8A5A10;font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;vertical-align:1px}
+.nav a .annual-tag{display:inline-block;margin-left:5px;padding:1px 5px;border-radius:999px;background:rgba(255,255,255,.14);color:rgba(255,255,255,.72);font-size:7.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;vertical-align:1px}
+.nav a.is-ghost{opacity:.42}
+.nav a.is-ghost .annual-tag{background:rgba(255,255,255,.08)}
+.adive-cards{display:flex;flex-direction:column;gap:12px}
+.adive-card{border:1px solid rgba(43,39,80,.09);border-radius:16px;background:rgba(255,255,255,.72);overflow:hidden}
+.adive-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+.adive-head:hover{background:rgba(238,237,254,.4)}
+.adive-head-left{display:flex;align-items:center;gap:10px;min-width:0}
+.adive-head h3{margin:0;color:var(--ink);font-size:14px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.adive-stamp{color:var(--faint);font-size:9px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.adive-stamp.is-empty{color:var(--faint);font-style:italic;font-weight:600}
+.adive-chev{flex-shrink:0;color:var(--faint);font-size:11px;transition:transform .18s var(--ease)}
+.adive-card.is-open .adive-chev{transform:rotate(90deg)}
+.adive-body{display:none;padding:0 16px 16px}
+.adive-card.is-open .adive-body{display:block}
+.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+.profile-stat{padding:12px;border:1px solid rgba(83,74,183,.10);border-radius:12px;background:rgba(238,237,254,.42);text-align:center}
+.profile-stat .pv{color:var(--ink);font-size:22px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.profile-stat .pl{margin-top:3px;color:var(--faint);font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.profile-note{color:var(--muted);font-size:10px;line-height:1.6}
+.cc-top{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.cc-big{color:var(--ink);font-size:30px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.cc-big-label{color:var(--faint);font-size:9.5px;font-weight:700;letter-spacing:.02em}
+.chart.adive-sm{height:180px}
+.seg-table{width:100%;border-collapse:collapse;font-size:11px}
+.seg-table th{padding:8px 10px;text-align:left;color:var(--faint);font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid rgba(43,39,80,.1)}
+.seg-table td{padding:8px 10px;border-bottom:1px solid rgba(43,39,80,.06);color:var(--text);font-variant-numeric:tabular-nums}
+.seg-table td:first-child{font-weight:700;color:var(--ink)}
+.seg-table tr:last-child td{border-bottom:0}
+.adive-empty-row{display:grid;place-content:center;min-height:90px;color:var(--faint);font-size:10px;text-align:center;line-height:1.7}
+@media(max-width:860px){.profile-stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:1180px){
 .entry-grid{grid-template-columns:1fr}
 .pl-grid{grid-template-columns:1fr}
@@ -471,6 +505,7 @@ main{padding:18px}
 <a href="#cashflow" data-label="Cash Flow"><i>09</i><span>Cash Flow</span></a>
 <a href="#liquidity" data-label="Liquidity & Efficiency"><i>10</i><span>Liquidity &amp; Efficiency</span></a>
 <a href="#heatmap" data-label="Benchmark Table"><i>11</i><span>Benchmark Table</span></a>
+<a href="#annual-deep-dive" data-label="Annual Deep-Dive" id="navAnnual"><i>12</i><span>Annual Deep-Dive</span><em class="annual-tag">年度</em></a>
 </nav><div class="side-foot">Six CSV sources &middot; CNY normalised<br/>Market values in source currency</div><button class="side-toggle" id="sideToggle" type="button" aria-label="Toggle navigation" aria-expanded="true" title="Collapse navigation"></button></aside><main>
 <header class="top"><div><p class="eyebrow">SAM China · Strategy &amp; Marketing</p><h1>Competitive Intelligence<br/>Dashboard</h1><p class="sub">Latest-quarter benchmark, historical trends and working-capital diagnostics</p></div><div class="status" id="status">Loading six CSV files…</div></header>
 <section class="hero" id="overview"><div><h2 id="heroTitle">Executive Snapshot</h2><p id="heroText">Reading GitHub CSV files.</p></div><div class="controls"><div class="ctrl"><label>Focus company</label><select id="company"></select></div><div class="ctrl"><label>Reporting period</label><select id="period"></select></div><div class="fx-control"><label for="eurCnyRate">AUMOVIO FX · EUR/CNY</label><input id="eurCnyRate" min="0.01" step="0.01" type="number" value="8.35"/><label for="hkdCnyRate">NASN FX · HKD/CNY</label><input id="hkdCnyRate" max="1.99" min="0.01" step="0.001" type="number" value="0.855"/><button id="applyFx" type="button">Apply</button><span class="fx-note">Global: converts AUMOVIO EUR and NASN HKD figures to CNY across financials, history and comparable market data; the standalone AUMOVIO share-price trend remains in EUR</span></div></div></section><section class="exec-block" id="exec"><article class="panel exec-signals"><div class="ph"><div><h3 class="pt">Executive Signals</h3><p class="ps">Numbers first &middot; ranks and peer medians recomputed on every CSV update</p></div><span class="sig-legend">Large figure = the metric that decides the quarter &middot; rank within the selected peer set &middot; all figures CNY</span></div><div class="signals sig-grid" id="signals"></div></article><aside class="part-note exec-note" data-note-key="overview-notes">
@@ -767,7 +802,62 @@ main{padding:18px}
 </div>
 <div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div>
 <div class="part-note-foot">Saved automatically in this browser</div>
-</aside></div><div class="footer">Sources: six CSV files in data/ · Missing values are not estimated.</div></main></div>
+</aside></div>
+
+<section class="entry-section" id="annual-deep-dive">
+<div class="sec-bar">
+<div>
+<p class="eyebrow"><span class="annual-badge">年度 · Annual</span></p>
+<h2>Annual Deep-Dive</h2>
+<p class="sec-sub">Updated once a year from annual reports &middot; stored in this browser &middot; CSV import / export &middot; does not affect quarterly sections</p>
+</div>
+<div class="sec-tools">
+<select aria-label="Annual report year" class="mini-select" id="adYear" title="Report year shown below"></select>
+<label class="mini-btn" for="adImport">Import CSV</label>
+<input accept=".csv,text/csv" hidden="" id="adImport" type="file"/>
+<button class="mini-btn" id="adExport" type="button">Export CSV</button>
+<button class="mini-btn ghost" id="adTemplate" type="button">Template</button>
+</div>
+</div>
+<div class="co-chips" id="adChips"></div>
+<div class="adive-cards">
+
+<article class="adive-card" data-card="profile">
+<div class="adive-head" data-toggle="profile">
+<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Company Profile &amp; Footprint</h3></div>
+<span class="adive-stamp" id="adProfileStamp">Awaiting annual data</span>
+</div>
+<div class="adive-body" id="adProfileBody"></div>
+</article>
+
+<article class="adive-card" data-card="customer">
+<div class="adive-head" data-toggle="customer">
+<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Customer Concentration</h3></div>
+<span class="adive-stamp" id="adCustomerStamp">Awaiting annual data</span>
+</div>
+<div class="adive-body" id="adCustomerBody"></div>
+</article>
+
+<article class="adive-card" data-card="region">
+<div class="adive-head" data-toggle="region">
+<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Regional Performance (China vs Overseas)</h3></div>
+<span class="adive-stamp" id="adRegionStamp">Awaiting annual data</span>
+</div>
+<div class="adive-body" id="adRegionBody"></div>
+</article>
+
+<article class="adive-card" data-card="segment">
+<div class="adive-head" data-toggle="segment">
+<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Product Segment P&amp;L</h3></div>
+<span class="adive-stamp" id="adSegmentStamp">Awaiting annual data</span>
+</div>
+<div class="adive-body" id="adSegmentBody"></div>
+</article>
+
+</div>
+</section>
+
+<div class="footer">Sources: six CSV files in data/ · Missing values are not estimated.</div></main></div>
 <script>'use strict';Chart.register(ChartDataLabels);Chart.defaults.font.family="Inter,'Segoe UI','Microsoft YaHei',sans-serif";Chart.defaults.font.size=10;Chart.defaults.color='#6E6B84';const PATH={fin:['data/fact_financials_combined.csv'],sales:'data/fact_sales_history.csv',profit:'data/fact_profit_history.csv',market:'data/market_data_verified.csv',marketHistory:'data/market_history.csv'},ORDER=['Aumovio','Luxshare','HASCO','Tuopu','Baolong','BTL','NASN'];let raw=[],sales=[],profit=[],market=[],marketHistory=[],data=[],charts={},selPeriod='';let eurRate=Number(localStorage.getItem('eurCnyRate'))||8.35,savedHkdRate=Number(localStorage.getItem('hkdCnyRate')),hkdRate=Number.isFinite(savedHkdRate)&&savedHkdRate>0&&savedHkdRate<2?savedHkdRate:0.855;if(!(Number.isFinite(savedHkdRate)&&savedHkdRate>0&&savedHkdRate<2))localStorage.setItem('hkdCnyRate',String(hkdRate));const num=v=>{let x=Number(String(v??'').replaceAll(',',''));return Number.isFinite(x)?x:null},ratio=(a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&b!==0?a/b:null,bn=v=>Number.isFinite(v)?`${(v/1e9).toFixed(Math.abs(v)>=1e10?1:2)}B`:'N/A',pct=v=>Number.isFinite(v)?`${(v*100).toFixed(2)}%`:'N/A',pp=v=>Number.isFinite(v)?`${v>=0?'+':''}${(v*100).toFixed(2)}pp`:'N/A',yoyPct=v=>Number.isFinite(v)?`${v>=0?'+':''}${(v*100).toFixed(2)}%`:'N/A',fx=v=>Number.isFinite(v)?`${v.toFixed(2)}x`:'N/A',rawAmt=v=>Number.isFinite(v)?`${v.toLocaleString(undefined,{maximumFractionDigits:2})} CNY`:'N/A',padRange=(vals,minPad=5,ratio=.16,nonNegative=false)=>{let a=vals.filter(Number.isFinite);if(!a.length)return{min:0,max:100};let lo=Math.min(...a),hi=Math.max(...a),span=Math.max(hi-lo,Math.max(Math.abs(lo),Math.abs(hi))*.2,1),pad=Math.max(minPad,span*ratio),min=lo-pad,max=hi+pad;if(nonNegative)min=Math.max(0,min);return{min,max}},canon=c=>String(c).toUpperCase()==='AUMOVIO'?'Aumovio':c;function load(u){return new Promise((ok,no)=>Papa.parse(u,{download:true,header:true,skipEmptyLines:true,complete:x=>ok(x.data),error:no}))}function pk(p){let m=String(p).match(/^(\d{4})Q([1-4])$/);return m?+m[1]*10+ +m[2]:-1}function periods(){return[...new Set(raw.filter(x=>x.item_code==='IS_REV'&&pk(x.period)>=20261).map(x=>x.period))].sort((a,b)=>pk(b)-pk(a))}function py(p){let m=String(p).match(/^(\d{4})Q([1-4])$/);return m?`${+m[1]-1}Q${m[2]}`:null}function companyRate(x){let co=canon(x.company),cu=String(x.currency||'').toUpperCase(),er=num(x.exchange_rate);if(co==='Aumovio'){if(cu==='EUR')return eurRate;return Number.isFinite(er)&&er>0?eurRate/er:1}if(co==='NASN'){if(cu==='HKD')return hkdRate;return Number.isFinite(er)&&er>0?hkdRate/er:hkdRate}return 1}function val(c,p,st,codes){let v=raw.filter(x=>canon(x.company)===c&&x.period===p&&x.statement_type===st&&codes.includes(x.item_code)).map(x=>num(x.value)*companyRate(x)).filter(Number.isFinite);return v.length?+([...new Set(v.map(String))][0]):null}function build(p){let cs=[...new Set(raw.filter(x=>x.period===p&&x.item_code==='IS_REV').map(x=>canon(x.company)))].sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b));return cs.map(c=>{let g=(st,codes,pp=p)=>val(c,pp,st,codes),prev=py(p),rev=g('IS',['IS_REV']),cost=g('IS',['IS_COGS']),gp=g('IS',['IS_GROSS_PROFIT']),np=g('IS',['IS_NP','IS_NP_PROF_CONT_OPER']);if(np===null&&c==='NASN'){let l=g('IS',['IS_LOSS_BEFORE_TAX']);if(Number.isFinite(l))np=-Math.abs(l)}let d={company:c,revenue:rev,revenuePY:g('IS',['IS_REV'],prev),grossPY:(function(){let gpy=g('IS',['IS_GROSS_PROFIT'],prev),rpy=g('IS',['IS_REV'],prev),cpy=g('IS',['IS_COGS'],prev);return gpy??(Number.isFinite(rpy)&&Number.isFinite(cpy)?rpy-Math.abs(cpy):null)})(),opPY:g('IS',['IS_OP'],prev),npPY:(function(){let n=g('IS',['IS_NP','IS_NP_PROF_CONT_OPER'],prev);if(n===null&&c==='NASN'){let l=g('IS',['IS_LOSS_BEFORE_TAX'],prev);if(Number.isFinite(l))n=-Math.abs(l)}return n})(),ocfPY:g('CF',['CF_OP_NET'],prev),gross:gp??(Number.isFinite(rev)&&Number.isFinite(cost)?rev-Math.abs(cost):null),op:g('IS',['IS_OP']),np,rnd:Math.abs(g('IS',['IS_COST_RESE_DEVE_EXPE'])??NaN),sell:g('IS',['IS_COST_SELL_EXPE']),admin:g('IS',['IS_COST_ADMI_EXPE']),ocf:g('CF',['CF_OP_NET']),icf:g('CF',['CF_INV_NET']),fcf:g('CF',['CF_FIN_NET']),ca:g('BS',['BS_CA_TOTAL_CURR_ASSE']),cl:g('BS',['BS_CL_TOTAL_CURR_LIAB']),ta:g('BS',['BS_TOTAL_ASSETS']),tl:g('BS',['BS_TOTAL_LIAB']),ar:g('BS',['BS_CA_AR','BS_CA_ACCT_RECV']),ap:g('BS',['BS_CL_ACCO_PAYA','BS_CL_AP','BS_CL_ACCT_PAYABLE']),inventory:g('BS',['BS_CA_INVENTORIES','BS_CA_INVENTORY','BS_CA_INVE'])};return{...d,revenueGrowth:ratio(d.revenue,d.revenuePY)===null?null:d.revenue/d.revenuePY-1,grossMargin:ratio(d.gross,d.revenue),operatingMargin:ratio(d.op,d.revenue),netMargin:ratio(d.np,d.revenue),ocfMargin:ratio(d.ocf,d.revenue),icfMargin:ratio(d.icf,d.revenue),fcfMargin:ratio(d.fcf,d.revenue),currentRatio:ratio(d.ca,d.cl),rndIntensity:ratio(d.rnd,d.revenue),sga:(Number.isFinite(d.sell)||Number.isFinite(d.admin))?(Math.abs(d.sell??0)+Math.abs(d.admin??0)):null,sgaIntensity:ratio((Number.isFinite(d.sell)||Number.isFinite(d.admin))?(Math.abs(d.sell??0)+Math.abs(d.admin??0)):null,d.revenue),arToRevenue:ratio(d.ar,d.revenue),apToRevenue:ratio(d.ap,d.revenue),workingCapital:(Number.isFinite(d.ca)&&Number.isFinite(d.cl))?d.ca-d.cl:null,workingCapitalToRevenue:ratio((Number.isFinite(d.ca)&&Number.isFinite(d.cl))?d.ca-d.cl:null,d.revenue),freeCashFlow:(Number.isFinite(d.ocf)&&Number.isFinite(d.icf))?d.ocf+d.icf:null,freeCashFlowMargin:ratio((Number.isFinite(d.ocf)&&Number.isFinite(d.icf))?d.ocf+d.icf:null,d.revenue),arToTotalAssets:ratio(d.ar,d.ta),arToCurrentAssets:ratio(d.ar,d.ca),apToTotalLiabilities:ratio(d.ap,d.tl),apToCurrentLiabilities:ratio(d.ap,d.cl),grossMarginPY:ratio(d.grossPY,d.revenuePY),operatingMarginPY:ratio(d.opPY,d.revenuePY),netMarginPY:ratio(d.npPY,d.revenuePY),ocfMarginPY:ratio(d.ocfPY,d.revenuePY),grossMarginYoY:(function(){let a=ratio(d.gross,d.revenue),b=ratio(d.grossPY,d.revenuePY);return Number.isFinite(a)&&Number.isFinite(b)?a-b:null})(),operatingMarginYoY:(function(){let a=ratio(d.op,d.revenue),b=ratio(d.opPY,d.revenuePY);return Number.isFinite(a)&&Number.isFinite(b)?a-b:null})(),netMarginYoY:(function(){let a=ratio(d.np,d.revenue),b=ratio(d.npPY,d.revenuePY);return Number.isFinite(a)&&Number.isFinite(b)?a-b:null})(),ocfMarginYoY:(function(){let a=ratio(d.ocf,d.revenue),b=ratio(d.ocfPY,d.revenuePY);return Number.isFinite(a)&&Number.isFinite(b)?a-b:null})()}})}function rank(c,m,asc=false){let a=data.filter(x=>Number.isFinite(x[m])).sort((x,y)=>asc?x[m]-y[m]:y[m]-x[m]),i=a.findIndex(x=>x.company===c);return i<0?null:[i+1,a.length]}function rt(c,m,a=false){let z=rank(c,m,a);return z?`Rank #${z[0]} / ${z[1]}`:'Not ranked'}function reset(k){charts[k]?.destroy()}function opts(h=false){return{responsive:true,maintainAspectRatio:false,indexAxis:h?'y':'x',plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:!h,color:'rgba(83,74,183,.07)'},border:{display:false},ticks:{color:'#6E6B84',font:{size:10}}},y:{grid:{display:h,color:'rgba(83,74,183,.07)'},border:{display:false},ticks:{color:'#6E6B84',font:{size:10}}}}}}function setup(){let ps=periods(),pe=document.getElementById('period');if(!ps.length)throw Error('No quarter found');pe.innerHTML=ps.map(x=>`<option>${x}</option>`).join('');selPeriod=ps[0];pe.onchange=()=>{selPeriod=pe.value;data=build(selPeriod);companies();render()};data=build(selPeriod);companies()}function companies(){let e=document.getElementById('company'),old=e.value;e.innerHTML=data.map(x=>`<option value="${x.company}">${x.company==='Aumovio'?'AUMOVIO':x.company}</option>`).join('');e.value=data.some(x=>x.company===old)?old:(data.some(x=>x.company==='Aumovio')?'Aumovio':data[0]?.company);e.onchange=render}function kpis(d){let a=[['Revenue',bn(d.revenue),'revenue',Number.isFinite(d.revenueGrowth)?`${d.revenueGrowth>=0?'▲':'▼'} ${pct(Math.abs(d.revenueGrowth))} YoY`:null,`Revenue: ${rawAmt(d.revenue)}\nRevenue YoY: ${pct(d.revenueGrowth)}\nPrior-year revenue: ${rawAmt(d.revenuePY)}`],['Gross Margin',pct(d.grossMargin),'grossMargin',null,`Gross Margin: ${pct(d.grossMargin)}\nGross profit: ${rawAmt(d.gross)}\nRevenue: ${rawAmt(d.revenue)}`],['Operating Margin',pct(d.operatingMargin),'operatingMargin',null,`Operating Margin: ${pct(d.operatingMargin)}\nOperating profit: ${rawAmt(d.op)}\nRevenue: ${rawAmt(d.revenue)}`],['Net Profit Margin',pct(d.netMargin),'netMargin',null,`Net Profit Margin: ${pct(d.netMargin)}\nNet profit: ${rawAmt(d.np)}\nRevenue: ${rawAmt(d.revenue)}`],['OCF Margin',pct(d.ocfMargin),'ocfMargin',null,`OCF Margin: ${pct(d.ocfMargin)}\nOperating cash flow: ${rawAmt(d.ocf)}\nRevenue: ${rawAmt(d.revenue)}`],['Current Ratio',fx(d.currentRatio),'currentRatio',null,`Current Ratio: ${fx(d.currentRatio)}\nCurrent Assets: ${rawAmt(d.ca)}\nCurrent Liabilities: ${rawAmt(d.cl)}`]];document.getElementById('kpis').innerHTML=a.map(([l,v,m,t,tip])=>`<article class="kpi" title="${tip}"><div class="kl">${l}</div><div class="kv">${v}</div><div class="kf"><span class="rank">◆ ${rt(d.company,m)}</span>${t?`<span class="trend ${d.revenueGrowth>=0?'up':'down'}">${t}</span>`:''}</div></article>`).join('')}
 const COMPANY_COLORS={Aumovio:'#D85A30',Luxshare:'#534AB7',HASCO:'#378ADD',Tuopu:'#1D9E75',Baolong:'#BA7517',BTL:'#D4537E',NASN:'#639922'},companyColor=c=>COMPANY_COLORS[canon(c)]||'#8E8AA6',hexToRgb=h=>{let m=String(h||'').replace('#','').match(/.{1,2}/g)||['64','74','8b'];return m.map(x=>parseInt(x,16))},companyTint=(c,a=.12)=>{let[r,g,b]=hexToRgb(companyColor(c));return`rgba(${r},${g},${b},${a})`},bubbleRadius=v=>Number.isFinite(v)?Math.max(8,Math.min(19,7+Math.log10(Math.max(v,1)/1e9+1)*5.4)):8,labelAlign=c=>({Aumovio:'top',Luxshare:'left',HASCO:'top',Tuopu:'bottom',Baolong:'bottom',BTL:'top',NASN:'right'}[canon(c)]||'top');function coreCharts(sel){let s=[...data].filter(x=>Number.isFinite(x.revenue)).sort((a,b)=>b.revenue-a.revenue),color=c=>c===sel?companyColor(sel):'rgba(140,136,166,.38)';reset('rev');charts.rev=new Chart(revenueChart,{type:'bar',data:{labels:s.map(x=>x.company),datasets:[{data:s.map(x=>x.revenue/1e9),backgroundColor:s.map(x=>color(x.company)),borderColor:s.map(x=>x.company===sel?companyColor(sel):'transparent'),borderWidth:s.map(x=>x.company===sel?3:0),borderRadius:8}]},options:{...opts(true),plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{label:c=>`Revenue: ${bn(s[c.dataIndex].revenue)}`}}}}});reset('mar');let nums=['gross','op','np'],numNames=['Revenue - COGS','Operating Profit','Net Profit'];charts.mar=new Chart(marginChart,{type:'bar',data:{labels:data.map(x=>x.company),datasets:[{label:'Gross Margin',data:data.map(x=>x.grossMargin*100),backgroundColor:'#3C3489'},{label:'Operating Margin',data:data.map(x=>x.operatingMargin*100),backgroundColor:'#534AB7'},{label:'Net Profit Margin',data:data.map(x=>x.netMargin*100),backgroundColor:'#AFA9EC'}]},options:{...opts(),plugins:{legend:{display:true,position:'bottom'},datalabels:{display:false},tooltip:{callbacks:{label:c=>{let d=data[c.dataIndex],i=c.datasetIndex;return[`${c.dataset.label}: ${Number(c.raw).toFixed(2)}%`,`Numerator (${numNames[i]}): ${rawAmt(d[nums[i]])}`,`Revenue: ${rawAmt(d.revenue)}`]}}}},scales:{...opts().scales,x:{...opts().scales.x,ticks:{color:c=>data[c.index]?.company===sel?companyColor(sel):'#6E6B84',font:c=>({size:10,weight:data[c.index]?.company===sel?'800':'400'})}},y:{...opts().scales.y,ticks:{callback:v=>Math.round(v)+'%'}}}}});let b=data.filter(x=>Number.isFinite(x.revenueGrowth)&&Number.isFinite(x.netMargin)),xr=padRange(b.map(x=>x.revenueGrowth*100),5,.18),yr=padRange(b.map(x=>x.netMargin*100),5,.18);reset('bub');charts.bub=new Chart(bubbleChart,{type:'bubble',plugins:[quadrant],data:{datasets:b.map(x=>({label:x.company==='Aumovio'?'AUMOVIO':x.company,meta:x,data:[{x:x.revenueGrowth*100,y:x.netMargin*100,r:bubbleRadius(x.revenue)}],backgroundColor:x.company===sel?companyColor(x.company)+'cc':companyColor(x.company)+'45',borderColor:x.company===sel?companyColor(x.company):'rgba(140,136,166,.4)',borderWidth:x.company===sel?3.5:1.5,hoverBackgroundColor:companyColor(x.company)+'cc',hoverBorderColor:'#fff',hoverBorderWidth:3}))},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:30,right:28,bottom:18,left:22}},plugins:{quadrant:{x:0,y:0,labels:['High Profit / Low Growth','Stars','Turnaround','Growth / Low Profit'],colors:['rgba(83,74,183,.08)','rgba(83,74,183,.20)','rgba(216,90,48,.16)','rgba(216,90,48,.07)'],lineColor:'rgba(216,90,48,.48)'},legend:{display:true,position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:9,padding:16}},datalabels:{display:true,formatter:(v,c)=>c.dataset.label,align:c=>labelAlign(c.dataset.meta.company),anchor:'end',offset:7,clamp:true,clip:false,color:c=>c.dataset.meta.company===sel?companyColor(sel):'#8E8AA6',backgroundColor:c=>c.dataset.meta.company===sel?'#fff':'rgba(255,255,255,.7)',borderColor:c=>c.dataset.meta.company===sel?companyColor(sel):'rgba(140,136,166,.35)',borderWidth:c=>c.dataset.meta.company===sel?2:1,borderRadius:5,padding:{top:3,right:5,bottom:3,left:5},font:c=>({size:c.dataset.meta.company===sel?11:9,weight:c.dataset.meta.company===sel?'800':'600'})},tooltip:{callbacks:{title:i=>i[0].dataset.label,label:c=>{let d=c.dataset.meta;return[`Revenue: ${bn(d.revenue)}`,`Revenue YoY: ${pct(d.revenueGrowth)}`,`Current revenue: ${rawAmt(d.revenue)}`,`Prior-year revenue: ${rawAmt(d.revenuePY)}`,`Net Profit Margin: ${pct(d.netMargin)}`,`Net profit: ${rawAmt(d.np)}`,`Revenue: ${rawAmt(d.revenue)}`]}}}},scales:{x:{min:xr.min,max:xr.max,title:{display:true,text:'Revenue YoY (%)'},grid:{color:c=>c.tick.value===0?'rgba(216,90,48,.38)':'rgba(83,74,183,.07)'},ticks:{callback:v=>Math.round(v)+'%'}},y:{min:yr.min,max:yr.max,title:{display:true,text:'Net Profit Margin (%)'},grid:{color:c=>c.tick.value===0?'rgba(216,90,48,.38)':'rgba(83,74,183,.07)'},ticks:{callback:v=>Math.round(v)+'%'}}}}});let sm=(id,key,fn,tip,percent=false)=>{reset(key);charts[key]=new Chart(id,{type:'bar',data:{labels:data.map(x=>x.company),datasets:[{data:data.map(fn),backgroundColor:data.map(x=>color(x.company)),borderRadius:7}]},options:{...opts(),plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{label:c=>tip(data[c.dataIndex])}}},scales:{...opts().scales,x:{...opts().scales.x,ticks:{color:c=>data[c.index]?.company===sel?companyColor(sel):'#6E6B84',font:c=>({size:10,weight:data[c.index]?.company===sel?'800':'400'})}},y:{...opts().scales.y,ticks:{callback:v=>percent?v+'%':v}}}}})};sm(currentChart,'cr',x=>x.currentRatio,d=>[`Current Ratio: ${fx(d.currentRatio)}`,`Current Assets: ${rawAmt(d.ca)}`,`Current Liabilities: ${rawAmt(d.cl)}`]);sm(rndChart,'rnd',x=>Number.isFinite(x.rndIntensity)?x.rndIntensity*100:null,d=>[`R&D Intensity: ${pct(d.rndIntensity)}`,`R&D expense: ${rawAmt(d.rnd)}`,`Revenue: ${rawAmt(d.revenue)}`],true);sm(sgaChart,'sga',x=>Number.isFinite(x.sgaIntensity)?x.sgaIntensity*100:null,d=>[`SG&A Intensity: ${pct(d.sgaIntensity)}`,`SG&A expense: ${rawAmt(d.sga)}`,`Revenue: ${rawAmt(d.revenue)}`],true)}
 function cashFlowCharts(sel){let rows=data.filter(x=>Number.isFinite(x.ocf)||Number.isFinite(x.icf)||Number.isFinite(x.fcf));cashFlowBenchmarkSubtitle.textContent=`${selPeriod} · CNY billion · ${rows.length} companies with available cash-flow data`;reset('cfb');charts.cfb=new Chart(cashFlowBenchmarkChart,{type:'bar',data:{labels:rows.map(x=>x.company==='Aumovio'?'AUMOVIO':x.company),datasets:[{label:'Operating Cash Flow',data:rows.map(x=>Number.isFinite(x.ocf)?x.ocf/1e9:null),backgroundColor:'rgba(83,74,183,.84)',borderColor:'#534AB7',borderWidth:1,borderRadius:6,maxBarThickness:28},{label:'Investing Cash Flow',data:rows.map(x=>Number.isFinite(x.icf)?x.icf/1e9:null),backgroundColor:'rgba(216,90,48,.84)',borderColor:'#D85A30',borderWidth:1,borderRadius:6,maxBarThickness:28},{label:'Financing Cash Flow',data:rows.map(x=>Number.isFinite(x.fcf)?x.fcf/1e9:null),backgroundColor:'rgba(29,158,117,.82)',borderColor:'#1D9E75',borderWidth:1,borderRadius:6,maxBarThickness:28}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'bottom',labels:{usePointStyle:true,boxWidth:10,padding:18}},datalabels:{display:false},tooltip:{callbacks:{title:i=>i[0].label,label:c=>`${c.dataset.label}: ${Number.isFinite(c.raw)?hfmt(c.raw):'N/A'}`}}},scales:{x:{grid:{display:false},ticks:{color:c=>rows[c.index]?.company===sel?companyColor(sel):'#6E6B84',font:c=>({weight:rows[c.index]?.company===sel?'800':'400',size:10})}},y:{grid:{color:'rgba(83,74,183,.08)'},title:{display:true,text:'CNY bn'}}}}});let m=rows.filter(x=>Number.isFinite(x.ocfMargin)||Number.isFinite(x.freeCashFlowMargin)).sort((a,b)=>ORDER.indexOf(a.company)-ORDER.indexOf(b.company));cashFlowStructureSubtitle.textContent=`${selPeriod} · % of revenue · OCF versus free cash flow · ${m.length} companies with comparable data`;reset('cfs');charts.cfs=new Chart(cashFlowStructureChart,{type:'bar',data:{labels:m.map(x=>x.company==='Aumovio'?'AUMOVIO':x.company),datasets:[{label:'OCF Margin',data:m.map(x=>Number.isFinite(x.ocfMargin)?x.ocfMargin*100:null),backgroundColor:'#378ADD',borderRadius:6,maxBarThickness:34},{label:'Free Cash Flow Margin',data:m.map(x=>Number.isFinite(x.freeCashFlowMargin)?x.freeCashFlowMargin*100:null),backgroundColor:'#534AB7',borderRadius:6,maxBarThickness:34}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},layout:{padding:{top:20,right:10,bottom:4,left:4}},plugins:{legend:{display:true,position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:10,padding:18,color:'#6E6B84',font:{size:10}}},datalabels:{display:c=>Number.isFinite(c.raw),anchor:c=>c.raw<0?'end':'end',align:c=>c.raw<0?'bottom':'top',offset:3,clip:false,color:'#454160',font:{size:9,weight:'700'},formatter:v=>Number.isFinite(v)?`${v.toFixed(1)}%`:''},tooltip:{backgroundColor:'#26215C',padding:12,callbacks:{title:i=>i[0].label,label:c=>{let x=m[c.dataIndex];return c.datasetIndex===0?[`OCF Margin: ${pct(x.ocfMargin)}`,`Operating Cash Flow: ${rawAmt(x.ocf)}`,`Revenue: ${rawAmt(x.revenue)}`]:[`Free Cash Flow Margin: ${pct(x.freeCashFlowMargin)}`,`Free Cash Flow (OCF + ICF): ${rawAmt(x.freeCashFlow)}`,`Operating Cash Flow: ${rawAmt(x.ocf)}`,`Investing Cash Flow: ${rawAmt(x.icf)}`,`Revenue: ${rawAmt(x.revenue)}`]}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{color:c=>m[c.index]?.company===sel?companyColor(sel):'#6E6B84',font:c=>({size:10,weight:m[c.index]?.company===sel?'800':'400'})}},y:{grid:{color:'rgba(83,74,183,.08)'},border:{display:false},title:{display:true,text:'% of revenue',color:'#6E6B84'},ticks:{color:'#6E6B84',callback:v=>Math.round(v)+'%'}}}}})}function hkey(p){let q=String(p).match(/^(\d{4})Q([1-4])$/),y=String(p).match(/^(\d{4})$/);return q?+q[1]*10+ +q[2]:y?+y[1]*10:0}function hfmt(v){if(!Number.isFinite(v))return'';let d=Math.abs(v)>=100?0:Math.abs(v)<10?2:1;return`${v.toFixed(d)}bn`}function historyCharts(sel){let sr=sales.filter(x=>canon(x.company)===sel&&Number.isFinite(num(x.revenue))),pr=profit.filter(x=>canon(x.company)===sel&&Number.isFinite(num(x.profit))),pers=[...new Set([...sr,...pr].map(x=>x.period))].sort((a,b)=>hkey(a)-hkey(b)),sv=pers.map(p=>{let x=sr.find(z=>z.period===p);return x?num(x.revenue)*companyRate(x)/1e9:null}),pv=pers.map(p=>{let x=pr.find(z=>z.period===p);return x?num(x.profit)*companyRate(x)/1e9:null}),prevKey=p=>{let q=String(p).match(/^(\d{4})Q([1-4])$/),y=String(p).match(/^(\d{4})$/);return q?`${+q[1]-1}Q${q[2]}`:y?`${+y[1]-1}`:null},syoy=pers.map((p,i)=>{let v=sv[i];if(!Number.isFinite(v))return null;let pk=prevKey(p),pi=pk?pers.indexOf(pk):-1,pv2=pi>=0?sv[pi]:null;return Number.isFinite(pv2)&&pv2!==0?v/Math.abs(pv2)-Math.sign(pv2):null}),pyoy=pers.map((p,i)=>{let v=pv[i];if(!Number.isFinite(v))return null;let pk=prevKey(p),pi=pk?pers.indexOf(pk):-1,pv2=pi>=0?pv[pi]:null;return Number.isFinite(pv2)&&pv2!==0?v/Math.abs(pv2)-Math.sign(pv2):null}),colors=pers.map(p=>/Q/.test(p)?'rgba(216,90,48,.88)':'rgba(83,74,183,.72)'),name=sel==='Aumovio'?'AUMOVIO':sel;salesSubtitle.textContent=`Company · ${name} · CNY billion · YoY vs. prior-year same period`;profitSubtitle.textContent=`Company · ${name} · CNY billion · YoY vs. prior-year same period`;let yfmt=v=>Number.isFinite(v)?`${v>=0?'+':''}${(v*100).toFixed(1)}%`:'N/A';let makeOpts=(yoyArr)=>({responsive:true,maintainAspectRatio:false,layout:{padding:{top:34}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{let y=yoyArr[c.dataIndex];return[`${name} · ${hfmt(c.raw)}`,`YoY: ${yfmt(y)}`]}}},datalabels:{display:c=>Number.isFinite(c.dataset.data[c.dataIndex]),anchor:'end',align:c=>c.dataset.data[c.dataIndex]<0?'bottom':'top',color:'#2B2750',font:{size:9,weight:'700'},formatter:(v,c)=>{let y=yoyArr[c.dataIndex];let base=hfmt(v);if(!Number.isFinite(y))return base;let col=y>=0?'▲':'▼';return`${base}\n${col} ${yfmt(y)}`}}},scales:{x:{grid:{display:false},ticks:{maxRotation:37,minRotation:37}},y:{beginAtZero:true,grid:{color:'rgba(83,74,183,.08)'},title:{display:true,text:'CNY bn'}}}});reset('sh');charts.sh=new Chart(salesHistoryChart,{type:'bar',data:{labels:pers,datasets:[{data:sv,backgroundColor:colors,borderRadius:5,maxBarThickness:52}]},options:makeOpts(syoy)});reset('ph');charts.ph=new Chart(profitHistoryChart,{type:'bar',data:{labels:pers,datasets:[{data:pv,backgroundColor:pv.map((v,i)=>Number.isFinite(v)&&v<0?'rgba(216,90,48,.94)':colors[i]),borderRadius:5,maxBarThickness:52}]},options:makeOpts(pyoy)})}function median(v){let a=v.filter(Number.isFinite).sort((x,y)=>x-y);if(!a.length)return null;let m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2}const quadrant={id:'quadrant',beforeDraw(ch,args,o){if(!ch.chartArea||!Number.isFinite(o.x)||!Number.isFinite(o.y))return;let{ctx,chartArea:a,scales:s}=ch,x=Math.max(a.left,Math.min(a.right,s.x.getPixelForValue(o.x))),y=Math.max(a.top,Math.min(a.bottom,s.y.getPixelForValue(o.y))),colors=o.colors||['rgba(83,74,183,.055)','rgba(29,158,117,.055)','rgba(216,90,48,.055)','rgba(186,117,23,.075)'],labels=o.labels||['High Profit / Low Growth','Stars','Turnaround','Growth / Low Profit'],boxes=[{x:a.left,y:a.top,w:x-a.left,h:y-a.top},{x:x,y:a.top,w:a.right-x,h:y-a.top},{x:a.left,y:y,w:x-a.left,h:a.bottom-y},{x:x,y:y,w:a.right-x,h:a.bottom-y}];ctx.save();boxes.forEach((b,i)=>{if(b.w<=0||b.h<=0)return;ctx.fillStyle=colors[i];ctx.fillRect(b.x,b.y,b.w,b.h);if(labels[i]&&b.w>90&&b.h>45){ctx.fillStyle='rgba(43,39,80,.48)';ctx.font='700 10px Inter, Segoe UI, sans-serif';ctx.textBaseline='top';ctx.fillText(labels[i],b.x+10,b.y+9,Math.max(0,b.w-20))}});ctx.strokeStyle=o.lineColor||'rgba(83,74,183,.42)';ctx.lineWidth=1;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(x,a.top);ctx.lineTo(x,a.bottom);ctx.stroke();ctx.beginPath();ctx.moveTo(a.left,y);ctx.lineTo(a.right,y);ctx.stroke();ctx.restore()}};
@@ -1359,6 +1449,345 @@ $('manualImport').addEventListener('change',function(e){
   r.readAsArrayBuffer(f);
   e.target.value='';
 });
+})();
+
+/* ===== Annual Deep-Dive: company profile, customer concentration, regional, segment P&L ===== */
+(function annualDeepDive(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var elCo=$('company'),elYear=$('adYear'),nav=$('navAnnual');
+if(!elCo||!elYear) return;
+var KEY={profile:'ciAdProfile',customer:'ciAdCustomer',region:'ciAdRegion',segment:'ciAdSegment'};
+var PROFILE_LABELS={Plants:'Production Plants',RD_Centers:'R&D Centers',Employees:'Employees',Countries:'Countries'};
+function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return{}}}
+function write(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){console.warn('annual deep-dive: storage unavailable',e)}}
+var db={profile:read(KEY.profile),customer:read(KEY.customer),region:read(KEY.region),segment:read(KEY.segment)};
+function persist(b){write(KEY[b],db[b])}
+function num(v){var n=Number(v);return Number.isFinite(n)?n:null}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function co(){return elCo.value||''}
+function yr(){return elYear.value||''}
+function slot(){return co()+'|'+yr()}
+
+function companyPool(){
+  var set={},put=function(v){if(v)set[v]=1};
+  Array.prototype.slice.call(elCo.options).forEach(function(o){put(o.value)});
+  ['profile','customer','region','segment'].forEach(function(b){Object.keys(db[b]).forEach(function(k){put(k.split('|')[0])})});
+  var out=Object.keys(set);
+  if(!out.length) out=['Aumovio','HASCO','Luxshare','Tuopu','Baolong','BTL','NASN'];
+  return out.sort(function(a,b){return a.localeCompare(b)});
+}
+function yearsFor(c){
+  var set={};
+  ['profile','customer','region','segment'].forEach(function(b){
+    Object.keys(db[b]).forEach(function(k){var a=k.split('|');if(a[0]===c&&a[1])set[a[1]]=1});
+  });
+  return Object.keys(set).sort().reverse();
+}
+function allYears(){
+  var set={};
+  ['profile','customer','region','segment'].forEach(function(b){
+    Object.keys(db[b]).forEach(function(k){var y=k.split('|')[1];if(y)set[y]=1});
+  });
+  if(elYear.value) set[elYear.value]=1;
+  if(!Object.keys(set).length){
+    var cy=new Date().getFullYear();
+    for(var y=cy;y>=cy-5;y--) set[String(y)]=1;
+  }
+  return Object.keys(set).sort().reverse();
+}
+function hasAnyData(){
+  return ['profile','customer','region','segment'].some(function(b){
+    return Object.keys(db[b]).some(function(k){
+      var rows=db[b][k];
+      return rows&&rows.length&&rows.some(function(r){return num(r.v)>0||num(r.rev)>0||num(r.gm)!=null});
+    });
+  });
+}
+function companyHasData(c){
+  return ['profile','customer','region','segment'].some(function(b){
+    return Object.keys(db[b]).some(function(k){
+      if(k.split('|')[0]!==c) return false;
+      var rows=db[b][k];
+      return rows&&rows.length&&rows.some(function(r){return num(r.v)>0||num(r.rev)>0||num(r.gm)!=null});
+    });
+  });
+}
+function rowsFor(b){return db[b][slot()]||[]}
+function latestYearWithData(c){var ys=yearsFor(c);return ys.length?ys[0]:''}
+
+function stampText(b,label){
+  var rows=rowsFor(b);
+  var sEl=$('ad'+b.charAt(0).toUpperCase()+b.slice(1)+'Stamp');
+  if(!sEl) return;
+  if(rows&&rows.length){sEl.textContent='Last updated: FY'+yr();sEl.classList.remove('is-empty')}
+  else{sEl.textContent='Awaiting annual data';sEl.classList.add('is-empty')}
+}
+
+function renderProfile(){
+  var rows=rowsFor('profile'),box=$('adProfileBody');
+  if(!rows.length){box.innerHTML='<div class="adive-empty-row">No company profile data for '+esc(co())+' '+esc(yr())+'<br/>Import a CSV with block=profile to populate Plants / R&D Centers / Employees / Countries</div>';return}
+  var known=['Plants','RD_Centers','Employees','Countries'],byName={};
+  rows.forEach(function(r){byName[r.n]=r.v});
+  var stats=known.filter(function(k){return byName[k]!=null}).map(function(k){
+    return '<div class="profile-stat"><div class="pv">'+esc(Math.round(num(byName[k])||0).toLocaleString('en-US'))+'</div><div class="pl">'+esc(PROFILE_LABELS[k]||k)+'</div></div>';
+  }).join('');
+  var extra=rows.filter(function(r){return known.indexOf(r.n)<0});
+  box.innerHTML='<div class="profile-stats">'+(stats||'')+'</div>'+(extra.length?'<p class="profile-note">'+extra.map(function(r){return esc(r.n)+': '+esc(r.v)}).join(' &middot; ')+'</p>':'');
+}
+
+function renderCustomer(){
+  var rows=rowsFor('customer'),box=$('adCustomerBody');
+  if(!rows.length){box.innerHTML='<div class="adive-empty-row">No customer concentration data for '+esc(co())+' '+esc(yr())+'<br/>Import a CSV with block=customer, e.g. name=Top5 Customers, value=33.7</div>';return}
+  var primary=rows[0];
+  var bars=rows.map(function(r){
+    var v=num(r.v)||0;
+    return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">'+
+      '<span style="flex:0 0 140px;color:var(--muted);font-size:10.5px;font-weight:600">'+esc(r.n)+'</span>'+
+      '<div style="flex:1;height:10px;border-radius:6px;background:rgba(83,74,183,.08);overflow:hidden">'+
+        '<div style="width:'+Math.min(100,v)+'%;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--p600),var(--p800))"></div>'+
+      '</div>'+
+      '<span style="flex:0 0 46px;text-align:right;color:var(--ink);font-weight:800;font-size:11px;font-variant-numeric:tabular-nums">'+v.toFixed(1)+'%</span>'+
+    '</div>';
+  }).join('');
+  box.innerHTML='<div class="cc-top"><span class="cc-big">'+(num(primary.v)||0).toFixed(1)+'%</span><span class="cc-big-label">'+esc(primary.n)+' &middot; '+esc(yr())+'</span></div>'+bars;
+}
+
+function renderRegion(){
+  var rows=rowsFor('region'),box=$('adRegionBody');
+  if(!rows.length){box.innerHTML='<div class="adive-empty-row">No regional split for '+esc(co())+' '+esc(yr())+'<br/>Import a CSV with block=region, name=China/Overseas, revenue, gm</div>';return}
+  var totalRev=rows.reduce(function(a,r){return a+(num(r.rev)||0)},0);
+  var cards=rows.map(function(r){
+    var rev=num(r.rev),gm=num(r.gm),share=totalRev>0&&rev!=null?(rev/totalRev*100):0;
+    return '<div class="profile-stat" style="text-align:left">'+
+      '<div class="pl" style="margin:0 0 6px">'+esc(r.n)+'</div>'+
+      '<div class="pv" style="font-size:18px">'+(rev!=null?rev.toLocaleString('en-US',{maximumFractionDigits:0})+' CNY mn':'N/A')+'</div>'+
+      (gm!=null?'<div style="margin-top:4px;color:var(--p600);font-weight:700;font-size:11px">GM '+gm.toFixed(1)+'%</div>':'')+
+      (totalRev>0?'<div style="margin-top:8px;height:6px;border-radius:4px;background:rgba(83,74,183,.08);overflow:hidden"><div style="width:'+share.toFixed(1)+'%;height:100%;background:linear-gradient(90deg,var(--p600),var(--p800))"></div></div><div style="margin-top:4px;color:var(--faint);font-size:8.5px">'+share.toFixed(0)+'% of recorded revenue</div>':'')+
+    '</div>';
+  }).join('');
+  box.innerHTML='<div class="profile-stats" style="grid-template-columns:repeat('+Math.min(rows.length,4)+',1fr)">'+cards+'</div>';
+}
+
+function renderSegment(){
+  var rows=rowsFor('segment'),box=$('adSegmentBody');
+  if(!rows.length){box.innerHTML='<div class="adive-empty-row">No product segment P&amp;L for '+esc(co())+' '+esc(yr())+'<br/>Import a CSV with block=segment, name=segment label, revenue, gm</div>';return}
+  var sorted=rows.slice().sort(function(a,b){return (num(b.rev)||0)-(num(a.rev)||0)});
+  var totalRev=sorted.reduce(function(a,r){return a+(num(r.rev)||0)},0);
+  var body=sorted.map(function(r){
+    var rev=num(r.rev),gm=num(r.gm),share=totalRev>0&&rev!=null?(rev/totalRev*100):null;
+    return '<tr><td>'+esc(r.n)+'</td><td>'+(rev!=null?rev.toLocaleString('en-US',{maximumFractionDigits:1}):'N/A')+'</td><td>'+(gm!=null?gm.toFixed(1)+'%':'N/A')+'</td><td>'+(share!=null?share.toFixed(0)+'%':'N/A')+'</td></tr>';
+  }).join('');
+  box.innerHTML='<div class="tablewrap"><table class="seg-table"><thead><tr><th>Segment</th><th>Revenue (CNY mn)</th><th>Gross Margin</th><th>% of total</th></tr></thead><tbody>'+body+
+    '</tbody><tfoot><tr><td>Total</td><td>'+totalRev.toLocaleString('en-US',{maximumFractionDigits:1})+'</td><td></td><td>100%</td></tr></tfoot></table></div>';
+}
+
+function renderChips(){
+  var box=$('adChips');if(!box) return;
+  var cur=co(),pool=companyPool();
+  box.innerHTML='<span class="chips-lead">Data for</span>'+pool.map(function(c){
+    var has=companyHasData(c);
+    return '<button type="button" class="co-chip'+(c===cur?' is-on':'')+(has?'':' is-empty')+'" data-c="'+esc(c)+'"'
+      +(has?' title="Has annual data"':' title="No annual data yet — click to edit"')+'>'
+      +'<i class="dot"></i>'+esc(c==='Aumovio'?'AUMOVIO':c)+'</button>';
+  }).join('');
+}
+
+function buildYearOptions(){
+  var list=allYears(),sig=list.join(',');
+  if(elYear.getAttribute('data-sig')!==sig){
+    var cur=elYear.value;
+    elYear.innerHTML=list.map(function(y){return '<option>'+y+'</option>'}).join('');
+    elYear.setAttribute('data-sig',sig);
+    if(list.indexOf(cur)>=0) elYear.value=cur;
+  }
+  if(!elYear.value&&list.length){
+    var preferred=latestYearWithData(co());
+    elYear.value=(preferred&&list.indexOf(preferred)>=0)?preferred:list[0];
+  }
+}
+function updateNavGhost(){
+  if(!nav) return;
+  nav.classList.toggle('is-ghost',!hasAnyData());
+}
+function render(){
+  buildYearOptions();
+  renderProfile();renderCustomer();renderRegion();renderSegment();
+  stampText('profile');stampText('customer');stampText('region');stampText('segment');
+  renderChips();updateNavGhost();
+}
+
+document.querySelectorAll('#annual-deep-dive .adive-head').forEach(function(head){
+  head.addEventListener('click',function(){
+    head.closest('.adive-card').classList.toggle('is-open');
+  });
+});
+var adChipsBox=$('adChips');
+if(adChipsBox) adChipsBox.addEventListener('click',function(e){
+  var b=e.target.closest('.co-chip');if(!b) return;
+  var c=b.getAttribute('data-c');if(!c) return;
+  if(c!==elCo.value){
+    var hit=Array.prototype.slice.call(elCo.options).some(function(o){return o.value===c});
+    if(!hit){var o=document.createElement('option');o.value=c;o.textContent=c==='Aumovio'?'AUMOVIO':c;elCo.appendChild(o)}
+    elCo.value=c;elCo.dispatchEvent(new Event('change'));
+  }
+  elYear.removeAttribute('data-sig');
+  var preferred=latestYearWithData(c);
+  buildYearOptions();
+  if(preferred) elYear.value=preferred;
+  render();
+});
+elCo.addEventListener('change',function(){elYear.removeAttribute('data-sig');render()});
+elYear.addEventListener('change',render);
+
+/* ---------- CSV import / export (separate file from the ownership/headcount/product-line CSV) ---------- */
+var AD_ALIAS={'均胜电子':'HASCO','立讯精密':'Luxshare','拓普集团':'Tuopu','保隆科技':'Baolong','伯特利':'BTL',
+  '安波福':'Aumovio','AUMOVIO':'Aumovio','拿森':'NASN','拿森智能':'NASN',
+  '600699':'HASCO','002475':'Luxshare','601689':'Tuopu','603197':'Baolong','603596':'BTL',
+  '600699.SH':'HASCO','002475.SZ':'Luxshare','601689.SH':'Tuopu','603197.SH':'Baolong','603596.SH':'BTL'};
+var AD_BLOCK={profile:'profile','公司概况':'profile',customer:'customer','客户集中度':'customer','region:':'region',region:'region','区域':'region',segment:'segment','产品分部':'segment'};
+function adNormCo(v){var s=String(v||'').trim();return AD_ALIAS[s]||AD_ALIAS[s.toUpperCase()]||s}
+function adParseCsv(text){
+  var rows=[],row=[],cur='',q=false,i,ch;
+  text=String(text).replace(/^\uFEFF/,'');
+  for(i=0;i<text.length;i++){
+    ch=text.charAt(i);
+    if(q){ if(ch==='"'){if(text.charAt(i+1)==='"'){cur+='"';i++}else q=false} else cur+=ch }
+    else{
+      if(ch==='"')q=true;
+      else if(ch===','){row.push(cur);cur=''}
+      else if(ch==='\n'){row.push(cur);rows.push(row);row=[];cur=''}
+      else if(ch!=='\r')cur+=ch;
+    }
+  }
+  if(cur!==''||row.length){row.push(cur);rows.push(row)}
+  return rows;
+}
+function adCsvCell(v){v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+function adDecodeBuf(buf){
+  var u8=new Uint8Array(buf),s=new TextDecoder('utf-8').decode(u8);
+  if(s.indexOf('\uFFFD')>=0){try{return new TextDecoder('gbk').decode(u8)}catch(e){}}
+  return s;
+}
+function adImportData(text){
+  var rows=adParseCsv(text).filter(function(r){return r.join('').trim()!==''});
+  if(rows.length<2) throw new Error('empty');
+  var head=rows[0].map(function(x){return x.trim().toLowerCase()});
+  var ix=function(n){return head.indexOf(n)};
+  var iB=ix('block'),iC=ix('company'),iY=ix('year'),iN=ix('name'),iV=ix('value'),iR=ix('revenue'),iG=ix('gm');
+  if(iB<0||iC<0||iY<0) throw new Error('header');
+  var n=0,skipped=0,cos={},yrs={};
+  rows.slice(1).forEach(function(r){
+    var b=AD_BLOCK[String(r[iB]||'').trim().toLowerCase()],c=adNormCo(r[iC]),y=String(r[iY]||'').trim();
+    var nm=String(r[iN]||'').trim();
+    if(!b||!c||!y||!nm){skipped++;return}
+    cos[c]=1;yrs[y]=1;
+    var k=c+'|'+y,item={n:nm};
+    if(b==='profile'||b==='customer'){
+      var v=Number(String(r[iV]==null?'':r[iV]).replace(/[%,\s]/g,''));
+      if(!isFinite(v)){skipped++;return}
+      item.v=v;
+    }else{
+      var rev=Number(String(r[iR]==null?'':r[iR]).replace(/[,%\s]/g,''));
+      var gm=Number(String(r[iG]==null?'':r[iG]).replace(/[,%\s]/g,''));
+      if(isFinite(rev))item.rev=rev;
+      if(isFinite(gm))item.gm=gm;
+      if(!('rev' in item)&&!('gm' in item)){skipped++;return}
+    }
+    (db[b][k]=db[b][k]||[]);
+    var exist=db[b][k].findIndex(function(x){return x.n===nm});
+    if(exist>=0) db[b][k][exist]=item; else db[b][k].push(item);
+    n++;
+  });
+  ['profile','customer','region','segment'].forEach(persist);
+  return {n:n,skipped:skipped,cos:Object.keys(cos),yrs:Object.keys(yrs)};
+}
+function adExportCsv(){
+  var lines=['block,company,year,name,value,revenue,gm'];
+  function keySort(a,b){var x=a.split('|'),y=b.split('|');return x[0]===y[0]?y[1].localeCompare(x[1]):x[0].localeCompare(y[0])}
+  ['profile','customer'].forEach(function(b){
+    Object.keys(db[b]).sort(keySort).forEach(function(k){
+      var a=k.split('|');
+      db[b][k].forEach(function(r){lines.push([b,a[0],a[1],r.n,r.v==null?'':r.v,'',''].map(adCsvCell).join(','))});
+    });
+  });
+  ['region','segment'].forEach(function(b){
+    Object.keys(db[b]).sort(keySort).forEach(function(k){
+      var a=k.split('|');
+      db[b][k].forEach(function(r){lines.push([b,a[0],a[1],r.n,'',r.rev==null?'':r.rev,r.gm==null?'':r.gm].map(adCsvCell).join(','))});
+    });
+  });
+  return lines.join('\n');
+}
+function adDownload(name,text){
+  var blob=new Blob(['\uFEFF'+text],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'),url=URL.createObjectURL(blob);
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(url)},800);
+}
+var AD_TEMPLATE=[
+ 'block,company,year,name,value,revenue,gm',
+ 'profile,Baolong,2025,Plants,15,,',
+ 'profile,Baolong,2025,RD_Centers,9,,',
+ 'profile,Baolong,2025,Employees,9042,,',
+ 'profile,Baolong,2025,Countries,8,,',
+ 'customer,Baolong,2025,Top5 Customers,33.7,,',
+ 'region,Baolong,2025,China,,4996,21.5',
+ 'region,Baolong,2025,Overseas,,3537,33.9',
+ 'segment,Baolong,2025,TPMS & Tools,,,',
+ 'segment,Baolong,2025,Intelligent Suspension,,,',
+ 'segment,Baolong,2025,Auto Metal Tubing,,,',
+ 'segment,Baolong,2025,Auto Sensor,,,',
+ 'segment,Baolong,2025,Valve & Accessories,,,'
+].join('\n');
+function adShowToast(txt){
+  var t=$('manualToast');
+  if(!t){alert(txt);return}
+  t.textContent=txt;t.classList.add('is-on');
+  clearTimeout(adShowToast._h);
+  adShowToast._h=setTimeout(function(){t.classList.remove('is-on')},4200);
+}
+var adExportBtn=$('adExport'),adTemplateBtn=$('adTemplate'),adImportInput=$('adImport');
+if(adExportBtn) adExportBtn.addEventListener('click',function(){
+  adDownload('annual-deepdive-'+new Date().toISOString().slice(0,10)+'.csv',adExportCsv());
+});
+if(adTemplateBtn) adTemplateBtn.addEventListener('click',function(){
+  adDownload('annual-deepdive-template.csv',AD_TEMPLATE);
+});
+if(adImportInput) adImportInput.addEventListener('change',function(e){
+  var f=e.target.files&&e.target.files[0];if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    var res;
+    try{res=adImportData(adDecodeBuf(r.result))}
+    catch(err){
+      adShowToast('Could not read this file — header must be block,company,year,name,value,revenue,gm');
+      e.target.value='';return;
+    }
+    if(!res||!res.n){
+      adShowToast('No usable rows found — check the block / company / year columns');
+    }else{
+      var c=res.cos[0];
+      if(c){
+        var hit=Array.prototype.slice.call(elCo.options).some(function(o){return o.value===c});
+        if(!hit){var o=document.createElement('option');o.value=c;o.textContent=c==='Aumovio'?'AUMOVIO':c;elCo.appendChild(o)}
+        elCo.value=c;elCo.dispatchEvent(new Event('change'));
+      }
+      elYear.removeAttribute('data-sig');
+      buildYearOptions();
+      if(res.yrs&&res.yrs.length) elYear.value=res.yrs.sort().reverse()[0];
+      render();
+      adShowToast('Imported '+res.n+' rows · '+res.cos.length+' compan'+(res.cos.length>1?'ies':'y')+' · showing '+(c||'')+' '+elYear.value);
+      var sec=$('annual-deep-dive');
+      if(sec&&sec.scrollIntoView) sec.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    e.target.value='';
+  };
+  r.readAsArrayBuffer(f);
+  e.target.value='';
+});
+
+setTimeout(render,650);setTimeout(render,1850);
 })();
 </script>
 <div class="manual-toast" id="manualToast" role="status" aria-live="polite"></div>
