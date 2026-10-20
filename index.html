@@ -394,6 +394,7 @@ main{padding:18px}
 .lg-dot{width:8px;height:8px;border-radius:2.5px}
 .lg-name{overflow:hidden;color:var(--muted);text-overflow:ellipsis;white-space:nowrap}
 .lg-val{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.lg-share{color:var(--faint);font-size:9px;font-weight:600;margin-left:5px;font-variant-numeric:tabular-nums}
 .pie-legend li.lg-total{grid-template-columns:minmax(0,1fr) auto;margin-top:2px;padding-top:7px;border-top:1px solid rgba(43,39,80,.08)}
 .pie-legend li.lg-total .lg-name{color:var(--faint);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:8.5px}
 .pie-legend li.lg-total.is-warn .lg-val{color:var(--c600)}
@@ -1166,7 +1167,8 @@ var TPL={
   hc:[{n:'R&D',v:0},{n:'Production',v:0},{n:'Sales & marketing',v:0},{n:'G&A',v:0}],
   edu:[{n:'Below bachelor',v:0},{n:'Bachelor',v:0},{n:'Master',v:0},{n:'PhD / Doctorate',v:0}]
 };
-var UNIT={eq:'%',hc:'ppl',edu:'%'};
+// edu 与 hc 一样按人数（人）记录；eq 才是百分比。Education Mix 的占比由图表自动换算。
+var UNIT={eq:'%',hc:'ppl',edu:'ppl'};
 var EMPTY_MSG={eq:'No holders recorded yet',hc:'No headcount recorded yet',edu:'No education data recorded yet'};
 var CANVAS_ID={eq:'equityPie',hc:'headcountPie',edu:'eduPie'};
 var $=function(id){return document.getElementById(id)};
@@ -1325,7 +1327,9 @@ function paint(b){
         ?'<span class="lg-chg '+(c>0?'up':'down')+'" title="vs previous quarter">'+(c>0?'+':'\u2212')+Math.abs(c).toFixed(2)+'</span>'
         :'<span class="lg-chg"></span>';
     }
-    return '<li class="'+(b==='eq'?'is-eq':'')+'"><i class="lg-dot" style="background:'+PAL[i%PAL.length]+'"></i><span class="lg-name" title="'+esc(r.n)+'">'+(esc(r.n)||'Unnamed')+'</span><span class="lg-val">'+fmt(r.v,b)+'</span>'+chg+'</li>';
+    var valTxt=fmt(r.v,b);
+    if(b==='edu'&&total>0) valTxt+=' <span class="lg-share">'+(num(r.v)/total*100).toFixed(1)+'%</span>';
+    return '<li class="'+(b==='eq'?'is-eq':'')+'"><i class="lg-dot" style="background:'+PAL[i%PAL.length]+'"></i><span class="lg-name" title="'+esc(r.n)+'">'+(esc(r.n)||'Unnamed')+'</span><span class="lg-val">'+valTxt+'</span>'+chg+'</li>';
   }).join('')+'<li class="lg-total'+(UNIT[b]==='%'?' is-eq':'')+(UNIT[b]==='%'&&total>0&&Math.abs(total-100)>0.05?' is-warn':'')+'"><span class="lg-name">Total</span><span class="lg-val">'+fmt(total,b)+'</span></li>';
   var totalBox=$(b+'Total');
   if(totalBox) totalBox.textContent=total>0?('Total '+fmt(total,b)):'Nothing entered yet';
@@ -1356,7 +1360,9 @@ function paintSub(b){
     return;
   }
   if(b==='edu'){
-    $('eduSub').textContent=total>0?(p+' · employees by education level · '+total.toFixed(1)+'% covered'):(p+' · no education data recorded yet · click Edit to enter');
+    $('eduSub').textContent=total>0
+      ?('FY'+p.slice(0,4)+' annual report · '+Math.round(total).toLocaleString('en-US')+' employees by education level')
+      :(p+' · no education data recorded yet · click Edit to enter');
     return;
   }
   if(total<=0){
@@ -1816,7 +1822,7 @@ function importData(text){
       if(!nm){skipped++;return}
       var v=Number(String(r[iV]==null?'':r[iV]).replace(/[%,\s]/g,''));
       if(!isFinite(v)||String(r[iV]).trim()===''){skipped++;return}
-      var k=c+'|'+p,item={n:nm,v:(b==='eq'||b==='edu')?Math.round(v*100)/100:Math.round(v)};
+      var k=c+'|'+p,item={n:nm,v:b==='eq'?Math.round(v*100)/100:Math.round(v)};
       var g=String(r[iG]==null?'':r[iG]).replace(/[%\s]/g,'');
       if(g!==''&&isFinite(Number(g)))item.c=Number(g);
       (acc[b][k]=acc[b][k]||[]).push(item);n++;
@@ -1901,10 +1907,9 @@ var TEMPLATE=[
  'headcount,HASCO,2025Q4,生产人员,35259,,,,',
  'headcount,HASCO,2025Q4,销售人员,446,,,,',
  'headcount,HASCO,2025Q4,其他人员,392,,,,',
- 'education,HASCO,2025Q4,Bachelor,52,,,,',
- 'education,HASCO,2025Q4,Master,30,,,,',
- 'education,HASCO,2025Q4,PhD,3,,,,',
- 'education,HASCO,2025Q4,Below bachelor,15,,,,',
+ 'education,HASCO,2025Q4,本科及以上,27045,,,,',
+ 'education,HASCO,2025Q4,大专,8828,,,,',
+ 'education,HASCO,2025Q4,高中及以下,18748,,,,',
  'rd,HASCO,2025Q4,R&D headcount,5895,543,,,',
  'productline,HASCO,2025Q4,底盘系统,,531.4,3760,17.6,',
  'productline,HASCO,2025Q4,减震系统,,318.2,,21.0,'
