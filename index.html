@@ -674,7 +674,8 @@ main{padding:18px}
 <p class="sec-sub">Manual input per company and quarter &middot; stored in this browser &middot; CSV import / export</p>
 </div>
 <div class="sec-tools">
-<select aria-label="Manual data period" class="mini-select" id="ownPeriod" title="Quarter shown by the two charts below"></select>
+<select aria-label="Manual data period" class="mini-select" id="ownPeriod" title="Quarter — Shareholding only"></select>
+<select aria-label="Annual data period" class="mini-select" id="annPeriod" title="Year — Headcount, Education \u0026 Product line"></select>
 <label class="mini-btn" for="manualImport">Import CSV</label>
 <input accept=".csv,text/csv,.json,application/json" hidden="" id="manualImport" type="file"/>
 <button class="mini-btn" id="manualExport" type="button">Export CSV</button>
@@ -713,7 +714,7 @@ main{padding:18px}
 <div class="ph">
 <div>
 <h3 class="pt">Headcount Mix</h3>
-<p class="ps" id="hcSub">Employees by function for the selected quarter</p>
+<p class="ps" id="hcSub">Employees by function for the selected year</p>
 </div>
 <div class="panel-actions">
 <button class="mini-btn" id="hcEdit" type="button">Edit</button>
@@ -730,7 +731,7 @@ main{padding:18px}
 <div class="entry-rows" id="hcRows"></div>
 <div class="entry-actions">
 <button class="mini-btn" id="hcAdd" type="button">+ Add function</button>
-<button class="mini-btn ghost" id="hcClear" type="button">Clear quarter</button>
+<button class="mini-btn ghost" id="hcClear" type="button">Clear year</button>
 <span class="entry-total" id="hcTotal"></span>
 </div>
 </div>
@@ -741,7 +742,7 @@ main{padding:18px}
 <div class="ph">
 <div>
 <h3 class="pt">Education Mix</h3>
-<p class="ps" id="eduSub">Employees by education level for the selected quarter</p>
+<p class="ps" id="eduSub">Employees by education level for the selected year</p>
 </div>
 <div class="panel-actions">
 <button class="mini-btn" id="eduEdit" type="button">Edit</button>
@@ -758,7 +759,7 @@ main{padding:18px}
 <div class="entry-rows" id="eduRows"></div>
 <div class="entry-actions">
 <button class="mini-btn" id="eduAdd" type="button">+ Add level</button>
-<button class="mini-btn ghost" id="eduClear" type="button">Clear quarter</button>
+<button class="mini-btn ghost" id="eduClear" type="button">Clear year</button>
 <span class="entry-total" id="eduTotal"></span>
 </div>
 </div>
@@ -798,7 +799,7 @@ main{padding:18px}
 <div>
 <p class="eyebrow">Product Line Watch</p>
 <h2>Focused Product Line</h2>
-<p class="sec-sub">Revenue and average selling price across recorded quarters &middot; CNY</p>
+<p class="sec-sub">Revenue and average selling price across recorded years &middot; CNY</p>
 </div>
 </div>
 <article class="panel">
@@ -808,14 +809,14 @@ main{padding:18px}
 <p class="ps" id="plSub">Add a product line name to start tracking</p>
 </div>
 <div class="panel-actions">
-<span class="pill" id="plCount">0 quarters</span>
+<span class="pill" id="plCount">0 years</span>
 </div>
 </div>
 <div class="pl-grid">
 <div class="pl-chart-wrap">
 <div class="chart pl">
-<canvas aria-label="Product line revenue and selling price by quarter" id="plChart" role="img"></canvas>
-<div class="pie-empty" id="plEmpty" hidden="">No quarterly data yet<br/>Enter revenue and price on the right</div>
+<canvas aria-label="Product line revenue and selling price by year" id="plChart" role="img"></canvas>
+<div class="pie-empty" id="plEmpty" hidden="">No annual data yet<br/>Enter revenue and price on the right</div>
 </div>
 <div class="pl-legend">
 <span><i class="dot pl-rev"></i>Revenue &middot; CNY mn</span>
@@ -832,7 +833,7 @@ main{padding:18px}
 <input class="num-input" id="plPrice" min="0" placeholder="0.00" step="0.01" type="number"/>
 </div>
 <div class="pl-recorded">
-<span class="field-label">Recorded quarters</span>
+<span class="field-label">Recorded years</span>
 <div class="chip-row" id="plChips"></div>
 </div>
 </div>
@@ -1024,7 +1025,7 @@ var UNIT={eq:'%',hc:'ppl',edu:'%'};
 var EMPTY_MSG={eq:'No holders recorded yet',hc:'No headcount recorded yet',edu:'No education data recorded yet'};
 var CANVAS_ID={eq:'equityPie',hc:'headcountPie',edu:'eduPie'};
 var $=function(id){return document.getElementById(id)};
-var elCo=$('company'),elPe=$('period'),elOp=$('ownPeriod'),plName=$('plName'),plRev=$('plRev'),plPrice=$('plPrice');
+var elCo=$('company'),elPe=$('period'),elOp=$('ownPeriod'),elAp=$('annPeriod'),plName=$('plName'),plRev=$('plRev'),plPrice=$('plPrice');
 if(!elCo||!elPe||!plName||!plRev||!plPrice) return;
 var SEED=window.MANUAL_SEED||{eq:{},hc:{}};
 
@@ -1039,18 +1040,34 @@ function persist(k){clearTimeout(timers[k]);timers[k]=setTimeout(function(){writ
 function co(){return elCo.value||''}
 function pe(){return elPe.value||''}
 function op(){return (elOp&&elOp.value)||pe()}
+function ap(){return (elAp&&elAp.value)||op()}
+function slotAnn(){return co()+'|'+ap()}
 function slot(){return co()+'|'+op()}
-function slotB(b){return co()+'|'+(b==='hc'?hcPeriod():op())}
+function slotB(b){if(b==='hc'||b==='edu')return co()+'|'+ap();return co()+'|'+op()}
 function prevYear(p){var m=String(p).match(/^(\d{4})(Q[1-4])$/);return m?(Number(m[1])-1)+m[2]:p}
 function ownPeriods(){
   var set={},i;
   Array.prototype.slice.call(elPe.options).forEach(function(o){if(o.value)set[o.value]=1});
-  ['eq','hc','edu'].forEach(function(b){
+  ['eq'].forEach(function(b){
     [db[b],SEED[b]||{}].forEach(function(m){
       Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[1])set[a[1]]=1});
     });
   });
   if(elOp&&elOp.value)set[elOp.value]=1;
+  return Object.keys(set).sort().reverse();
+}
+function annPeriods(){
+  var set={},i;
+  Array.prototype.slice.call(elPe.options).forEach(function(o){
+    var m=String(o.value||'').match(/^(\d{4})/);
+    if(m)set[m[1]+'Q4']=1;
+  });
+  ['hc','edu','pd'].forEach(function(b){
+    [db[b],SEED[b]||{}].forEach(function(m){
+      Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[1])set[a[1]]=1});
+    });
+  });
+  if(elAp&&elAp.value)set[elAp.value]=1;
   return Object.keys(set).sort().reverse();
 }
 function hcPeriod(){
@@ -1248,7 +1265,7 @@ function plPoints(){
 }
 function drawPL(){
   var pts=plPoints(),canvas=$('plChart'),empty=$('plEmpty');
-  $('plCount').textContent=pts.length+' quarter'+(pts.length===1?'':'s');
+  $('plCount').textContent=pts.length+' year'+(pts.length===1?'':'s');
   if(!pts.length){
     if(charts.pl){charts.pl.destroy();charts.pl=null}
     canvas.style.display='none';empty.hidden=false;return;
@@ -1265,8 +1282,8 @@ function drawPL(){
 function updatePLChips(){
   var pts=plPoints(),box=$('plChips');
   box.innerHTML=pts.length?pts.map(function(x){
-    return '<span class="q-chip">'+esc(x.p)+'<button data-p="'+esc(x.p)+'" title="Remove this quarter" type="button">&times;</button></span>';
-  }).join(''):'<span class="chip-empty">No quarters recorded yet</span>';
+    return '<span class="q-chip">'+esc(x.p.slice(0,4))+'<button data-p="'+esc(x.p)+'" title="Remove this year" type="button">&times;</button></span>';
+  }).join(''):'<span class="chip-empty">No years recorded yet</span>';
 }
 
 /* ---------- R&D headcount & compensation ---------- */
@@ -1316,17 +1333,17 @@ function syncPL(){
   var c=co(),nm=db.pn[c]||'';
   if(!plName.matches(':focus')) plName.value=nm;
   $('plTitle').textContent=nm||'Unnamed product line';
-  $('plSub').textContent=nm?(c+' · revenue and ASP by quarter · CNY'):'Add a product line name to start tracking';
-  $('plRevPeriod').textContent=op()||'—';
-  $('plPricePeriod').textContent=op()||'—';
-  var rec=db.pd[slot()]||{};
+  $('plSub').textContent=nm?(c+' · revenue and ASP by year · CNY'):'Add a product line name to start tracking';
+  $('plRevPeriod').textContent=ap()?ap().slice(0,4):'—';
+  $('plPricePeriod').textContent=ap()?ap().slice(0,4):'—';
+  var rec=db.pd[slotAnn()]||{};
   if(!plRev.matches(':focus')) plRev.value=Number.isFinite(rec.rev)?rec.rev:'';
   if(!plPrice.matches(':focus')) plPrice.value=Number.isFinite(rec.price)?rec.price:'';
   updatePLChips();drawPL();
 }
 function plSet(field,el){
-  if(!co()||!pe()) return;
-  var k=slot(),rec=db.pd[k]||{};
+  if(!co()||!ap()) return;
+  var k=slotAnn(),rec=db.pd[k]||{};
   var v=el.value.trim()===''?null:Number(el.value);
   rec[field]=Number.isFinite(v)?v:null;
   if(rec.rev==null&&rec.price==null) delete db.pd[k]; else db.pd[k]=rec;
@@ -1346,9 +1363,21 @@ function buildPeriodOptions(){
   if(!elOp.value&&list.length) elOp.value=list[0];
   if(!elOp.value&&pe()) elOp.value=pe();
 }
+function buildAnnPeriodOptions(){
+  if(!elAp) return;
+  var list=annPeriods(),sig=list.join(',');
+  if(elAp.getAttribute('data-sig')!==sig){
+    var cur=elAp.value;
+    elAp.innerHTML=list.map(function(p){return '<option value="'+p+'">'+p.slice(0,4)+'</option>'}).join('');
+    elAp.setAttribute('data-sig',sig);
+    if(list.indexOf(cur)>=0) elAp.value=cur;
+  }
+  if(!elAp.value&&list.length) elAp.value=list[0];
+}
 function boot(){
   if(!elCo.options.length){companyPool().forEach(ensureCoOption)}
   buildPeriodOptions();
+  buildAnnPeriodOptions();
   paint('eq');paintSub('eq');
   paint('hc');paintSub('hc');
   paint('edu');paintSub('edu');
@@ -1365,11 +1394,16 @@ function applyImport(res){
     elCo.value=c;
     elCo.dispatchEvent(new Event('change'));
   }
-  var own=periodsWithData(c);
-  var target=pers.filter(function(p){return own.indexOf(p)>=0});
-  target=target.length?target[target.length-1]:(own.length?own[own.length-1]:'');
+  var eqOwn=[]; [db.eq,SEED.eq||{}].forEach(function(m){Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===c&&a[1]&&blockHas('eq',k))eqOwn.push(a[1])})});
+  var annOwn=[]; ['hc','edu','pd'].forEach(function(b){[db[b],SEED[b]||{}].forEach(function(m){Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===c&&a[1])annOwn.push(a[1])})})});
+  var eqTarget=pers.filter(function(p){return eqOwn.indexOf(p)>=0});
+  eqTarget=eqTarget.length?eqTarget[eqTarget.length-1]:(eqOwn.length?eqOwn.sort().slice(-1)[0]:'');
+  var annTarget=pers.filter(function(p){return annOwn.indexOf(p)>=0});
+  annTarget=annTarget.length?annTarget[annTarget.length-1]:(annOwn.length?annOwn.sort().slice(-1)[0]:'');
   buildPeriodOptions();
-  if(target&&Array.prototype.slice.call(elOp.options).some(function(o){return o.value===target})) evSet(elOp,target);
+  buildAnnPeriodOptions();
+  if(eqTarget&&Array.prototype.slice.call(elOp.options).some(function(o){return o.value===eqTarget})) evSet(elOp,eqTarget);
+  if(elAp&&annTarget&&Array.prototype.slice.call(elAp.options).some(function(o){return o.value===annTarget})) evSet(elAp,annTarget);
   boot();
   var sec=$('ownership');
   if(sec&&sec.scrollIntoView) sec.scrollIntoView({behavior:'smooth',block:'start'});
@@ -1389,7 +1423,7 @@ plName.addEventListener('input',function(){
   var c=co();if(!c) return;
   db.pn[c]=this.value;persist('pn');
   $('plTitle').textContent=this.value||'Unnamed product line';
-  $('plSub').textContent=this.value?(c+' · revenue and ASP by quarter · CNY'):'Add a product line name to start tracking';
+  $('plSub').textContent=this.value?(c+' · revenue and ASP by year · CNY'):'Add a product line name to start tracking';
 });
 plRev.addEventListener('input',function(){plSet('rev',this)});
 plPrice.addEventListener('input',function(){plSet('price',this)});
@@ -1416,6 +1450,7 @@ $('coChips').addEventListener('click',function(e){
 });
 elPe.addEventListener('change',boot);
 if(elOp) elOp.addEventListener('change',boot);
+if(elAp) elAp.addEventListener('change',boot);
 if(window.MutationObserver){
   var mo=new MutationObserver(function(){boot()});
   mo.observe(elCo,{childList:true});
