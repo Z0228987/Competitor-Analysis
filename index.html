@@ -1232,6 +1232,10 @@ function periodsAsc(){
     var parts=k.split('|');
     if(parts[0]===co()&&parts[1])set[parts[1]]=1;
   });
+  Object.keys(db.rd).forEach(function(k){
+    var parts=k.split('|');
+    if(parts[0]===co()&&parts[1])set[parts[1]]=1;
+  });
   return Object.keys(set).sort();
 }
 function plPoints(){
@@ -1425,6 +1429,8 @@ var ALIAS={'均胜电子':'HASCO','立讯精密':'Luxshare','拓普集团':'Tuop
   '600699':'HASCO','002475':'Luxshare','601689':'Tuopu','603197':'Baolong','603596':'BTL',
   '600699.SH':'HASCO','002475.SZ':'Luxshare','601689.SH':'Tuopu','603197.SH':'Baolong','603596.SH':'BTL'};
 var BLOCK={equity:'eq',eq:'eq','股权':'eq','股权结构':'eq',headcount:'hc',hc:'hc','员工':'hc','员工构成':'hc',
+  education:'edu',edu:'edu','教育':'edu','学历':'edu','educationmix':'edu',
+  rd:'rd','研发':'rd','rdheadcount':'rd','r&d':'rd',
   productline:'pl',pl:'pl','产品线':'pl','product':'pl'};
 function normCo(v){var s=String(v||'').trim();return ALIAS[s]||ALIAS[s.toUpperCase()]||s}
 function parseCsv(text){
@@ -1455,11 +1461,13 @@ function importData(text){
     var j=JSON.parse(text);
     if(j.equityStructure)db.eq=j.equityStructure;
     if(j.headcountMix)db.hc=j.headcountMix;
+    if(j.educationMix)db.edu=j.educationMix;
+    if(j.rdHeadcount)db.rd=j.rdHeadcount;
     if(j.productLineName)db.pn=j.productLineName;
     if(j.productLineData)db.pd=j.productLineData;
-    ['eq','hc','pn','pd'].forEach(function(k){write(KEY[k],db[k])});
+    ['eq','hc','edu','rd','pn','pd'].forEach(function(k){write(KEY[k],db[k])});
     var cos={},pers={};
-    ['eq','hc','pd'].forEach(function(b){
+    ['eq','hc','edu','pd'].forEach(function(b){
       Object.keys(db[b]||{}).forEach(function(k){var a=k.split('|');if(a[0])cos[a[0]]=1;if(a[1])pers[a[1]]=1});
     });
     return {n:Object.keys(j.equityStructure||{}).length+Object.keys(j.headcountMix||{}).length,
@@ -1471,20 +1479,28 @@ function importData(text){
   var ix=function(n){return head.indexOf(n)};
   var iB=ix('block'),iC=ix('company'),iP=ix('period'),iN=ix('name'),iV=ix('value'),iR=ix('revenue'),iP2=ix('price'),iG=ix('change');
   if(iB<0||iC<0||iP<0) throw new Error('header');
-  var acc={eq:{},hc:{},pn:{},pd:{}},n=0,skipped=0,cos={},pers={};
+  var acc={eq:{},hc:{},edu:{},rd:{},pn:{},pd:{}},n=0,skipped=0,cos={},pers={};
   rows.slice(1).forEach(function(r){
     var b=BLOCK[String(r[iB]||'').trim().toLowerCase()],c=normCo(r[iC]),p=String(r[iP]||'').trim().toUpperCase().replace(/\s/g,'');
     var nm=String(r[iN]||'').trim();
     if(!b||!c||!p){skipped++;return}
     cos[c]=1;pers[p]=1;
-    if(b==='eq'||b==='hc'){
+    if(b==='eq'||b==='hc'||b==='edu'){
       if(!nm){skipped++;return}
       var v=Number(String(r[iV]==null?'':r[iV]).replace(/[%,\s]/g,''));
       if(!isFinite(v)||String(r[iV]).trim()===''){skipped++;return}
-      var k=c+'|'+p,item={n:nm,v:b==='eq'?Math.round(v*100)/100:Math.round(v)};
+      var k=c+'|'+p,item={n:nm,v:(b==='eq'||b==='edu')?Math.round(v*100)/100:Math.round(v)};
       var g=String(r[iG]==null?'':r[iG]).replace(/[%\s]/g,'');
       if(g!==''&&isFinite(Number(g)))item.c=Number(g);
       (acc[b][k]=acc[b][k]||[]).push(item);n++;
+    }else if(b==='rd'){
+      var hcv=Number(String(r[iV]==null?'':r[iV]).replace(/[,\s]/g,''));
+      var salv=Number(String(r[iR]==null?'':r[iR]).replace(/[,\s]/g,''));
+      var recRd={};
+      if(isFinite(hcv)&&String(r[iV]).trim()!=='')recRd.hc=hcv;
+      if(isFinite(salv)&&String(r[iR]).trim()!=='')recRd.sal=salv;
+      if(!('hc'in recRd)&&!('sal'in recRd)){skipped++;return}
+      acc.rd[c+'|'+p]=recRd;n++;
     }else{
       if(nm)acc.pn[c]=nm;
       var rev=Number(String(r[iR]==null?'':r[iR]).replace(/[,%\s]/g,''));
@@ -1500,7 +1516,7 @@ function importData(text){
     var target=b==='pn'?db.pn:(b==='pd'?db.pd:db[b]);
     Object.keys(acc[b]).forEach(function(k){target[k]=acc[b][k]});
   });
-  ['eq','hc','pn','pd'].forEach(function(k){write(KEY[k],db[k])});
+  ['eq','hc','edu','rd','pn','pd'].forEach(function(k){write(KEY[k],db[k])});
   return {n:n,skipped:skipped,cos:Object.keys(cos),pers:Object.keys(pers)};
 }
 function exportCsv(){
@@ -1514,6 +1530,14 @@ function exportCsv(){
   Object.keys(slotMap('hc')).sort(keySort).forEach(function(k){
     var a=k.split('|');
     slotMap('hc')[k].forEach(function(r){lines.push(['headcount',a[0],a[1],r.n,r.v,'','',''].map(csvCell).join(','))});
+  });
+  Object.keys(slotMap('edu')).sort(keySort).forEach(function(k){
+    var a=k.split('|');
+    slotMap('edu')[k].forEach(function(r){lines.push(['education',a[0],a[1],r.n,r.v,'','',r.c==null?'':r.c].map(csvCell).join(','))});
+  });
+  Object.keys(db.rd).sort(keySort).forEach(function(k){
+    var a=k.split('|'),r=db.rd[k]||{};
+    lines.push(['rd',a[0],a[1],'R&D headcount',r.hc==null?'':r.hc,r.sal==null?'':r.sal,'',''].map(csvCell).join(','));
   });
   Object.keys(db.pd).sort(keySort).forEach(function(k){
     var a=k.split('|'),r=db.pd[k]||{};
@@ -1535,6 +1559,11 @@ var TEMPLATE=[
  'headcount,HASCO,2025Q4,生产人员,35259,,,',
  'headcount,HASCO,2025Q4,销售人员,446,,,',
  'headcount,HASCO,2025Q4,其他人员,392,,,',
+ 'education,HASCO,2025Q4,Bachelor,52,,,',
+ 'education,HASCO,2025Q4,Master,30,,,',
+ 'education,HASCO,2025Q4,PhD,3,,,',
+ 'education,HASCO,2025Q4,Below bachelor,15,,,',
+ 'rd,HASCO,2025Q4,R&D headcount,5895,543,,',
  'productline,HASCO,2026Q2,热管理模块,,531.4,3760,'
 ].join('\n');
 
