@@ -190,6 +190,20 @@ h1{margin:0;color:var(--ink);font-size:clamp(28px,3vw,42px);font-weight:800;line
 @media (hover:none){.part-note:hover .part-note-toolbar{max-height:0;padding:0;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-4px)}.part-note:focus-within .part-note-toolbar{max-height:50px;padding:0 0 9px;opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}}
 .part-layout-overview{grid-template-columns:minmax(0,1fr)}
 
+/* ===== Optional/collapsible notes (all sections except Executive Signals) ===== */
+.part-layout.note-collapsible{transition:grid-template-columns .2s var(--ease)}
+.part-layout.note-collapsible:not(.note-open){grid-template-columns:minmax(0,1fr) 34px}
+.part-layout.note-collapsible:not(.note-open) .part-note{min-height:0;padding:15px 4px 0;align-items:center}
+.part-layout.note-collapsible:not(.note-open) .part-note:before,
+.part-layout.note-collapsible:not(.note-open) .part-note-editor,
+.part-layout.note-collapsible:not(.note-open) .part-note-toolbar,
+.part-layout.note-collapsible:not(.note-open) .part-note-foot,
+.part-layout.note-collapsible:not(.note-open) .part-note-clear{display:none!important}
+.note-toggle{display:flex;align-items:center;justify-content:center;width:26px;height:26px;margin-bottom:8px;border:1px solid rgba(43,39,80,.10);border-radius:8px;color:var(--faint);background:rgba(255,255,255,.7);cursor:pointer;font-size:13px;line-height:1;transition:.15s var(--ease)}
+.note-toggle:hover{color:var(--p600);border-color:rgba(83,74,183,.25);background:#fff}
+.note-toggle.has-content{color:var(--c600);border-color:rgba(216,90,48,.3)}
+.note-toggle[title]{position:relative}
+
 /* ===== Tables ===== */
 .tablewrap{overflow:auto}
 table{width:100%;border-collapse:collapse;font-size:10px}
@@ -528,7 +542,7 @@ main{padding:18px}
 </label>
 </div>
 <div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div><div class="part-note-foot">Saved automatically in this browser</div></aside></section>
-<div class="part-layout" data-part="history-notes"><section class="g2" id="history"><article class="panel"><div class="ph"><div><h3 class="pt">Revenue Trend</h3><p class="ps" id="salesSubtitle"></p></div><div class="legend"><span><i class="dot fy"></i>Full Year</span><span><i class="dot q"></i>Quarterly</span></div></div><div class="chart history"><canvas id="salesHistoryChart"></canvas></div></article><article class="panel"><div class="ph"><div><h3 class="pt">Profit Trend (Net profit)</h3><p class="ps" id="profitSubtitle"></p></div><div class="legend"><span><i class="dot fy"></i>Full Year</span><span><i class="dot q"></i>Quarterly</span></div></div><div class="chart history"><canvas id="profitHistoryChart"></canvas></div></article></section><aside class="part-note" data-note-key="history-notes">
+<div class="part-layout note-collapsible" data-part="history-notes"><section class="g2" id="history"><article class="panel"><div class="ph"><div><h3 class="pt">Revenue Trend</h3><p class="ps" id="salesSubtitle"></p></div><div class="legend"><span><i class="dot fy"></i>Full Year</span><span><i class="dot q"></i>Quarterly</span></div></div><div class="chart history"><canvas id="salesHistoryChart"></canvas></div></article><article class="panel"><div class="ph"><div><h3 class="pt">Profit Trend (Net profit)</h3><p class="ps" id="profitSubtitle"></p></div><div class="legend"><span><i class="dot fy"></i>Full Year</span><span><i class="dot q"></i>Quarterly</span></div></div><div class="chart history"><canvas id="profitHistoryChart"></canvas></div></article></section><aside class="part-note" data-note-key="history-notes"><button class="note-toggle" type="button" title="Add comment">💬</button>
 <button class="part-note-clear" title="Clear this note" type="button">Clear</button>
 <div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
 <button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
@@ -548,7 +562,7 @@ main{padding:18px}
 <div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div>
 <div class="part-note-foot">Saved automatically in this browser</div>
 </aside></div>
-<div class="part-layout" data-part="profitability-notes"><section class="g2" id="benchmark"><article class="panel"><div class="ph"><div><h3 class="pt">Revenue Benchmark</h3><p class="ps">Selected quarter, CNY billion</p></div></div><div class="chart"><canvas id="revenueChart"></canvas></div></article><article class="panel"><div class="ph"><div><h3 class="pt">Margin Benchmark</h3><p class="ps">Gross, operating and net profit margin</p></div></div><div class="chart"><canvas id="marginChart"></canvas></div></article></section><aside class="part-note" data-note-key="profitability-notes">
+<div class="part-layout note-collapsible" data-part="profitability-notes"><section class="g2" id="benchmark"><article class="panel"><div class="ph"><div><h3 class="pt">Revenue Benchmark</h3><p class="ps">Selected quarter, CNY billion</p></div></div><div class="chart"><canvas id="revenueChart"></canvas></div></article><article class="panel"><div class="ph"><div><h3 class="pt">Margin Benchmark</h3><p class="ps">Gross, operating and net profit margin</p></div></div><div class="chart"><canvas id="marginChart"></canvas></div></article></section><aside class="part-note" data-note-key="profitability-notes"><button class="note-toggle" type="button" title="Add comment">💬</button>
 <button class="part-note-clear" title="Clear this note" type="button">Clear</button>
 <div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
 <button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
@@ -568,7 +582,7 @@ main{padding:18px}
 <div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div>
 <div class="part-note-foot">Saved automatically in this browser</div>
 </aside></div>
-<div class="part-layout" data-part="positioning-notes"><section id="positioning"><article class="panel positioning-panel"><div class="ph"><div><h3 class="pt">Growth–Profitability Positioning</h3><p class="ps">X: Revenue YoY · Y: Net profit margin · Bubble: Revenue</p></div></div><div class="chart positioning"><canvas id="bubbleChart"></canvas></div></article></section><aside class="part-note" data-note-key="positioning-notes">
+<div class="part-layout note-collapsible" data-part="positioning-notes"><section id="positioning"><article class="panel positioning-panel"><div class="ph"><div><h3 class="pt">Growth–Profitability Positioning</h3><p class="ps">X: Revenue YoY · Y: Net profit margin · Bubble: Revenue</p></div></div><div class="chart positioning"><canvas id="bubbleChart"></canvas></div></article></section><aside class="part-note" data-note-key="positioning-notes"><button class="note-toggle" type="button" title="Add comment">💬</button>
 <button class="part-note-clear" title="Clear this note" type="button">Clear</button>
 <div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
 <button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
@@ -588,7 +602,7 @@ main{padding:18px}
 <div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div>
 <div class="part-note-foot">Saved automatically in this browser</div>
 </aside></div>
-<div class="part-layout" data-part="cashflow-notes"><section class="cashflow-section" id="cashflow"><article class="panel cashflow-merged"><div class="ph"><div><h3 class="pt">Cash Flow &amp; Conversion</h3><p class="ps" id="cashFlowSubtitle">Bars: CNY billion (left axis) &middot; lines: % of revenue (right axis)</p></div><div class="cf-controls"><span class="sig-legend">Free CF = OCF + ICF</span><div class="cf-axis-ctrl" title="Adjust left Y-axis maximum to zoom into smaller bars"><label class="cf-axis-label" for="cfAxisMax">Y-axis max</label><input id="cfAxisMax" class="cf-axis-slider" type="range" min="0" max="100" value="100" step="1"/><span class="cf-axis-val" id="cfAxisVal">Auto</span></div></div></div><div class="chart cashflow-chart"><canvas id="cashFlowChart"></canvas></div></article></section><aside class="part-note" data-note-key="cashflow-notes">
+<div class="part-layout note-collapsible" data-part="cashflow-notes"><section class="cashflow-section" id="cashflow"><article class="panel cashflow-merged"><div class="ph"><div><h3 class="pt">Cash Flow &amp; Conversion</h3><p class="ps" id="cashFlowSubtitle">Bars: CNY billion (left axis) &middot; lines: % of revenue (right axis)</p></div><div class="cf-controls"><span class="sig-legend">Free CF = OCF + ICF</span><div class="cf-axis-ctrl" title="Adjust left Y-axis maximum to zoom into smaller bars"><label class="cf-axis-label" for="cfAxisMax">Y-axis max</label><input id="cfAxisMax" class="cf-axis-slider" type="range" min="0" max="100" value="100" step="1"/><span class="cf-axis-val" id="cfAxisVal">Auto</span></div></div></div><div class="chart cashflow-chart"><canvas id="cashFlowChart"></canvas></div></article></section><aside class="part-note" data-note-key="cashflow-notes"><button class="note-toggle" type="button" title="Add comment">💬</button>
 <button class="part-note-clear" title="Clear this note" type="button">Clear</button>
 <div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
 <button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
@@ -607,27 +621,7 @@ main{padding:18px}
 </div>
 <div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div>
 <div class="part-note-foot">Saved automatically in this browser</div>
-</aside></div><div class="part-layout" data-part="working-capital-notes"><section id="working-capital"><article class="panel"><div class="ph"><div><h3 class="pt">Working Capital Benchmark</h3><p class="ps" id="workingCapitalSubtitle"></p></div><span class="pill">Working Capital</span></div><div class="chart wc"><canvas id="workingCapitalChart"></canvas></div></article></section><aside class="part-note" data-note-key="working-capital-notes">
-<button class="part-note-clear" title="Clear this note" type="button">Clear</button>
-<div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
-<button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
-<button data-cmd="italic" title="Italic" type="button"><i>I</i></button>
-<button data-cmd="insertUnorderedList" title="Bullet List" type="button" aria-label="Bullet list">&#8226;</button>
-<select aria-label="Font size" class="part-note-size" title="Font size">
-<option value="2">Small</option>
-<option selected="" value="3">Normal</option>
-<option value="4">Medium</option>
-<option value="5">Large</option>
-<option value="6">X-Large</option>
-</select>
-<label class="part-note-color-label" title="Text color">
-<span>Color</span><input aria-label="Text color" class="part-note-color" type="color" value="#302943"/>
-</label>
-</div>
-<div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div>
-<div class="part-note-foot">Saved automatically in this browser</div>
-</aside></div>
-<div class="part-layout" data-part="liquidity-notes"><section class="g3" id="liquidity"><article class="panel"><h3 class="pt">Current Ratio</h3><div class="chart sm"><canvas id="currentChart"></canvas></div></article><article class="panel"><h3 class="pt">R&amp;D Intensity</h3><div class="chart sm"><canvas id="rndChart"></canvas></div></article><article class="panel"><h3 class="pt">SG&amp;A Intensity</h3><div class="chart sm"><canvas id="sgaChart"></canvas></div></article></section><aside class="part-note" data-note-key="liquidity-notes">
+</aside></div><div class="part-layout note-collapsible" data-part="working-capital-notes"><section id="working-capital"><article class="panel"><div class="ph"><div><h3 class="pt">Working Capital Benchmark</h3><p class="ps" id="workingCapitalSubtitle"></p></div><span class="pill">Working Capital</span></div><div class="chart wc"><canvas id="workingCapitalChart"></canvas></div></article></section><aside class="part-note" data-note-key="working-capital-notes"><button class="note-toggle" type="button" title="Add comment">💬</button>
 <button class="part-note-clear" title="Clear this note" type="button">Clear</button>
 <div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
 <button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
@@ -647,7 +641,7 @@ main{padding:18px}
 <div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div>
 <div class="part-note-foot">Saved automatically in this browser</div>
 </aside></div>
-<div class="part-layout" data-part="capital-market-notes"><section id="capital-market"><article class="capital-shell"><div class="ph"><div><h3 class="pt">Capital Market Intelligence</h3><p class="ps" id="marketSubtitle">Market valuation and peer expectations</p><div class="market-update" id="marketUpdated">Latest update: loading…</div></div></div><div class="market-note-dark">Market snapshot compiled from dated public sources. Values are delayed and unavailable comparable fields remain N/A.</div><div class="market-disclaimer"><strong>Market Comparison Notice</strong>AUMOVIO is traded in Germany, NASN is reported in HKD, while most other peers are listed on mainland China exchanges. AUMOVIO EUR figures and NASN HKD figures on this dashboard — financial metrics, historical trends and comparable market values — are converted to CNY using the user-entered company-specific FX rates. The standalone AUMOVIO share-price trend remains in EUR, while the peer trend is shown in CNY. Accounting, disclosure, liquidity, investor and data-provider conventions can still differ, so the comparison remains directional.</div><div class="market-ticker-wrap"><div class="market-ticker" id="marketTicker"></div></div><div class="market-top"><div class="market-dark-card"><div class="market-card-head"><div><h4>Peer Market Snapshot</h4><span>Latest comparable public observation</span></div><span>PEER SET</span></div><div class="market-snapshot"><div class="market-metric"><label>Share Price</label><strong id="sharePrice">N/A</strong><small>Latest valid close</small></div><div class="market-metric"><label>Market Cap</label><strong id="marketCap">N/A</strong><small>Original source currency</small></div><div class="market-metric"><label>P/E</label><strong id="peRatio">N/A</strong><small>Latest available</small></div><div class="market-metric"><label>YTD Return</label><strong id="marketYtd">N/A</strong><small>Price return</small></div></div><div class="tablewrap"><table class="market-table"><thead><tr><th>Company</th><th>Price</th><th>Market Cap</th><th>P/E</th><th>P/B</th><th>YTD</th></tr></thead><tbody id="marketPeerRows"></tbody></table></div><span hidden="" id="pbRatio"></span><span hidden="" id="evSales"></span></div><div class="market-dark-card"><div class="market-card-head"><div><h4>Market Metrics Explained</h4><span>How to read the data</span></div><span>GUIDE</span></div><div class="market-definitions"><div class="market-definition"><b>Share Price</b><p>Latest valid closing price in the security's trading currency.</p></div><div class="market-definition"><b>Market Cap</b><p>Equity market value. The peer table keeps source values and also shows converted CNY values for EUR securities.</p></div><div class="market-definition"><b>P/E</b><p>Price-to-earnings ratio, showing how much investors pay for one unit of earnings.</p></div><div class="market-definition"><b>P/B</b><p>Price-to-book ratio, comparing market value with reported shareholders' equity.</p></div><div class="market-definition"><b>YTD Return</b><p>Price change from the first valid closing price of the calendar year.</p></div><div class="market-definition"><b>Bubble Size</b><p>Represents company revenue from the selected financial period.</p></div></div></div></div><div class="market-dark-card market-trend-card"><div class="market-card-head"><div><h4>Share Price Trend · Last 1 Month</h4><span>AUMOVIO shown in EUR · Peers shown in CNY · absolute closing prices, not indexed</span></div><span>1M</span></div><div class="market-trend-grid"><div class="market-trend-pane"><div class="market-trend-pane-head"><h5>AUMOVIO</h5><span>Standalone trend · EUR</span></div><div class="chart"><canvas id="aumovioTrendChart"></canvas></div></div><div class="market-trend-pane"><div class="market-trend-pane-head"><h5>Peer Companies</h5><span>Absolute close · CNY</span></div><div class="chart"><canvas id="peerTrendChart"></canvas></div><div class="trend-legend" id="peerTrendLegend" role="list" aria-label="Peer company legend"></div></div></div></div></article></section><aside class="part-note" data-note-key="capital-market-notes">
+<div class="part-layout note-collapsible" data-part="liquidity-notes"><section class="g3" id="liquidity"><article class="panel"><h3 class="pt">Current Ratio</h3><div class="chart sm"><canvas id="currentChart"></canvas></div></article><article class="panel"><h3 class="pt">R&amp;D Intensity</h3><div class="chart sm"><canvas id="rndChart"></canvas></div></article><article class="panel"><h3 class="pt">SG&amp;A Intensity</h3><div class="chart sm"><canvas id="sgaChart"></canvas></div></article></section><aside class="part-note" data-note-key="liquidity-notes"><button class="note-toggle" type="button" title="Add comment">💬</button>
 <button class="part-note-clear" title="Clear this note" type="button">Clear</button>
 <div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
 <button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
@@ -666,7 +660,8 @@ main{padding:18px}
 </div>
 <div class="part-note-editor" contenteditable="true" data-placeholder="" spellcheck="true"></div>
 <div class="part-note-foot">Saved automatically in this browser</div>
-</aside></div><section class="entry-section" id="ownership">
+</aside></div>
+<div class="part-layout part-layout-overview" data-part="capital-market-notes"><section id="capital-market"><article class="capital-shell"><div class="ph"><div><h3 class="pt">Capital Market Intelligence</h3><p class="ps" id="marketSubtitle">Market valuation and peer expectations</p><div class="market-update" id="marketUpdated">Latest update: loading…</div></div></div><div class="market-note-dark">Market snapshot compiled from dated public sources. Values are delayed and unavailable comparable fields remain N/A.</div><div class="market-disclaimer"><strong>Market Comparison Notice</strong>AUMOVIO is traded in Germany, NASN is reported in HKD, while most other peers are listed on mainland China exchanges. AUMOVIO EUR figures and NASN HKD figures on this dashboard — financial metrics, historical trends and comparable market values — are converted to CNY using the user-entered company-specific FX rates. The standalone AUMOVIO share-price trend remains in EUR, while the peer trend is shown in CNY. Accounting, disclosure, liquidity, investor and data-provider conventions can still differ, so the comparison remains directional.</div><div class="market-ticker-wrap"><div class="market-ticker" id="marketTicker"></div></div><div class="market-top"><div class="market-dark-card"><div class="market-card-head"><div><h4>Peer Market Snapshot</h4><span>Latest comparable public observation</span></div><span>PEER SET</span></div><div class="market-snapshot"><div class="market-metric"><label>Share Price</label><strong id="sharePrice">N/A</strong><small>Latest valid close</small></div><div class="market-metric"><label>Market Cap</label><strong id="marketCap">N/A</strong><small>Original source currency</small></div><div class="market-metric"><label>P/E</label><strong id="peRatio">N/A</strong><small>Latest available</small></div><div class="market-metric"><label>YTD Return</label><strong id="marketYtd">N/A</strong><small>Price return</small></div></div><div class="tablewrap"><table class="market-table"><thead><tr><th>Company</th><th>Price</th><th>Market Cap</th><th>P/E</th><th>P/B</th><th>YTD</th></tr></thead><tbody id="marketPeerRows"></tbody></table></div><span hidden="" id="pbRatio"></span><span hidden="" id="evSales"></span></div><div class="market-dark-card"><div class="market-card-head"><div><h4>Market Metrics Explained</h4><span>How to read the data</span></div><span>GUIDE</span></div><div class="market-definitions"><div class="market-definition"><b>Share Price</b><p>Latest valid closing price in the security's trading currency.</p></div><div class="market-definition"><b>Market Cap</b><p>Equity market value. The peer table keeps source values and also shows converted CNY values for EUR securities.</p></div><div class="market-definition"><b>P/E</b><p>Price-to-earnings ratio, showing how much investors pay for one unit of earnings.</p></div><div class="market-definition"><b>P/B</b><p>Price-to-book ratio, comparing market value with reported shareholders' equity.</p></div><div class="market-definition"><b>YTD Return</b><p>Price change from the first valid closing price of the calendar year.</p></div><div class="market-definition"><b>Bubble Size</b><p>Represents company revenue from the selected financial period.</p></div></div></div></div><div class="market-dark-card market-trend-card"><div class="market-card-head"><div><h4>Share Price Trend · Last 1 Month</h4><span>AUMOVIO shown in EUR · Peers shown in CNY · absolute closing prices, not indexed</span></div><span>1M</span></div><div class="market-trend-grid"><div class="market-trend-pane"><div class="market-trend-pane-head"><h5>AUMOVIO</h5><span>Standalone trend · EUR</span></div><div class="chart"><canvas id="aumovioTrendChart"></canvas></div></div><div class="market-trend-pane"><div class="market-trend-pane-head"><h5>Peer Companies</h5><span>Absolute close · CNY</span></div><div class="chart"><canvas id="peerTrendChart"></canvas></div><div class="trend-legend" id="peerTrendLegend" role="list" aria-label="Peer company legend"></div></div></div></div></article></section></div><section class="entry-section" id="ownership">
 <div class="sec-bar">
 <div>
 <p class="eyebrow">Ownership &amp; Workforce</p>
@@ -894,7 +889,7 @@ main{padding:18px}
 </div>
 </section>
 
-<div class="part-layout" data-part="benchmark-table-notes"><section class="panel" id="heatmap"><div class="ph"><div><h3 class="pt">Peer Benchmark Heatmap</h3><p class="ps">Stronger relative performance is green.</p></div></div><div class="tablewrap"><table><thead><tr><th>Company</th><th>Revenue</th><th>Gross Margin</th><th>Operating Margin</th><th>Net Profit Margin</th><th>OCF Margin</th><th>Current Ratio</th></tr></thead><tbody id="tbody"></tbody></table></div></section><aside class="part-note" data-note-key="benchmark-table-notes">
+<div class="part-layout note-collapsible" data-part="benchmark-table-notes"><section class="panel" id="heatmap"><div class="ph"><div><h3 class="pt">Peer Benchmark Heatmap</h3><p class="ps">Stronger relative performance is green.</p></div></div><div class="tablewrap"><table><thead><tr><th>Company</th><th>Revenue</th><th>Gross Margin</th><th>Operating Margin</th><th>Net Profit Margin</th><th>OCF Margin</th><th>Current Ratio</th></tr></thead><tbody id="tbody"></tbody></table></div></section><aside class="part-note" data-note-key="benchmark-table-notes"><button class="note-toggle" type="button" title="Add comment">💬</button>
 <button class="part-note-clear" title="Clear this note" type="button">Clear</button>
 <div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
 <button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
@@ -974,7 +969,32 @@ function render(){let c=company.value,d=data.find(x=>x.company===c)||data[0];her
     color.addEventListener('input',()=>{restoreSelection(box);document.execCommand('foreColor',false,color.value);saveSelection(box);save()});
     box.querySelector('.part-note-clear').addEventListener('click',()=>{
       editor.innerHTML='';localStorage.removeItem(storageKey(box));editor.focus();
+      const toggle=box.querySelector('.note-toggle');
+      if(toggle)toggle.classList.remove('has-content');
     });
+  });
+})();
+
+(function setupNoteToggles(){
+  document.querySelectorAll('.part-layout.note-collapsible').forEach(layout=>{
+    const box=layout.querySelector('.part-note'),toggle=box&&box.querySelector('.note-toggle');
+    if(!box||!toggle)return;
+    const editor=box.querySelector('.part-note-editor');
+    const openKey='ciNoteOpen:'+box.dataset.noteKey;
+    const hasContent=()=>!!(editor.innerHTML&&editor.innerHTML.trim());
+    function applyState(open){
+      layout.classList.toggle('note-open',open);
+      toggle.classList.toggle('has-content',hasContent());
+      toggle.title=open?'Hide comment':'Add comment';
+    }
+    applyState(localStorage.getItem(openKey)==='1'||hasContent());
+    toggle.addEventListener('click',()=>{
+      const open=!layout.classList.contains('note-open');
+      localStorage.setItem(openKey,open?'1':'0');
+      applyState(open);
+      if(open)setTimeout(()=>editor.focus(),180);
+    });
+    editor.addEventListener('input',()=>{toggle.classList.toggle('has-content',hasContent())});
   });
 })();
 
