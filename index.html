@@ -62,6 +62,34 @@ body.nav-collapsed .nav a:hover:after{opacity:1;transform:translateY(-50%)}
 body.nav-collapsed .side-foot{display:none}
 body.nav-collapsed .side-toggle:before{transform:rotate(-135deg);margin-left:2px}
 
+/* ===== global filters parked in the nav rail ===== */
+.side-ctrl{display:flex;flex-direction:column;gap:8px;padding:11px 11px 12px;border:1px solid rgba(43,39,80,.09);border-radius:13px;background:rgba(255,255,255,.66);box-shadow:0 8px 20px -16px rgba(43,39,80,.35)}
+.sc-row{display:flex;flex-direction:column;gap:4px;min-width:0}
+.sc-label{font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.sc-select{width:100%;min-width:0;padding:8px 9px;border:1px solid rgba(43,39,80,.13);border-radius:9px;background:#fff;color:var(--text);font-family:inherit;font-size:11.5px;font-weight:650;line-height:1.2;outline:none;cursor:pointer}
+.sc-select:focus{border-color:var(--p600);box-shadow:0 0 0 3px rgba(83,74,183,.12)}
+.sc-fx{display:flex;flex-direction:column;gap:6px;padding-top:9px;border-top:1px dashed rgba(43,39,80,.14)}
+.sc-fx-row{display:flex;align-items:center;gap:6px}
+.sc-fx-row label{flex:1 1 auto;min-width:0;font-size:8.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--p800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-fx-row input{width:58px;flex:0 0 58px;padding:5px 6px;border:1px solid rgba(43,39,80,.13);border-radius:7px;background:#fff;color:var(--text);font-family:inherit;font-size:11px;text-align:right;outline:none}
+.sc-fx-row input:focus{border-color:var(--p600);box-shadow:0 0 0 3px rgba(83,74,183,.12)}
+.sc-apply{width:100%;padding:7px 10px;border:0;border-radius:9px;color:#fff;background:var(--p600);font-family:inherit;font-size:10px;font-weight:750;cursor:pointer;transition:.16s var(--ease)}
+.sc-apply:hover{background:var(--p800)}
+.sc-note{margin:0;color:var(--faint);font-size:8px;line-height:1.45}
+.sc-mini{display:none;width:100%;align-items:center;justify-content:center;gap:6px;padding:8px 4px;border:1px solid rgba(43,39,80,.13);border-radius:9px;background:#fff;color:var(--text);font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:.16s var(--ease)}
+.sc-mini:hover{border-color:var(--p600);color:var(--p800)}
+.sc-mini i{width:8px;height:8px;flex:0 0 8px;border-radius:50%;background:var(--p600)}
+body.nav-collapsed .side-ctrl{padding:8px 8px 9px;gap:0}
+body.nav-collapsed .sc-row,body.nav-collapsed .sc-fx,body.nav-collapsed .sc-note{display:none}
+body.nav-collapsed .sc-mini{display:flex}
+@media(max-height:860px){
+  .side{gap:11px;padding:12px 12px}
+  .brand{min-height:54px;padding:9px}
+  .nav a{padding:8px 10px;font-size:12px}
+  .side-ctrl{padding:9px 9px 10px;gap:7px}
+  .sc-note{display:none}
+}
+
 /* ===== Page frame ===== */
 main{min-width:0;padding:28px 32px 48px}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:22px;margin-bottom:20px}
@@ -76,6 +104,7 @@ h1{margin:0;color:var(--ink);font-size:clamp(28px,3vw,42px);font-weight:800;line
 .hero h2{margin:0 0 8px;color:var(--ink);font-size:23px;font-weight:800;letter-spacing:-.028em}
 .hero p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.controls .ctrl:only-child{max-width:280px}
 .ctrl label{display:block;margin-bottom:6px;color:var(--faint);font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .ctrl select,.ctrl input{width:100%;padding:10px 11px;border:1px solid rgba(43,39,80,.10);border-radius:10px;color:var(--text);background:rgba(255,255,255,.78);font:inherit;font-size:12px;outline:none;transition:.16s var(--ease)}
 .ctrl select:focus,.ctrl input:focus{border-color:rgba(83,74,183,.5);box-shadow:0 0 0 3px rgba(83,74,183,.09);background:#fff}
@@ -452,16 +481,12 @@ main{padding:18px}
 .nav a.is-ghost .annual-tag{background:rgba(255,255,255,.08)}
 .adive-cards{display:flex;flex-direction:column;gap:12px}
 .adive-card{border:1px solid rgba(43,39,80,.09);border-radius:16px;background:rgba(255,255,255,.72);overflow:hidden}
-.adive-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
-.adive-head:hover{background:rgba(238,237,254,.4)}
+.adive-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px 11px;border-bottom:1px solid rgba(43,39,80,.06)}
 .adive-head-left{display:flex;align-items:center;gap:10px;min-width:0}
 .adive-head h3{margin:0;color:var(--ink);font-size:14px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
 .adive-stamp{color:var(--faint);font-size:9px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
 .adive-stamp.is-empty{color:var(--faint);font-style:italic;font-weight:600}
-.adive-chev{flex-shrink:0;color:var(--faint);font-size:11px;transition:transform .18s var(--ease)}
-.adive-card.is-open .adive-chev{transform:rotate(90deg)}
-.adive-body{display:none;padding:0 16px 16px}
-.adive-card.is-open .adive-body{display:block}
+.adive-body{display:block;padding:14px 16px 16px}
 .profile-stats{display:grid;grid-template-columns:repeat(var(--ad-cols,4),1fr);gap:10px;margin-bottom:10px}
 .profile-stat{padding:12px;border:1px solid rgba(83,74,183,.10);border-radius:12px;background:rgba(238,237,254,.42);text-align:center}
 .profile-stat .pv{color:var(--ink);font-size:22px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
@@ -619,9 +644,23 @@ section.exec-block .exec-signals{min-width:0}
 <a href="#capital-market" data-label="Capital Markets"><i>08</i><span>Capital Markets</span></a>
 <a href="#annual-deep-dive" data-label="Annual Deep-Dive" id="navAnnual"><i>09</i><span>Annual Deep-Dive</span><em class="annual-tag">年度</em></a>
 <a href="#heatmap" data-label="Benchmark Table"><i>10</i><span>Benchmark Table</span></a>
-</nav><div class="side-foot">Six CSV sources &middot; CNY normalised<br/>Market values in source currency</div><button class="side-toggle" id="sideToggle" type="button" aria-label="Toggle navigation" aria-expanded="true" title="Collapse navigation"></button></aside><main>
+</nav>
+<div class="side-ctrl" id="sideCtrl">
+<div class="sc-row">
+<label class="sc-label" for="company">Focus company</label>
+<select class="sc-select" id="company"></select>
+</div>
+<button class="sc-mini" id="scMini" title="Expand navigation to change company" type="button"><i></i><span id="scMiniTxt">&mdash;</span></button>
+<div class="sc-fx">
+<div class="sc-fx-row"><label for="eurCnyRate">EUR/CNY &middot; AUMOVIO</label><input id="eurCnyRate" min="0.01" step="0.01" type="number" value="8.35"/></div>
+<div class="sc-fx-row"><label for="hkdCnyRate">HKD/CNY &middot; NASN</label><input id="hkdCnyRate" max="1.99" min="0.01" step="0.001" type="number" value="0.855"/></div>
+<button class="sc-apply" id="applyFx" type="button">Apply FX</button>
+<p class="sc-note">AUMOVIO EUR &rarr; CNY &middot; NASN quote HKD &rarr; CNY. NASN statements are already reported in CNY</p>
+</div>
+</div>
+<div class="side-foot">Six CSV sources &middot; CNY normalised<br/>Market values in source currency</div><button class="side-toggle" id="sideToggle" type="button" aria-label="Toggle navigation" aria-expanded="true" title="Collapse navigation"></button></aside><main>
 <header class="top"><div><p class="eyebrow">SAM China · Strategy &amp; Marketing</p><h1>Competitive Intelligence<br/>Dashboard</h1></div><div class="status" id="status">Loading six CSV files…</div></header>
-<section class="hero" id="overview"><div><h2 id="heroTitle">Executive Snapshot</h2><p id="heroText">Reading GitHub CSV files.</p></div><div class="controls"><div class="ctrl"><label>Focus company</label><select id="company"></select></div><div class="ctrl"><label>Reporting period</label><select id="period"></select></div><div class="fx-control"><label for="eurCnyRate">AUMOVIO FX · EUR/CNY</label><input id="eurCnyRate" min="0.01" step="0.01" type="number" value="8.35"/><label for="hkdCnyRate">NASN QUOTE FX &middot; HKD/CNY</label><input id="hkdCnyRate" max="1.99" min="0.01" step="0.001" type="number" value="0.855"/><button id="applyFx" type="button">Apply</button><span class="fx-note">Global: converts AUMOVIO EUR figures to CNY, and NASN share price / market cap from HKD to CNY. NASN financial statements are already reported in CNY, so no conversion is applied to them</span></div></div></section><section class="exec-block" id="exec"><article class="panel exec-signals"><div class="ph"><div><h3 class="pt">Executive Signals</h3><p class="ps">Numbers first &middot; ranks and peer medians recomputed on every CSV update</p></div><span class="sig-legend">Large figure = the metric that decides the quarter &middot; rank within the selected peer set &middot; all figures CNY</span></div><div class="signals sig-grid" id="signals"></div></article><aside class="part-note exec-note" data-note-key="overview-notes">
+<section class="hero" id="overview"><div><h2 id="heroTitle">Executive Snapshot</h2><p id="heroText">Reading GitHub CSV files.</p></div><div class="controls"><div class="ctrl"><label>Reporting period</label><select id="period"></select></div></div></section><section class="exec-block" id="exec"><article class="panel exec-signals"><div class="ph"><div><h3 class="pt">Executive Signals</h3><p class="ps">Numbers first &middot; ranks and peer medians recomputed on every CSV update</p></div><span class="sig-legend">Large figure = the metric that decides the quarter &middot; rank within the selected peer set &middot; all figures CNY</span></div><div class="signals sig-grid" id="signals"></div></article><aside class="part-note exec-note" data-note-key="overview-notes">
 <button class="part-note-clear" title="Clear this note" type="button">Clear</button>
 <div aria-label="Text formatting" class="part-note-toolbar" role="toolbar">
 <button data-cmd="bold" title="Bold" type="button"><b>B</b></button>
@@ -792,13 +831,12 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="equity">
 <div class="adive-head">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Shareholding Structure</h3></div>
+<div class="adive-head-left"><h3>Shareholding Structure</h3></div>
 <span class="adive-stamp">Manual · per company &amp; quarter</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
 <div class="ph">
 <div>
-<h3 class="pt">Shareholding Structure</h3>
 <p class="ps" id="eqSub">Share of equity for the selected quarter</p>
 </div>
 <div class="panel-actions">
@@ -825,13 +863,12 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="headcount">
 <div class="adive-head">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Headcount Mix</h3></div>
+<div class="adive-head-left"><h3>Headcount Mix</h3></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
 <div class="ph">
 <div>
-<h3 class="pt">Headcount Mix</h3>
 <p class="ps" id="hcSub">Employees by function for the selected year</p>
 </div>
 <div class="panel-actions">
@@ -860,13 +897,12 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="education">
 <div class="adive-head">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Education Mix</h3></div>
+<div class="adive-head-left"><h3>Education Mix</h3></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
 <div class="ph">
 <div>
-<h3 class="pt">Education Mix</h3>
 <p class="ps" id="eduSub">Employees by education level for the selected year</p>
 </div>
 <div class="panel-actions">
@@ -893,13 +929,12 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="rd">
 <div class="adive-head">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>R&amp;D Headcount &amp; Compensation</h3></div>
+<div class="adive-head-left"><h3>R&amp;D Headcount &amp; Compensation</h3></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
 <div class="ph">
 <div>
-<h3 class="pt">R&amp;D Headcount &amp; Compensation</h3>
 <p class="ps" id="rdSub">R&amp;D staff count vs average annual compensation, by period</p>
 </div>
 <div class="panel-actions">
@@ -927,7 +962,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="profile">
 <div class="adive-head" data-toggle="profile">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Company Profile &amp; Footprint</h3></div>
+<div class="adive-head-left"><h3>Company Profile &amp; Footprint</h3></div>
 <span class="adive-stamp" id="adProfileStamp">Awaiting annual data</span>
 </div>
 <div class="adive-body" id="adProfileBody"></div>
@@ -935,7 +970,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="customer">
 <div class="adive-head" data-toggle="customer">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Customer Concentration</h3></div>
+<div class="adive-head-left"><h3>Customer Concentration</h3></div>
 <span class="adive-stamp" id="adCustomerStamp">Awaiting annual data</span>
 </div>
 <div class="adive-body" id="adCustomerBody"></div>
@@ -943,7 +978,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="region">
 <div class="adive-head" data-toggle="region">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Regional Performance (China vs Overseas)</h3></div>
+<div class="adive-head-left"><h3>Regional Performance (China vs Overseas)</h3></div>
 <span class="adive-stamp" id="adRegionStamp">Awaiting annual data</span>
 </div>
 <div class="adive-body" id="adRegionBody"></div>
@@ -951,7 +986,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="segment">
 <div class="adive-head" data-toggle="segment">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Product Segment P&amp;L</h3></div>
+<div class="adive-head-left"><h3>Product Segment P&amp;L</h3></div>
 <span class="adive-stamp" id="adSegmentStamp">Awaiting annual data</span>
 </div>
 <div class="adive-body" id="adSegmentBody"></div>
@@ -959,7 +994,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="productline">
 <div class="adive-head">
-<div class="adive-head-left"><span class="adive-chev">&#9656;</span><h3>Focused Product Line</h3></div>
+<div class="adive-head-left"><h3>Focused Product Line</h3></div>
 <span class="adive-stamp">Chassis-relevant lines &middot; revenue by year</span>
 </div>
 <div class="adive-body">
@@ -2112,11 +2147,27 @@ function render(){
   renderChips();updateNavGhost();
 }
 
-document.querySelectorAll('#annual-deep-dive .adive-head').forEach(function(head){
-  head.addEventListener('click',function(){
-    head.closest('.adive-card').classList.toggle('is-open');
+/* ---------- 侧边栏折叠态下的紧凑公司按钮（点一下展开导航并可切换） ---------- */
+(function(){
+  var mini=document.getElementById('scMini'),txt=document.getElementById('scMiniTxt'),sel=document.getElementById('company');
+  if(!mini||!txt||!sel) return;
+  var SHORT={Aumovio:'AU',Luxshare:'LX',HASCO:'HA',Tuopu:'TU',Baolong:'BA',BTL:'BT',NASN:'NA'};
+  function paint(){
+    var v=sel.value||'';
+    txt.textContent=SHORT[v]||String(v||'—').slice(0,2).toUpperCase();
+    mini.title=(v==='Aumovio'?'AUMOVIO':v)+' · expand the navigation rail to change company';
+  }
+  mini.addEventListener('click',function(){
+    document.body.classList.remove('nav-collapsed');
+    try{localStorage.setItem('ciNavCollapsed','0')}catch(e){}
+    setTimeout(function(){try{sel.focus()}catch(e){}},60);
   });
-});
+  sel.addEventListener('change',paint);
+  if(window.MutationObserver){
+    try{new MutationObserver(paint).observe(sel,{childList:true,attributes:true})}catch(e){}
+  }
+  paint();setTimeout(paint,700);setTimeout(paint,1900);
+})();
 
 /* ---------- 整块折叠：展开时内部所有卡片一次全开，不用逐个点 ---------- */
 var adSec=$('annual-deep-dive'),adFold=$('adFold'),adFoldLabel=$('adFoldLabel');
