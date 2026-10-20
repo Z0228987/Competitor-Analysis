@@ -736,6 +736,61 @@ main{padding:18px}
 </div>
 </article>
 </div>
+<div class="entry-grid" style="margin-top:14px">
+<article class="panel pie-panel">
+<div class="ph">
+<div>
+<h3 class="pt">Education Mix</h3>
+<p class="ps" id="eduSub">Employees by education level for the selected quarter</p>
+</div>
+<div class="panel-actions">
+<button class="mini-btn" id="eduEdit" type="button">Edit</button>
+</div>
+</div>
+<div class="pie-wrap">
+<div class="chart pie">
+<canvas aria-label="Doughnut chart of headcount by education level" id="eduPie" role="img"></canvas>
+<div class="pie-empty" id="eduEmpty" hidden=""><b>2026Q2</b><br/>No education data recorded yet &middot; click Edit</div>
+</div>
+<ul class="pie-legend" id="eduLegend"></ul>
+</div>
+<div class="entry" hidden="" id="eduEntry">
+<div class="entry-rows" id="eduRows"></div>
+<div class="entry-actions">
+<button class="mini-btn" id="eduAdd" type="button">+ Add level</button>
+<button class="mini-btn ghost" id="eduClear" type="button">Clear quarter</button>
+<span class="entry-total" id="eduTotal"></span>
+</div>
+</div>
+</article>
+<article class="panel pie-panel">
+<div class="ph">
+<div>
+<h3 class="pt">R&amp;D Headcount &amp; Compensation</h3>
+<p class="ps" id="rdSub">R&amp;D staff count vs average annual compensation, by period</p>
+</div>
+<div class="panel-actions">
+<button class="mini-btn" id="rdEdit" type="button">Edit</button>
+</div>
+</div>
+<div class="chart sm">
+<canvas aria-label="Bar and line chart of R&amp;D headcount and average compensation" id="rdChart" role="img"></canvas>
+<div class="pie-empty" id="rdEmpty" hidden="">No R&amp;D data yet<br/>click Edit to enter</div>
+</div>
+<div class="pl-legend">
+<span><i class="dot pl-rev"></i>R&amp;D headcount &middot; ppl</span>
+<span><i class="dot pl-price"></i>Avg comp &middot; CNY k / yr</span>
+</div>
+<div class="entry" hidden="" id="rdEntry">
+<div class="pl-inputs" style="margin:10px 0 0">
+<label class="field-label" for="rdHc"><span class="fld-period" id="rdHcPeriod">&mdash;</span> R&amp;D headcount <em>ppl</em></label>
+<input class="num-input" id="rdHc" min="0" placeholder="0" type="number"/>
+<label class="field-label" for="rdSal"><span class="fld-period" id="rdSalPeriod">&mdash;</span> avg R&amp;D comp <em>CNY k / yr</em></label>
+<input class="num-input" id="rdSal" min="0" placeholder="0" step="0.1" type="number"/>
+</div>
+</div>
+</article>
+</div>
 </section>
 
 <section class="entry-section" id="product-line">
@@ -959,12 +1014,15 @@ window.MANUAL_SEED={"eq":{"HASCO|2024Q4":[{"n":"均胜集团","v":36.73},{"n":"�
 'use strict';
 var CH=window.Chart; if(!CH) return;
 var PAL=['#534AB7','#7F77DD','#AFA9EC','#1D9E75','#5DCAA5','#D85A30','#F0997B','#378ADD','#BA7517','#D4537E','#639922','#888780'];
-var KEY={eq:'ciEquityStructure',hc:'ciHeadcountMix',pn:'ciProductLineName',pd:'ciProductLineData'};
+var KEY={eq:'ciEquityStructure',hc:'ciHeadcountMix',edu:'ciEducationMix',pn:'ciProductLineName',pd:'ciProductLineData',rd:'ciRdHeadcount'};
 var TPL={
   eq:[{n:'Founder / controlling',v:0},{n:'Institutional investors',v:0},{n:'Employee / ESOP',v:0},{n:'Free float / retail',v:0},{n:'Treasury shares',v:0}],
-  hc:[{n:'R&D',v:0},{n:'Production',v:0},{n:'Sales & marketing',v:0},{n:'G&A',v:0}]
+  hc:[{n:'R&D',v:0},{n:'Production',v:0},{n:'Sales & marketing',v:0},{n:'G&A',v:0}],
+  edu:[{n:'Below bachelor',v:0},{n:'Bachelor',v:0},{n:'Master',v:0},{n:'PhD / Doctorate',v:0}]
 };
-var UNIT={eq:'%',hc:'ppl'};
+var UNIT={eq:'%',hc:'ppl',edu:'%'};
+var EMPTY_MSG={eq:'No holders recorded yet',hc:'No headcount recorded yet',edu:'No education data recorded yet'};
+var CANVAS_ID={eq:'equityPie',hc:'headcountPie',edu:'eduPie'};
 var $=function(id){return document.getElementById(id)};
 var elCo=$('company'),elPe=$('period'),elOp=$('ownPeriod'),plName=$('plName'),plRev=$('plRev'),plPrice=$('plPrice');
 if(!elCo||!elPe||!plName||!plRev||!plPrice) return;
@@ -972,10 +1030,10 @@ var SEED=window.MANUAL_SEED||{eq:{},hc:{}};
 
 function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return{}}}
 function write(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){console.warn('manual blocks: storage unavailable',e)}}
-var db={eq:read(KEY.eq),hc:read(KEY.hc),pn:read(KEY.pn),pd:read(KEY.pd)};
+var db={eq:read(KEY.eq),hc:read(KEY.hc),edu:read(KEY.edu),pn:read(KEY.pn),pd:read(KEY.pd),rd:read(KEY.rd)};
 /* 首次访问时把预置数据当作默认值（不写盘，编辑后才落 localStorage） */
 function seeded(b,s){var sd=SEED[b]&&SEED[b][s];return sd?sd.map(function(r){return{n:r.n,v:r.v,c:r.c}}):null}
-var charts={eq:null,hc:null,pl:null};
+var charts={eq:null,hc:null,edu:null,pl:null,rd:null};
 var timers={};
 function persist(k){clearTimeout(timers[k]);timers[k]=setTimeout(function(){write(KEY[k],db[k])},180)}
 function co(){return elCo.value||''}
@@ -987,7 +1045,7 @@ function prevYear(p){var m=String(p).match(/^(\d{4})(Q[1-4])$/);return m?(Number
 function ownPeriods(){
   var set={},i;
   Array.prototype.slice.call(elPe.options).forEach(function(o){if(o.value)set[o.value]=1});
-  ['eq','hc'].forEach(function(b){
+  ['eq','hc','edu'].forEach(function(b){
     [db[b],SEED[b]||{}].forEach(function(m){
       Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[1])set[a[1]]=1});
     });
@@ -1012,7 +1070,7 @@ function hcPeriod(){
 }
 function num(v){var n=Number(v);return Number.isFinite(n)?n:0}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function fmt(v,b){return b==='eq'?num(v).toFixed(1)+'%':Math.round(num(v)).toLocaleString('en-US')}
+function fmt(v,b){return UNIT[b]==='%'?num(v).toFixed(1)+'%':Math.round(num(v)).toLocaleString('en-US')}
 
 function blockHas(b,k){
   var rows=db[b]&&db[b][k];
@@ -1020,10 +1078,10 @@ function blockHas(b,k){
   var sd=SEED[b]&&SEED[b][k];
   return !!(sd&&sd.length&&sd.reduce(function(a,r){return a+num(r.v)},0)>0);
 }
-function hasData(c,p){return blockHas('eq',c+'|'+p)||blockHas('hc',c+'|'+p)}
+function hasData(c,p){return blockHas('eq',c+'|'+p)||blockHas('hc',c+'|'+p)||blockHas('edu',c+'|'+p)}
 function periodsWithData(c){
   var set={},i;
-  ['eq','hc'].forEach(function(b){
+  ['eq','hc','edu'].forEach(function(b){
     [db[b],SEED[b]||{}].forEach(function(m){
       Object.keys(m).forEach(function(k){
         var a=k.split('|');if(a[0]===c&&a[1]&&blockHas(b,k))set[a[1]]=1;
@@ -1035,7 +1093,7 @@ function periodsWithData(c){
 function companyPool(){
   var set={},put=function(v){if(v)set[v]=1};
   Array.prototype.slice.call(elCo.options).forEach(function(o){put(o.value)});
-  ['eq','hc'].forEach(function(b){
+  ['eq','hc','edu'].forEach(function(b){
     [SEED[b]||{},db[b]||{}].forEach(function(m){Object.keys(m).forEach(function(k){put(k.split('|')[0])})});
   });
   var out=Object.keys(set);
@@ -1071,7 +1129,7 @@ function rowsFor(b){
 /* ---------- doughnut panels ---------- */
 function paint(b){
   var rows=rowsFor(b),total=rows.reduce(function(a,r){return a+num(r.v)},0);
-  var legend=$(b==='eq'?'eqLegend':'hcLegend'),canvas=$(b==='eq'?'equityPie':'headcountPie'),empty=$(b==='eq'?'eqEmpty':'hcEmpty');
+  var legend=$(b+'Legend'),canvas=$(CANVAS_ID[b]||(b+'Pie')),empty=$(b+'Empty');
   legend.innerHTML=rows.map(function(r,i){
     var chg='';
     if(b==='eq'){
@@ -1081,16 +1139,16 @@ function paint(b){
         :'<span class="lg-chg"></span>';
     }
     return '<li class="'+(b==='eq'?'is-eq':'')+'"><i class="lg-dot" style="background:'+PAL[i%PAL.length]+'"></i><span class="lg-name" title="'+esc(r.n)+'">'+(esc(r.n)||'Unnamed')+'</span><span class="lg-val">'+fmt(r.v,b)+'</span>'+chg+'</li>';
-  }).join('')+'<li class="lg-total'+(b==='eq'?' is-eq':'')+(b==='eq'&&total>0&&Math.abs(total-100)>0.05?' is-warn':'')+'"><span class="lg-name">Total</span><span class="lg-val">'+fmt(total,b)+'</span></li>';
-  var totalBox=$(b==='eq'?'eqTotal':'hcTotal');
+  }).join('')+'<li class="lg-total'+(UNIT[b]==='%'?' is-eq':'')+(UNIT[b]==='%'&&total>0&&Math.abs(total-100)>0.05?' is-warn':'')+'"><span class="lg-name">Total</span><span class="lg-val">'+fmt(total,b)+'</span></li>';
+  var totalBox=$(b+'Total');
   if(totalBox) totalBox.textContent=total>0?('Total '+fmt(total,b)):'Nothing entered yet';
-  if(totalBox) totalBox.className='entry-total'+((b==='eq'&&total>0&&Math.abs(total-100)>0.05)?' is-warn':'');
+  if(totalBox) totalBox.className='entry-total'+((UNIT[b]==='%'&&total>0&&Math.abs(total-100)>0.05)?' is-warn':'');
   if(total<=0){
     if(charts[b]){charts[b].destroy();charts[b]=null}
     canvas.style.display='none';empty.hidden=false;
     var per0=slotB(b).split('|')[1]||'—';
     var alt=periodsWithData(co()).filter(function(x){return x!==per0});
-    empty.innerHTML='<b>'+esc(per0)+'</b><br/>'+(b==='eq'?'No holders recorded yet':'No headcount recorded yet')+' &middot; click Edit'
+    empty.innerHTML='<b>'+esc(per0)+'</b><br/>'+(EMPTY_MSG[b]||'No data recorded yet')+' &middot; click Edit'
       +(alt.length?'<br/><span class="pie-alt">data on file: '+esc(alt.slice(-3).join(' / '))+'</span>':'');
     return;
   }
@@ -1110,6 +1168,10 @@ function paintSub(b){
     $('eqSub').textContent=p+' · top holders as % of total shares · '+total.toFixed(2)+'% covered';
     return;
   }
+  if(b==='edu'){
+    $('eduSub').textContent=total>0?(p+' · employees by education level · '+total.toFixed(1)+'% covered'):(p+' · no education data recorded yet · click Edit to enter');
+    return;
+  }
   if(total<=0){
     $('hcSub').textContent=p+' · no headcount recorded yet · click Edit to enter (annual)';
     return;
@@ -1123,7 +1185,7 @@ function paintSub(b){
   $('hcSub').textContent=txt;
 }
 function editor(b){
-  var rows=rowsFor(b),box=$(b==='eq'?'eqRows':'hcRows');
+  var rows=rowsFor(b),box=$(b+'Rows');
   box.innerHTML=rows.map(function(r,i){
     return '<div class="entry-row"><input class="e-name" data-i="'+i+'" data-k="n" placeholder="Label" type="text" value="'+esc(r.n)+'"/>'
       +'<input class="e-val" data-i="'+i+'" data-k="v" placeholder="0" step="0.01" min="0" type="number" value="'+(r.v?r.v:'')+'"/>'
@@ -1131,7 +1193,7 @@ function editor(b){
   }).join('');
 }
 function bindEditor(b){
-  var box=$(b==='eq'?'eqRows':'hcRows');
+  var box=$(b+'Rows');
   box.addEventListener('input',function(e){
     var t=e.target,i=Number(t.getAttribute('data-i')),k=t.getAttribute('data-k');
     if(!t.getAttribute('data-k')||!Number.isFinite(i)) return;
@@ -1145,16 +1207,16 @@ function bindEditor(b){
     var rows=rowsFor(b),i=Number(btn.getAttribute('data-i'));
     rows.splice(i,1);persist(b);editor(b);paint(b);paintSub(b);
   });
-  $(b==='eq'?'eqAdd':'hcAdd').addEventListener('click',function(){
+  $(b+'Add').addEventListener('click',function(){
     var rows=rowsFor(b);rows.push({n:'',v:0});persist(b);editor(b);paint(b);
-    var last=$(b==='eq'?'eqRows':'hcRows').lastElementChild;
+    var last=$(b+'Rows').lastElementChild;
     if(last){var f=last.querySelector('.e-name');if(f)f.focus()}
   });
-  $(b==='eq'?'eqClear':'hcClear').addEventListener('click',function(){
+  $(b+'Clear').addEventListener('click',function(){
     db[b][slotB(b)]=TPL[b].map(function(r){return{n:r.n,v:0}});persist(b);editor(b);paint(b);paintSub(b);
   });
-  $(b==='eq'?'eqEdit':'hcEdit').addEventListener('click',function(){
-    var panel=$(b==='eq'?'eqEntry':'hcEntry'),btn=this,open=panel.hidden;
+  $(b+'Edit').addEventListener('click',function(){
+    var panel=$(b+'Entry'),btn=this,open=panel.hidden;
     panel.hidden=!open;
     btn.textContent=open?'Done':'Edit';
     btn.classList.toggle('is-on',open);
@@ -1202,6 +1264,50 @@ function updatePLChips(){
     return '<span class="q-chip">'+esc(x.p)+'<button data-p="'+esc(x.p)+'" title="Remove this quarter" type="button">&times;</button></span>';
   }).join(''):'<span class="chip-empty">No quarters recorded yet</span>';
 }
+
+/* ---------- R&D headcount & compensation ---------- */
+function rdPoints(){
+  var c=co(),out=[];
+  periodsAsc().forEach(function(p){
+    var r=db.rd[c+'|'+p];
+    if(r&&(Number.isFinite(r.hc)||Number.isFinite(r.sal))) out.push({p:p,hc:Number.isFinite(r.hc)?r.hc:null,sal:Number.isFinite(r.sal)?r.sal:null});
+  });
+  return out;
+}
+function drawRD(){
+  var pts=rdPoints(),canvas=$('rdChart'),empty=$('rdEmpty');
+  if(!pts.length){
+    if(charts.rd){charts.rd.destroy();charts.rd=null}
+    canvas.style.display='none';empty.hidden=false;return;
+  }
+  canvas.style.display='';empty.hidden=true;
+  var labels=pts.map(function(x){return x.p}),hcs=pts.map(function(x){return x.hc}),sals=pts.map(function(x){return x.sal});
+  var data={labels:labels,datasets:[
+    {type:'bar',label:'R&D headcount',data:hcs,backgroundColor:'rgba(127,119,221,.55)',hoverBackgroundColor:'rgba(127,119,221,.82)',borderRadius:6,barPercentage:.55,yAxisID:'y',order:2},
+    {type:'line',label:'Avg comp',data:sals,borderColor:'#D85A30',backgroundColor:'#fff',borderWidth:2,pointRadius:3,pointHoverRadius:5,pointBorderWidth:2,pointBorderColor:'#D85A30',pointBackgroundColor:'#fff',tension:.32,spanGaps:true,yAxisID:'y1',order:1}
+  ]};
+  if(charts.rd){charts.rd.data=data;charts.rd.update()}
+  else charts.rd=new CH(canvas,{type:'bar',data:data,options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{backgroundColor:'rgba(43,39,80,.94)',padding:10,callbacks:{label:function(c){var v=c.parsed.y;if(v==null)return null;return c.dataset.label==='R&D headcount'?('R&D headcount: '+Math.round(v).toLocaleString('en-US')+' ppl'):('Avg comp: '+num(v).toFixed(1)+' CNY k/yr')}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:10},autoSkip:false,maxRotation:45}},y:{position:'left',beginAtZero:true,grid:{color:'rgba(83,74,183,.07)'},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}},y1:{position:'right',beginAtZero:true,grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}}}}});
+}
+function syncRD(){
+  var rec=db.rd[slot()]||{};
+  $('rdHcPeriod').textContent=op()||'—';
+  $('rdSalPeriod').textContent=op()||'—';
+  var rdHcEl=$('rdHc'),rdSalEl=$('rdSal');
+  if(!rdHcEl.matches(':focus')) rdHcEl.value=Number.isFinite(rec.hc)?rec.hc:'';
+  if(!rdSalEl.matches(':focus')) rdSalEl.value=Number.isFinite(rec.sal)?rec.sal:'';
+  var pts=rdPoints();
+  $('rdSub').textContent=pts.length?('R&D staff count vs average annual compensation · '+pts.length+' period'+(pts.length===1?'':'s')+' on file'):'R&D staff count vs average annual compensation, by period';
+  drawRD();
+}
+function rdSet(field,el){
+  if(!co()||!pe()) return;
+  var k=slot(),rec=db.rd[k]||{};
+  var v=el.value.trim()===''?null:Number(el.value);
+  rec[field]=Number.isFinite(v)?v:null;
+  if(rec.hc==null&&rec.sal==null) delete db.rd[k]; else db.rd[k]=rec;
+  persist('rd');syncRD();
+}
 function syncPL(){
   var c=co(),nm=db.pn[c]||'';
   if(!plName.matches(':focus')) plName.value=nm;
@@ -1241,7 +1347,8 @@ function boot(){
   buildPeriodOptions();
   paint('eq');paintSub('eq');
   paint('hc');paintSub('hc');
-  syncPL();renderCoChips();
+  paint('edu');paintSub('edu');
+  syncPL();syncRD();renderCoChips();
 }
 function applyImport(res){
   res=res||{n:0,cos:[],pers:[]};
@@ -1272,7 +1379,7 @@ function showToast(txt){
   clearTimeout(showToast._h);
   showToast._h=setTimeout(function(){t.classList.remove('is-on')},4200);
 }
-bindEditor('eq');bindEditor('hc');
+bindEditor('eq');bindEditor('hc');bindEditor('edu');
 
 plName.addEventListener('input',function(){
   var c=co();if(!c) return;
@@ -1286,6 +1393,15 @@ $('plChips').addEventListener('click',function(e){
   var btn=e.target.closest('button[data-p]');if(!btn) return;
   delete db.pd[co()+'|'+btn.getAttribute('data-p')];
   persist('pd');syncPL();
+});
+$('rdHc').addEventListener('input',function(){rdSet('hc',this)});
+$('rdSal').addEventListener('input',function(){rdSet('sal',this)});
+$('rdEdit').addEventListener('click',function(){
+  var panel=$('rdEntry'),btn=this,open=panel.hidden;
+  panel.hidden=!open;
+  btn.textContent=open?'Done':'Edit';
+  btn.classList.toggle('is-on',open);
+  if(open) syncRD();
 });
 
 elCo.addEventListener('change',boot);
