@@ -1209,6 +1209,7 @@ var EMPTY_MSG={eq:'No holders recorded yet',hc:'No headcount recorded yet',edu:'
 var CANVAS_ID={eq:'equityPie',hc:'headcountPie',edu:'eduPie'};
 var $=function(id){return document.getElementById(id)};
 var elCo=$('company'),elPe=$('period'),elOp=$('ownPeriod'),elAp=$('annPeriod'),plName=$('plName'),plRev=$('plRev'),plPrice=$('plPrice'),plGm=$('plGm');
+var elOpMirrors=[$('ownPeriodRd')].filter(Boolean),elApMirrors=[$('annPeriodEdu'),$('annPeriodPl')].filter(Boolean);
 if(!elCo||!elPe||!plName||!plRev||!plPrice||!plGm) return;
 var SEED=window.MANUAL_SEED||{eq:{},hc:{}};
 
@@ -1675,6 +1676,11 @@ function plDeleteLine(){
 }
 
 /* ---------- boot & wiring ---------- */
+function mirrorSelect(src,dst){
+  if(!src||!dst) return;
+  if(dst.innerHTML!==src.innerHTML) dst.innerHTML=src.innerHTML;
+  if(dst.value!==src.value) dst.value=src.value;
+}
 function buildPeriodOptions(){
   if(!elOp) return;
   var list=ownPeriods(),sig=list.join(',');
@@ -1686,6 +1692,7 @@ function buildPeriodOptions(){
   }
   if(!elOp.value&&list.length) elOp.value=list[0];
   if(!elOp.value&&pe()) elOp.value=pe();
+  elOpMirrors.forEach(function(m){mirrorSelect(elOp,m)});
 }
 function buildAnnPeriodOptions(){
   if(!elAp) return;
@@ -1697,6 +1704,7 @@ function buildAnnPeriodOptions(){
     if(list.indexOf(cur)>=0) elAp.value=cur;
   }
   if(!elAp.value&&list.length) elAp.value=list[0];
+  elApMirrors.forEach(function(m){mirrorSelect(elAp,m)});
 }
 function boot(){
   if(!elCo.options.length){companyPool().forEach(ensureCoOption)}
@@ -1784,6 +1792,8 @@ $('coChips').addEventListener('click',function(e){
 elPe.addEventListener('change',boot);
 if(elOp) elOp.addEventListener('change',boot);
 if(elAp) elAp.addEventListener('change',boot);
+elOpMirrors.forEach(function(m){m.addEventListener('change',function(){evSet(elOp,m.value)})});
+elApMirrors.forEach(function(m){m.addEventListener('change',function(){evSet(elAp,m.value)})});
 if(window.MutationObserver){
   var mo=new MutationObserver(function(){boot()});
   mo.observe(elCo,{childList:true});
@@ -1997,6 +2007,7 @@ fetch('data/IMPORT_manual_all.csv',{cache:'no-store'}).then(function(r){
 'use strict';
 var $=function(id){return document.getElementById(id)};
 var elCo=$('company'),elYear=$('adYear'),nav=$('navAnnual');
+var elYearMirrors=[$('adYearCustomer'),$('adYearRegion'),$('adYearSegment')].filter(Boolean);
 if(!elCo||!elYear) return;
 var KEY={profile:'ciAdProfile',customer:'ciAdCustomer',region:'ciAdRegion',segment:'ciAdSegment'};
 var PROFILE_LABELS={Plants:'Production Plants',RD_Centers:'R&D Centers',Employees:'Employees',Countries:'Countries'};
@@ -2146,6 +2157,10 @@ function buildYearOptions(){
     var preferred=latestYearWithData(co());
     elYear.value=(preferred&&list.indexOf(preferred)>=0)?preferred:list[0];
   }
+  elYearMirrors.forEach(function(m){
+    if(m.innerHTML!==elYear.innerHTML) m.innerHTML=elYear.innerHTML;
+    if(m.value!==elYear.value) m.value=elYear.value;
+  });
 }
 function updateNavGhost(){
   if(!nav) return;
@@ -2232,6 +2247,11 @@ elCo.addEventListener('change',function(){
   render();
 });
 elYear.addEventListener('change',render);
+elYearMirrors.forEach(function(m){m.addEventListener('change',function(){
+  if(elYear.value===m.value) return;
+  elYear.value=m.value;
+  elYear.dispatchEvent(new Event('change'));
+})});
 
 /* ---------- CSV import / export (separate file from the ownership/headcount/product-line CSV) ---------- */
 var AD_ALIAS={'均胜电子':'HASCO','立讯精密':'Luxshare','拓普集团':'Tuopu','保隆科技':'Baolong','伯特利':'BTL',
