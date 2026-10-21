@@ -482,8 +482,9 @@ main{padding:18px}
 .adive-cards{display:flex;flex-direction:column;gap:12px}
 .adive-card{border:1px solid rgba(43,39,80,.09);border-radius:16px;background:rgba(255,255,255,.72);overflow:hidden}
 .adive-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px 11px;border-bottom:1px solid rgba(43,39,80,.06)}
-.adive-head-left{display:flex;align-items:center;gap:10px;min-width:0}
+.adive-head-left{display:flex;align-items:center;gap:10px;min-width:0;flex-wrap:wrap}
 .adive-head h3{margin:0;color:var(--ink);font-size:14px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.card-period-select{padding:4px 20px 4px 9px;font-size:9px;background-position:calc(100% - 10px) 52%,calc(100% - 6px) 52%}
 .adive-stamp{color:var(--faint);font-size:9px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
 .adive-stamp.is-empty{color:var(--faint);font-style:italic;font-weight:600}
 .adive-body{display:block;padding:14px 16px 16px}
@@ -811,19 +812,19 @@ section.exec-block .exec-signals{min-width:0}
 </div>
 <div class="adive-shell" id="adShell">
 <div class="adive-toolrow">
-<div class="tool-group tool-group-annual"><select aria-label="Annual report year" class="mini-select" id="adYear" title="Report year shown below"></select>
+<div class="tool-group tool-group-annual">
 <label class="mini-btn" for="adImport">Import Annual</label>
 <input accept=".csv,text/csv" hidden="" id="adImport" type="file"/>
 <button class="mini-btn" id="adExport" type="button">Export Annual</button>
 <button class="mini-btn ghost" id="adTemplate" type="button">Template</button></div>
 <span class="tool-sep"></span>
-<div class="tool-group"><select aria-label="Manual data period" class="mini-select" id="ownPeriod" title="Quarter — Shareholding only"></select>
-<select aria-label="Annual data period" class="mini-select" id="annPeriod" title="Year — Headcount, Education \u0026 Product line"></select>
+<div class="tool-group">
 <label class="mini-btn" for="manualImport">Import Manual</label>
 <input accept=".csv,text/csv,.json,application/json" hidden="" id="manualImport" type="file"/>
 <button class="mini-btn" id="manualExport" type="button">Export Manual</button>
 <button class="mini-btn ghost" id="manualTemplate" type="button">Template</button></div>
 </div>
+<p class="ps" style="margin:6px 2px 0;opacity:.68;font-size:10px">Each card below now carries its own period selector — change the year/quarter directly next to the card it controls.</p>
 
 <div class="co-chips" id="coChips"></div>
 
@@ -831,7 +832,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="equity">
 <div class="adive-head">
-<div class="adive-head-left"><h3>Shareholding Structure</h3></div>
+<div class="adive-head-left"><h3>Shareholding Structure</h3><select aria-label="Shareholding quarter" class="mini-select card-period-select" id="ownPeriod" title="Quarter — controls Shareholding Structure"></select></div>
 <span class="adive-stamp">Manual · per company &amp; quarter</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
@@ -863,7 +864,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="headcount">
 <div class="adive-head">
-<div class="adive-head-left"><h3>Headcount Mix</h3></div>
+<div class="adive-head-left"><h3>Headcount Mix</h3><select aria-label="Headcount year" class="mini-select card-period-select" id="annPeriod" title="Year — controls Headcount Mix, Education Mix & Product line"></select></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
@@ -897,7 +898,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="education">
 <div class="adive-head">
-<div class="adive-head-left"><h3>Education Mix</h3></div>
+<div class="adive-head-left"><h3>Education Mix</h3><select aria-label="Education year" class="mini-select card-period-select" id="annPeriodEdu" title="Year — same control as Headcount Mix above"></select></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
@@ -929,8 +930,8 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="rd">
 <div class="adive-head">
-<div class="adive-head-left"><h3>R&amp;D Headcount &amp; Compensation</h3></div>
-<span class="adive-stamp">Manual · per company &amp; year</span>
+<div class="adive-head-left"><h3>R&amp;D Headcount &amp; Compensation</h3><select aria-label="R&D period" class="mini-select card-period-select" id="ownPeriodRd" title="Quarter — same control as Shareholding Structure above"></select></div>
+<span class="adive-stamp">Manual · per company &amp; quarter</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
 <div class="ph">
@@ -962,7 +963,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="profile">
 <div class="adive-head" data-toggle="profile">
-<div class="adive-head-left"><h3>Company Profile &amp; Footprint</h3></div>
+<div class="adive-head-left"><h3>Company Profile &amp; Footprint</h3><select aria-label="Annual report year" class="mini-select card-period-select" id="adYear" title="Report year — controls the 4 Annual Deep-Dive cards below" onclick="event.stopPropagation()"></select></div>
 <span class="adive-stamp" id="adProfileStamp">Awaiting annual data</span>
 </div>
 <div class="adive-body" id="adProfileBody"></div>
@@ -970,7 +971,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="customer">
 <div class="adive-head" data-toggle="customer">
-<div class="adive-head-left"><h3>Customer Concentration</h3></div>
+<div class="adive-head-left"><h3>Customer Concentration</h3><select aria-label="Annual report year" class="mini-select card-period-select" id="adYearCustomer" title="Year — same control as Company Profile above" onclick="event.stopPropagation()"></select></div>
 <span class="adive-stamp" id="adCustomerStamp">Awaiting annual data</span>
 </div>
 <div class="adive-body" id="adCustomerBody"></div>
@@ -978,7 +979,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="region">
 <div class="adive-head" data-toggle="region">
-<div class="adive-head-left"><h3>Regional Performance (China vs Overseas)</h3></div>
+<div class="adive-head-left"><h3>Regional Performance (China vs Overseas)</h3><select aria-label="Annual report year" class="mini-select card-period-select" id="adYearRegion" title="Year — same control as Company Profile above" onclick="event.stopPropagation()"></select></div>
 <span class="adive-stamp" id="adRegionStamp">Awaiting annual data</span>
 </div>
 <div class="adive-body" id="adRegionBody"></div>
@@ -986,7 +987,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="segment">
 <div class="adive-head" data-toggle="segment">
-<div class="adive-head-left"><h3>Product Segment P&amp;L</h3></div>
+<div class="adive-head-left"><h3>Product Segment P&amp;L</h3><select aria-label="Annual report year" class="mini-select card-period-select" id="adYearSegment" title="Year — same control as Company Profile above" onclick="event.stopPropagation()"></select></div>
 <span class="adive-stamp" id="adSegmentStamp">Awaiting annual data</span>
 </div>
 <div class="adive-body" id="adSegmentBody"></div>
@@ -994,7 +995,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="productline">
 <div class="adive-head">
-<div class="adive-head-left"><h3>Focused Product Line</h3></div>
+<div class="adive-head-left"><h3>Focused Product Line</h3><select aria-label="Product line year" class="mini-select card-period-select" id="annPeriodPl" title="Year — same control as Headcount Mix above"></select></div>
 <span class="adive-stamp">Chassis-relevant lines &middot; revenue by year</span>
 </div>
 <div class="adive-body">
