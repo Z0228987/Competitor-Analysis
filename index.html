@@ -1979,6 +1979,16 @@ $('manualImport').addEventListener('change',function(e){
   r.readAsArrayBuffer(f);
   e.target.value='';
 });
+
+/* 自动从 GitHub data/ 目录读取 IMPORT_manual_all.csv，省去手动 Import 的步骤 */
+fetch('data/IMPORT_manual_all.csv',{cache:'no-store'}).then(function(r){
+  if(!r.ok) throw new Error('not found');
+  return r.text();
+}).then(function(text){
+  var res=importData(text);
+  if(res&&res.n) applyImport(res);
+}).catch(function(e){ /* 文件不存在或加载失败时静默忽略，不影响手动 Import 功能 */ });
+
 })();
 
 /* ===== Annual Deep-Dive: company profile, customer concentration, regional, segment P&L ===== */
@@ -2370,6 +2380,26 @@ if(adImportInput) adImportInput.addEventListener('change',function(e){
 });
 
 setTimeout(render,650);setTimeout(render,1850);
+
+/* 自动从 GitHub data/ 目录读取 IMPORT_annual_all.csv，省去手动 Import 的步骤 */
+fetch('data/IMPORT_annual_all.csv',{cache:'no-store'}).then(function(r){
+  if(!r.ok) throw new Error('not found');
+  return r.text();
+}).then(function(text){
+  var res=adImportData(text);
+  if(res&&res.n){
+    var c=res.cos&&res.cos[0];
+    if(c){
+      var hit=Array.prototype.slice.call(elCo.options).some(function(o){return o.value===c});
+      if(!hit){var o=document.createElement('option');o.value=c;o.textContent=c==='Aumovio'?'AUMOVIO':c;elCo.appendChild(o)}
+    }
+    elYear.removeAttribute('data-sig');
+    buildYearOptions();
+    if(res.yrs&&res.yrs.length) elYear.value=res.yrs.sort().reverse()[0];
+    render();
+  }
+}).catch(function(e){ /* 文件不存在或加载失败时静默忽略，不影响手动 Import 功能 */ });
+
 })();
 </script>
 <div class="manual-toast" id="manualToast" role="status" aria-live="polite"></div>
