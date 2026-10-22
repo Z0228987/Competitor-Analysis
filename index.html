@@ -1266,29 +1266,31 @@ function slot(){return co()+'|'+op()}
 function slotB(b){if(b==='hc'||b==='edu'||b==='rd')return co()+'|'+ap();return co()+'|'+op()}
 function prevYear(p){var m=String(p).match(/^(\d{4})(Q[1-4])$/);return m?(Number(m[1])-1)+m[2]:p}
 function ownPeriods(){
-  var set={},i;
-  Array.prototype.slice.call(elPe.options).forEach(function(o){if(o.value)set[o.value]=1});
+  // 只列出该公司真正有 Shareholding 数据的季度，外加当前全局报告期（方便录入新一期）
+  var set={};
   ['eq'].forEach(function(b){
     [db[b],SEED[b]||{}].forEach(function(m){
-      Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[1])set[a[1]]=1});
+      Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[1]&&blockHas(b,k))set[a[1]]=1});
     });
   });
-  if(elOp&&elOp.value)set[elOp.value]=1;
+  if(elPe&&elPe.value)set[elPe.value]=1; // 当前全局期总是可选，便于开始录入新数据
+  if(elOp&&elOp.value)set[elOp.value]=1; // 保留当前已选值，避免选项消失
   return Object.keys(set).sort().reverse();
 }
 function annPeriods(){
-  var set={},i;
-  Array.prototype.slice.call(elPe.options).forEach(function(o){
-    var m=String(o.value||'').match(/^(\d{4})/);
-    if(m)set[m[1]+'Q4']=1;
-  });
+  // 只列出该公司真正有 Headcount/Education/Product line/R&D 数据的年份，外加当前全局报告年（方便录入新一期）
+  var set={};
   ['hc','edu','pd'].forEach(function(b){
     [db[b],SEED[b]||{}].forEach(function(m){
-      Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[a.length-1])set[a[a.length-1]]=1});
+      Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[a.length-1]&&blockHas(b,k))set[a[a.length-1]]=1});
     });
   });
-  Object.keys(db.rd||{}).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[1])set[a[1]]=1});
-  if(elAp&&elAp.value)set[elAp.value]=1;
+  Object.keys(db.rd||{}).forEach(function(k){
+    var a=k.split('|');
+    if(a[0]===co()&&a[1]){var r=db.rd[k];if(r&&(Number.isFinite(r.hc)||Number.isFinite(r.sal)))set[a[1]]=1}
+  });
+  if(elPe&&elPe.value){var m=String(elPe.value).match(/^(\d{4})/);if(m)set[m[1]+'Q4']=1;} // 当前全局期对应的年份总是可选
+  if(elAp&&elAp.value)set[elAp.value]=1; // 保留当前已选值，避免选项消失
   return Object.keys(set).sort().reverse();
 }
 function hcPeriod(){
