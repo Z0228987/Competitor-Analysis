@@ -119,6 +119,7 @@ h1{margin:0;color:var(--ink);font-size:clamp(28px,3vw,42px);font-weight:800;line
 .card-period-group.grp-q{color:#378ADD;background:rgba(55,138,221,.12)}
 .card-period-group.grp-a{color:#1D9E75;background:rgba(29,158,117,.12)}
 .card-period-group.grp-p{color:#D4537E;background:rgba(212,83,126,.12)}
+.card-period-group.grp-all{color:#918DA6;background:rgba(83,74,183,.08)}
 .ctrl option{color:var(--ink);background:#fff}
 .controls .fx-control{grid-column:1/-1}
 .fx-control{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border:1px solid rgba(43,39,80,.09);border-radius:11px;background:rgba(255,255,255,.62);color:var(--muted);font-size:9.5px}
@@ -472,6 +473,10 @@ main{padding:18px}
 .q-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border:1px solid rgba(43,39,80,.09);border-radius:7px;color:var(--muted);background:rgba(255,255,255,.8);font-size:8.5px;font-weight:750}
 .q-chip button{padding:0;border:0;color:var(--faint);background:transparent;font-size:11px;line-height:1;cursor:pointer}
 .q-chip button:hover{color:var(--c600)}
+.q-chip.is-click{cursor:pointer;transition:.15s var(--ease)}
+.q-chip.is-click:hover{border-color:rgba(83,74,183,.36);background:rgba(83,74,183,.09);color:var(--ink)}
+.q-chip.is-on{border-color:rgba(83,74,183,.45);background:rgba(83,74,183,.14);color:var(--p700);font-weight:850}
+.chip-hint{color:var(--faint);font-weight:650;letter-spacing:.02em;text-transform:none}
 .chip-empty{color:var(--faint);font-size:9px;line-height:1.6}
 .pl-line-row{margin:1px 0 2px}
 .pl-line-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border:1px solid rgba(43,39,80,.12);border-radius:999px;background:rgba(255,255,255,.82);color:var(--muted);font:inherit;font-size:9.5px;font-weight:750;cursor:pointer;transition:.15s var(--ease)}
@@ -882,7 +887,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="headcount">
 <div class="adive-head">
-<div class="adive-head-left"><h3>Headcount Mix</h3><select aria-label="Headcount year" class="mini-select card-period-select" id="annPeriod" title="Year — controls Headcount Mix, Education Mix & Product line"></select><span class="card-period-group grp-a">Year · A</span></div>
+<div class="adive-head-left"><h3>Headcount Mix</h3><select aria-label="Headcount year" class="mini-select card-period-select" id="annPeriod" title="Year — controls Headcount Mix &amp; Education Mix. Only years with recorded data are listed."></select><span class="card-period-group grp-a">Year · A</span></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
@@ -905,6 +910,7 @@ section.exec-block .exec-signals{min-width:0}
 <div class="entry-rows" id="hcRows"></div>
 <div class="entry-actions">
 <button class="mini-btn" id="hcAdd" type="button">+ Add function</button>
+<button class="mini-btn ghost" id="annYearAdd" type="button" title="Start recording a year that has no data yet">+ year</button>
 <button class="mini-btn ghost" id="hcClear" type="button">Clear year</button>
 <span class="entry-total" id="hcTotal"></span>
 </div>
@@ -916,7 +922,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="education">
 <div class="adive-head">
-<div class="adive-head-left"><h3>Education Mix</h3><select aria-label="Education year" class="mini-select card-period-select" id="annPeriodEdu" title="Year — same control as Headcount Mix above"></select><span class="card-period-group grp-a">Year · A</span></div>
+<div class="adive-head-left"><h3>Education Mix</h3><select aria-label="Education year" class="mini-select card-period-select" id="annPeriodEdu" title="Year — same control as Headcount Mix above. Only years with recorded data are listed."></select><span class="card-period-group grp-a">Year · A</span></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
@@ -939,6 +945,7 @@ section.exec-block .exec-signals{min-width:0}
 <div class="entry-rows" id="eduRows"></div>
 <div class="entry-actions">
 <button class="mini-btn" id="eduAdd" type="button">+ Add level</button>
+<button class="mini-btn ghost" id="annYearAddEdu" type="button" title="Start recording a year that has no data yet">+ year</button>
 <button class="mini-btn ghost" id="eduClear" type="button">Clear year</button>
 <span class="entry-total" id="eduTotal"></span>
 </div>
@@ -948,7 +955,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="rd">
 <div class="adive-head">
-<div class="adive-head-left"><h3>R&amp;D Headcount &amp; Compensation</h3><select aria-label="R&D year" class="mini-select card-period-select" id="annPeriodRd" title="Year — same control as Headcount Mix, Education Mix & Product line"></select><span class="card-period-group grp-a">Year · A</span></div>
+<div class="adive-head-left"><h3>R&amp;D Headcount &amp; Compensation</h3><span class="card-period-group grp-all">All years</span></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
@@ -962,7 +969,7 @@ section.exec-block .exec-signals{min-width:0}
 </div>
 <div class="chart sm">
 <canvas aria-label="Bar and line chart of R&amp;D headcount and average compensation" id="rdChart" role="img"></canvas>
-<div class="pie-empty" id="rdEmpty" hidden="">No R&amp;D data yet<br/>click Edit to enter</div>
+<div class="pie-empty" id="rdEmpty" hidden="">No R&amp;D data yet<br/>click Edit, then add a year</div>
 </div>
 <div class="pl-legend">
 <span><i class="dot pl-rev"></i>R&amp;D headcount &middot; ppl</span>
@@ -976,8 +983,12 @@ section.exec-block .exec-signals{min-width:0}
 <input class="num-input" id="rdSal" min="0" placeholder="0" step="0.1" type="number"/>
 </div>
 <div class="pl-recorded">
-<span class="field-label">Recorded years</span>
+<span class="field-label">Recorded years <span class="chip-hint">click a year to edit &middot; &times; to remove</span></span>
 <div class="chip-row" id="rdChips"></div>
+<div class="pl-addrow">
+<input class="num-input" id="rdNewYear" max="2100" min="2000" placeholder="+ year (e.g. 2026)" type="number"/>
+<button class="btn-mini" id="rdAddYear" type="button">Add</button>
+</div>
 </div>
 </div>
 </article></div>
@@ -1017,7 +1028,7 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="productline">
 <div class="adive-head">
-<div class="adive-head-left"><h3>Focused Product Line</h3><select aria-label="Product line year" class="mini-select card-period-select" id="annPeriodPl" title="Year — same control as Headcount Mix above"></select><span class="card-period-group grp-a">Year · A</span></div>
+<div class="adive-head-left"><h3>Focused Product Line</h3><span class="card-period-group grp-all">All years</span></div>
 <span class="adive-stamp">Chassis-relevant lines &middot; revenue by year</span>
 </div>
 <div class="adive-body">
@@ -1057,8 +1068,12 @@ section.exec-block .exec-signals{min-width:0}
 <input class="num-input" id="plPrice" min="0" placeholder="0.00" step="0.01" type="number"/>
 </div>
 <div class="pl-recorded">
-<span class="field-label">Recorded years <button class="linkbtn" id="plDelLine" type="button">delete line</button></span>
+<span class="field-label">Recorded years <span class="chip-hint">click a year to edit &middot; &times; to remove</span> <button class="linkbtn" id="plDelLine" type="button">delete line</button></span>
 <div class="chip-row" id="plChips"></div>
+<div class="pl-addrow">
+<input class="num-input" id="plNewYear" max="2100" min="2000" placeholder="+ year (e.g. 2026)" type="number"/>
+<button class="btn-mini" id="plAddYear" type="button">Add</button>
+</div>
 </div>
 </div>
 </div>
@@ -1237,7 +1252,10 @@ var EMPTY_MSG={eq:'No holders recorded yet',hc:'No headcount recorded yet',edu:'
 var CANVAS_ID={eq:'equityPie',hc:'headcountPie',edu:'eduPie'};
 var $=function(id){return document.getElementById(id)};
 var elCo=$('company'),elPe=$('period'),elOp=$('ownPeriod'),elAp=$('annPeriod'),plName=$('plName'),plRev=$('plRev'),plPrice=$('plPrice'),plGm=$('plGm');
-var elOpMirrors=[].filter(Boolean),elApMirrors=[$('annPeriodEdu'),$('annPeriodPl'),$('annPeriodRd')].filter(Boolean);
+var elOpMirrors=[].filter(Boolean),elApMirrors=[$('annPeriodEdu')].filter(Boolean);
+/* R&D 与 Product line 的图本身就是按年份铺开的，不需要"选年份"下拉；它们各自维护编辑年份 */
+var rdYear='',plYear='',lastCoRD='',lastCoPL='',lastPlLine='';
+var extraAnnYears={}; // 按公司记录"手工新增但还没填数据"的年份（填了数就自然进池，否则刷新即消失）
 if(!elCo||!elPe||!plName||!plRev||!plPrice||!plGm) return;
 var SEED=window.MANUAL_SEED||{eq:{},hc:{}};
 
@@ -1270,7 +1288,7 @@ function persist(k){clearTimeout(timers[k]);timers[k]=setTimeout(function(){writ
 function co(){return elCo.value||''}
 function pe(){return elPe.value||''}
 function op(){return (elOp&&elOp.value)||pe()}
-function ap(){return (elAp&&elAp.value)||op()}
+function ap(){return (elAp&&elAp.value)||''}
 function slotAnn(){return co()+'|'+ap()}
 function slot(){return co()+'|'+op()}
 function slotB(b){if(b==='hc'||b==='edu'||b==='rd')return co()+'|'+ap();return co()+'|'+op()}
@@ -1283,19 +1301,40 @@ function ownPeriods(){
       Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===co()&&a[1]&&blockHas(b,k))set[a[1]]=1});
     });
   });
-  if(elPe&&elPe.value)set[elPe.value]=1; // 当前全局期总是可选，便于开始录入新数据
-  if(elOp&&elOp.value)set[elOp.value]=1; // 保留当前已选值，避免选项消失
+  // 规则同年度下拉：只有真正录了数据的季度才出现在下拉里
   return Object.keys(set).sort().reverse();
 }
+/* 年度下拉只服务 Headcount / Education 两张卡，所以只列这两块真正有数据的年份 */
+function annYearsFor(c){
+  var set={};
+  ['hc','edu'].forEach(function(b){
+    [db[b],SEED[b]||{}].forEach(function(m){
+      Object.keys(m).forEach(function(k){var a=k.split('|');if(a[0]===c&&a[1]&&blockHas(b,k))set[a[1]]=1});
+    });
+  });
+  return Object.keys(set).sort();
+}
 function annPeriods(){
-  // 只列出该公司真正有 Headcount/Education/Product line/R&D 数据的年份；当前报告年作为"录入新一年"的入口排在最后
-  var list=annDataYears(co()).reverse();
-  var curYear='';
-  if(elPe&&elPe.value){var m=String(elPe.value).match(/^(\d{4})/);if(m)curYear=m[1]+'Q4'}
-  if(curYear&&list.indexOf(curYear)<0) list.push(curYear);
-  if(!list.length&&elAp&&elAp.value) list=[elAp.value];
-  if(!list.length&&curYear) list=[curYear];
-  return list; // 有数据的年份降序在前，默认选中的是有数据的最新年
+  // 规则：没有数据的年份不允许出现在下拉里（+ year 按钮才是"开新年份"的入口）
+  var list=annYearsFor(co()),ex=extraAnnYears[co()]||[];
+  ex.forEach(function(y){if(list.indexOf(y)<0)list.push(y)});
+  return list.sort().reverse();
+}
+function annAddYear(raw){
+  var m=String(raw||'').trim().match(/^(\d{4})$/);
+  if(!m){window.alert('Enter a 4-digit year, e.g. 2026');return ''}
+  var y=m[1]+'Q4',c=co();
+  if(!extraAnnYears[c]) extraAnnYears[c]=[];
+  if(extraAnnYears[c].indexOf(y)<0) extraAnnYears[c].push(y);
+  return y;
+}
+function annAddYearUI(){
+  var v=window.prompt('Which financial year do you want to record?',String(new Date().getFullYear()));
+  if(v==null||!String(v).trim()) return;
+  var y=annAddYear(v);if(!y) return;
+  elAp.setAttribute('data-sig','');
+  buildAnnPeriodOptions();
+  if(Array.prototype.slice.call(elAp.options).some(function(o){return o.value===y})) evSet(elAp,y);
 }
 function hcPeriod(){
   var c=co(),has={};
@@ -1434,9 +1473,14 @@ function paint(b){
     if(charts[b]){charts[b].destroy();charts[b]=null}
     canvas.style.display='none';empty.hidden=false;
     var per0=slotB(b).split('|')[1]||'—';
-    var alt=annDataYears(co()).filter(function(x){return x!==per0});
-    empty.innerHTML='<b>FY'+esc(String(per0).slice(0,4))+'</b><br/>'+(EMPTY_MSG[b]||'No data recorded yet')+' &middot; click Edit'
-      +(alt.length?'<br/><span class="pie-alt">years on file: '+esc(alt.map(function(x){return x.slice(0,4)}).slice(-3).join(' / '))+'</span>':'');
+    /* 提示"这家公司实际有哪些期"：股权是季度口径，员工/学历是年度口径，别混用 */
+    var altPool=(b==='eq')?periodsWithData(co()):annYearsFor(co());
+    var alt=altPool.filter(function(x){return x!==per0});
+    var noYear=(per0==='—');
+    var headTxt=noYear?'No year on file':((b==='eq')?esc(per0):('FY'+esc(String(per0).slice(0,4))));
+    empty.innerHTML='<b>'+headTxt+'</b><br/>'+(EMPTY_MSG[b]||'No data recorded yet')
+      +(noYear?' &middot; click Edit, then “+ year”':' &middot; click Edit')
+      +(alt.length?'<br/><span class="pie-alt">'+(b==='eq'?'quarters':'years')+' on file: '+esc(alt.map(function(x){return b==='eq'?x:x.slice(0,4)}).slice(-3).join(' / '))+'</span>':'');
     return;
   }
   canvas.style.display='';empty.hidden=true;empty.innerHTML=''; // 清掉上一次空态残留文字，避免被误读成"无数据"
@@ -1627,11 +1671,26 @@ function drawPL(){
     }
   }}},scales:{x:{grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:10},autoSkip:false,maxRotation:45}},y:{position:'left',beginAtZero:true,grid:{color:'rgba(83,74,183,.07)'},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}},y2:{position:'right',display:hasGm,beginAtZero:true,grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:9},callback:function(v){return v+'%'}}},y3:{position:'right',display:hasAsp,beginAtZero:true,grid:{drawOnChartArea:false},border:{display:false},ticks:{color:'#918DA6',font:{size:9},callback:function(v){return v}}}}}});
 }
+/* Product line 图同样是"营收按年份铺开"，所以不设年份下拉；编辑年份由点 chip / + year 决定 */
+function plYearList(){
+  var ys=plPoints(plLine).map(function(x){return x.p});
+  if(plYear&&ys.indexOf(plYear)<0) ys.push(plYear);
+  return ys.sort();
+}
+function plSyncYear(){
+  if(co()!==lastCoPL){lastCoPL=co();plYear=''}   // 换公司
+  if(plLine!==lastPlLine){lastPlLine=plLine;plYear=''} // 换产品线
+  var ys=plYearList();
+  if(!ys.length){plYear='';return ''}
+  if(ys.indexOf(plYear)<0) plYear=ys[ys.length-1];
+  return plYear;
+}
 function updatePLChips(){
-  var pts=plPoints(plLine),box=$('plChips');
-  box.innerHTML=pts.length?pts.map(function(x){
-    return '<span class="q-chip">'+esc(x.p.slice(0,4))+'<button data-p="'+esc(x.p)+'" title="Remove this year" type="button">&times;</button></span>';
-  }).join(''):'<span class="chip-empty">No years recorded for this line</span>';
+  var box=$('plChips'),ys=plYearList();
+  box.innerHTML=ys.length?ys.map(function(p){
+    return '<span class="q-chip is-click'+(p===plYear?' is-on':'')+'" data-y="'+esc(p)+'" title="Edit FY'+esc(p.slice(0,4))+'">'+esc(p.slice(0,4))
+      +'<button data-p="'+esc(p)+'" title="Remove this year" type="button">&times;</button></span>';
+  }).join(''):'<span class="chip-empty">No years recorded for this line &middot; add one below</span>';
 }
 function renderPLLines(){
   var box=$('plLineChips'),lines=plLines();
@@ -1644,12 +1703,23 @@ function renderPLLines(){
 }
 
 /* ---------- R&D headcount & compensation ---------- */
+/* R&D 图横轴就是年份，所以这块没有"选年份"下拉；编辑哪一年由 rdYear 决定（点 chip 或 + year） */
+function rdYearList(){
+  var c=co(),set={};
+  Object.keys(db.rd||{}).forEach(function(k){var a=k.split('|');if(a[0]===c&&a[1]&&blockHas('rd',k))set[a[1]]=1});
+  if(rdYear)set[rdYear]=1;
+  return Object.keys(set).sort();
+}
+function rdSyncYear(){
+  if(co()!==lastCoRD){lastCoRD=co();rdYear=''} // 换公司就回到这家公司最新的年份
+  var ys=rdYearList();
+  if(!ys.length){rdYear='';return ''}
+  if(ys.indexOf(rdYear)<0) rdYear=ys[ys.length-1];
+  return rdYear;
+}
 function rdPoints(){
-  /* 与右侧录入区同源：走年度池（db.rd 的年份 + 当前 annPeriod），不再混用季度池 periodsAsc */
-  var c=co(),out=[],set={};
-  Object.keys(db.rd||{}).forEach(function(k){var a=k.split('|');if(a[0]===c&&a[1])set[a[1]]=1});
-  if(ap())set[ap()]=1;
-  Object.keys(set).sort().forEach(function(p){
+  var c=co(),out=[];
+  rdYearList().forEach(function(p){
     var r=db.rd[c+'|'+p];
     if(r&&(Number.isFinite(r.hc)||Number.isFinite(r.sal))) out.push({p:p,hc:Number.isFinite(r.hc)?r.hc:null,sal:Number.isFinite(r.sal)?r.sal:null});
   });
@@ -1671,9 +1741,10 @@ function drawRD(){
   else charts.rd=new CH(canvas,{type:'bar',data:data,options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{backgroundColor:'rgba(43,39,80,.94)',padding:10,callbacks:{label:function(c){var v=c.parsed.y;if(v==null)return null;return c.dataset.label==='R&D headcount'?('R&D headcount: '+Math.round(v).toLocaleString('en-US')+' ppl'):('Avg comp: '+num(v).toFixed(1)+' CNY k/yr')}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:10},autoSkip:false,maxRotation:45}},y:{position:'left',beginAtZero:true,grid:{color:'rgba(83,74,183,.07)'},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}},y1:{position:'right',beginAtZero:true,grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}}}}});
 }
 function syncRD(){
-  var rec=db.rd[slotB('rd')]||{};
-  $('rdHcPeriod').textContent=ap()||'—';
-  $('rdSalPeriod').textContent=ap()||'—';
+  var y=rdSyncYear();
+  var rec=db.rd[co()+'|'+y]||{};
+  $('rdHcPeriod').textContent=y?y.slice(0,4):'—';
+  $('rdSalPeriod').textContent=y?y.slice(0,4):'—';
   var rdHcEl=$('rdHc'),rdSalEl=$('rdSal');
   if(!rdHcEl.matches(':focus')) rdHcEl.value=Number.isFinite(rec.hc)?rec.hc:'';
   if(!rdSalEl.matches(':focus')) rdSalEl.value=Number.isFinite(rec.sal)?rec.sal:'';
@@ -1682,15 +1753,16 @@ function syncRD(){
   updateRDChips();drawRD();
 }
 function updateRDChips(){
-  var pts=rdPoints(),box=$('rdChips');
+  var box=$('rdChips'),ys=rdYearList();
   if(!box) return;
-  box.innerHTML=pts.length?pts.map(function(x){
-    return '<span class="q-chip">'+esc(x.p.slice(0,4))+'<button data-p="'+esc(x.p)+'" title="Remove this year" type="button">&times;</button></span>';
-  }).join(''):'<span class="chip-empty">No years recorded yet</span>';
+  box.innerHTML=ys.length?ys.map(function(p){
+    return '<span class="q-chip is-click'+(p===rdYear?' is-on':'')+'" data-y="'+esc(p)+'" title="Edit FY'+esc(p.slice(0,4))+'">'+esc(p.slice(0,4))
+      +'<button data-p="'+esc(p)+'" title="Remove this year" type="button">&times;</button></span>';
+  }).join(''):'<span class="chip-empty">No years recorded yet &middot; add one below</span>';
 }
 function rdSet(field,el){
-  if(!co()||!ap()) return;
-  var k=slotB('rd'),rec=db.rd[k]||{};
+  if(!co()||!rdYear) return;
+  var k=co()+'|'+rdYear,rec=db.rd[k]||{};
   var v=el.value.trim()===''?null:Number(el.value);
   rec[field]=Number.isFinite(v)?v:null;
   if(rec.hc==null&&rec.sal==null) delete db.rd[k]; else db.rd[k]=rec;
@@ -1703,11 +1775,11 @@ function syncPL(){
   if(!plName.matches(':focus')) plName.value=nm;
   $('plTitle').textContent=c||'No company selected';
   $('plSub').textContent=lines.length?(c+' · '+lines.length+' chassis line'+(lines.length===1?'':'s')+' · revenue CNY mn'):(c+' · no chassis line on file yet');
-  var yrTxt=ap()?ap().slice(0,4):'—';
+  var yrTxt=plSyncYear()?plYear.slice(0,4):'—';
   $('plRevPeriod').textContent=yrTxt;
   $('plGmPeriod').textContent=yrTxt;
   $('plPricePeriod').textContent=yrTxt;
-  var rec=(nm&&db.pd[plKey(nm,ap())])||{};
+  var rec=(nm&&plYear&&db.pd[plKey(nm,plYear)])||{};
   if(!plRev.matches(':focus')) plRev.value=Number.isFinite(rec.rev)?rec.rev:'';
   if(!plGm.matches(':focus')) plGm.value=Number.isFinite(rec.gm)?rec.gm:'';
   if(!plPrice.matches(':focus')) plPrice.value=Number.isFinite(rec.price)?rec.price:'';
@@ -1716,8 +1788,8 @@ function syncPL(){
   updatePLChips();drawPL();
 }
 function plSet(field,el){
-  if(!co()||!ap()||!plLine) return;
-  var k=plKey(plLine,ap()),rec=db.pd[k]||{};
+  if(!co()||!plYear||!plLine) return;
+  var k=plKey(plLine,plYear),rec=db.pd[k]||{};
   var v=el.value.trim()===''?null:Number(el.value);
   rec[field]=Number.isFinite(v)?v:null;
   if(rec.rev==null&&rec.price==null&&rec.gm==null) delete db.pd[k]; else db.pd[k]=rec;
@@ -1770,27 +1842,30 @@ function buildPeriodOptions(){
   var list=ownPeriods(),sig=list.join(',');
   if(elOp.getAttribute('data-sig')!==sig){
     var cur=elOp.value;
-    elOp.innerHTML=list.map(function(p){return '<option>'+p+'</option>'}).join('');
+    elOp.innerHTML=list.length
+      ? list.map(function(p){return '<option>'+p+'</option>'}).join('')
+      : '<option value="" disabled="" selected="">no data</option>';
     elOp.setAttribute('data-sig',sig);
-    if(list.indexOf(cur)>=0) elOp.value=cur;
+    if(cur&&list.indexOf(cur)>=0) elOp.value=cur;
   }
-  if(!elOp.value&&list.length) elOp.value=list[0];
-  if(!elOp.value&&pe()) elOp.value=pe();
+  if(list.length){ if(list.indexOf(elOp.value)<0) elOp.value=list[0]; }
+  else elOp.value='';
   elOpMirrors.forEach(function(m){mirrorSelect(elOp,m)});
 }
 function buildAnnPeriodOptions(){
   if(!elAp) return;
   var list=annPeriods(),sig=list.join(',');
   if(elAp.getAttribute('data-sig')!==sig){
-    var cur=elAp.value,has=annDataYears(co());
-    elAp.innerHTML=list.map(function(p){
-      return '<option value="'+p+'"'+(has.indexOf(p)>=0?'':' title="No annual data yet"')+'>'+p.slice(0,4)+(has.indexOf(p)>=0?'':' *')+'</option>';
-    }).join('');
+    var cur=elAp.value;
+    elAp.innerHTML=list.length
+      ? list.map(function(p){return '<option value="'+p+'">'+p.slice(0,4)+'</option>'}).join('')
+      : '<option value="" disabled="" selected="">no data</option>';
     elAp.setAttribute('data-sig',sig);
-    // 已选年份若已无数据、且存在有数据的年份，则自动落到有数据的最新年，避免停在空年份
-    if(list.indexOf(cur)>=0&&(has.indexOf(cur)>=0||!has.length)) elAp.value=cur;
+    if(cur&&list.indexOf(cur)>=0) elAp.value=cur;
   }
-  if(!elAp.value&&list.length) elAp.value=list[0]; // list[0] 已按"有数据的最新年"排序
+  if(list.length){
+    if(list.indexOf(elAp.value)<0) elAp.value=list[0]; // list[0] 已按"有数据的最新年"排序
+  } else elAp.value='';
   elApMirrors.forEach(function(m){mirrorSelect(elAp,m)});
 }
 function boot(){
@@ -1859,19 +1934,48 @@ $('plAddLine').addEventListener('click',plSubmitNew);
 $('plNewLine').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();plSubmitNew()}});
 $('plDelLine').addEventListener('click',function(){plDeleteLine()});
 $('plChips').addEventListener('click',function(e){
-  var btn=e.target.closest('button[data-p]');if(!btn||!plLine) return;
-  var yr=btn.getAttribute('data-p');
-  if(!window.confirm('Remove the '+yr+' record for "'+plLine+'"?')) return;
-  delete db.pd[plKey(plLine,yr)];
-  persist('pd');syncPL();
+  var btn=e.target.closest('button[data-p]');
+  if(btn){
+    if(!plLine) return;
+    var yr=btn.getAttribute('data-p');
+    if(!window.confirm('Remove the '+yr+' record for "'+plLine+'"?')) return;
+    delete db.pd[plKey(plLine,yr)];
+    persist('pd');syncPL();return;
+  }
+  var chip=e.target.closest('[data-y]'); // 点年份本体 = 切换要编辑的年份
+  if(!chip) return;
+  plYear=chip.getAttribute('data-y');syncPL();
 });
 $('rdChips').addEventListener('click',function(e){
-  var btn=e.target.closest('button[data-p]');if(!btn||!co()) return;
-  var yr=btn.getAttribute('data-p');
-  if(!window.confirm('Remove the '+yr+' R&D headcount/compensation record for "'+co()+'"?')) return;
-  delete db.rd[co()+'|'+yr];
-  persist('rd');syncRD();
+  var btn=e.target.closest('button[data-p]');
+  if(btn){
+    if(!co()) return;
+    var yr=btn.getAttribute('data-p');
+    if(!window.confirm('Remove the '+yr+' R&D headcount/compensation record for "'+co()+'"?')) return;
+    delete db.rd[co()+'|'+yr];
+    persist('rd');syncRD();return;
+  }
+  var chip=e.target.closest('[data-y]');
+  if(!chip) return;
+  rdYear=chip.getAttribute('data-y');syncRD();
 });
+/* 开一个新年份（下拉里没有的年份只能靠这里新增，保证下拉永远"有数据才可见"） */
+function submitRdYear(){
+  var inp=$('rdNewYear');if(!inp) return;
+  var y=annAddYear(inp.value);if(!y) return;
+  inp.value='';rdYear=y;syncRD();
+}
+function submitPlYear(){
+  var inp=$('plNewYear');if(!inp) return;
+  var y=annAddYear(inp.value);if(!y) return;
+  inp.value='';plYear=y;syncPL();
+}
+if($('rdAddYear')) $('rdAddYear').addEventListener('click',submitRdYear);
+if($('rdNewYear')) $('rdNewYear').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitRdYear()}});
+if($('plAddYear')) $('plAddYear').addEventListener('click',submitPlYear);
+if($('plNewYear')) $('plNewYear').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitPlYear()}});
+if($('annYearAdd')) $('annYearAdd').addEventListener('click',annAddYearUI);
+if($('annYearAddEdu')) $('annYearAddEdu').addEventListener('click',annAddYearUI);
 $('rdHc').addEventListener('input',function(){rdSet('hc',this)});
 $('rdSal').addEventListener('input',function(){rdSet('sal',this)});
 $('rdEdit').addEventListener('click',function(){
@@ -2146,19 +2250,9 @@ function yearsForBlock(c,b){
   Object.keys(db[b]||{}).forEach(function(k){var a=k.split('|');if(a[0]===c&&a[1])set[a[1]]=1});
   return Object.keys(set).sort().reverse();
 }
-/* 年度下拉只列"这家公司真的有数据"的年份；其他公司的年份不该出现在本公司下拉里 */
+/* 年度下拉只列"这家公司真的有数据"的年份：别的公司的年份、凭空补的日历年份都不该出现 */
 function allYears(){
-  var c=co(),ys=yearsFor(c);
-  if(ys.length) return ys;
-  var set={};
-  ['profile','customer','region','segment'].forEach(function(b){
-    Object.keys(db[b]).forEach(function(k){var y=k.split('|')[1];if(y)set[y]=1});
-  });
-  ys=Object.keys(set).sort().reverse();
-  if(ys.length) return ys;
-  var cy=new Date().getFullYear();
-  for(var y=cy;y>=cy-5;y--) ys.push(String(y));
-  return ys;
+  return yearsFor(co());
 }
 /* 空卡提示：告诉用户这张卡实际上从哪一年开始有数据，而不是干巴巴一句"No data" */
 function coverageNote(b){
@@ -2267,14 +2361,18 @@ function buildYearOptions(){
   var list=allYears(),sig=list.join(',');
   if(elYear.getAttribute('data-sig')!==sig){
     var cur=elYear.value;
-    elYear.innerHTML=list.map(function(y){return '<option>'+y+'</option>'}).join('');
+    elYear.innerHTML=list.length
+      ? list.map(function(y){return '<option>'+y+'</option>'}).join('')
+      : '<option value="" disabled="" selected="">no data</option>';
     elYear.setAttribute('data-sig',sig);
-    if(list.indexOf(cur)>=0) elYear.value=cur;
+    if(cur&&list.indexOf(cur)>=0) elYear.value=cur;
   }
-  if(!elYear.value&&list.length){
-    var preferred=latestYearWithData(co());
-    elYear.value=(preferred&&list.indexOf(preferred)>=0)?preferred:list[0];
-  }
+  if(list.length){
+    if(list.indexOf(elYear.value)<0){
+      var preferred=latestYearWithData(co());
+      elYear.value=(preferred&&list.indexOf(preferred)>=0)?preferred:list[0];
+    }
+  } else elYear.value='';
   elYearMirrors.forEach(function(m){
     if(m.innerHTML!==elYear.innerHTML) m.innerHTML=elYear.innerHTML;
     if(m.value!==elYear.value) m.value=elYear.value;
