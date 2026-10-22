@@ -1,6 +1,6 @@
 # AUMOVIO 竞争情报项目 — 完整知识文档
-> 最后更新：2026-10-19 | 适用于下次对话直接喂给 AI 使用
-> 本次更新：Executive Signals 重构、全局玻璃质感 UI、可折叠侧边栏、手动录入三板块（股权/员工/产品线）、A股真实数据预置、CSV 导入体验修复、Capital Markets 新增 A股底盘零部件行业 PE/PB 均值对比卡片
+> 最后更新：2026-10-22 | 适用于下次对话直接喂给 AI 使用
+> 本次更新：Education Mix + R&D Headcount & Compensation 两张新图表、Annual Deep-Dive 自动从 `data/` 目录读取 CSV（免手动 Import）、Annual Deep-Dive 9 张卡片各自配专属年份/季度下拉框（含镜像联动修复）、Revenue/Profit Trend 新增 QoQ 环比箭头（与原有 YoY 同比并列）、次要图表 Notes 改为按需展开的"💬 Add comment"开关、Capital Markets 区块移除 Notes 栏、**全站交互/UI 走查并修复 13 项问题**（自动滚动跳转、破坏性操作二次确认、Notes 工具栏触屏可发现性、R&D 维度绑定、CSS 死代码、Import 按钮误选提示、时间维度分组标识、Annual Deep-Dive 单卡折叠、FX 自动生效、Peer Trend 一键恢复等）
 
 ---
 
@@ -43,6 +43,13 @@ PATH = {
 }
 ```
 
+> **2026-10-22 新增：Annual Deep-Dive / 手动录入板块的自动加载。**
+> 页面加载时会额外 `fetch('data/IMPORT_manual_all.csv')` 和 `fetch('data/IMPORT_annual_all.csv')`（`cache:'no-store'`），
+> 拿到后分别复用现成的 `importData()`（季度板块：equity/headcount/education/rd/productline）和
+> `adImportData()`（年度板块：profile/customer/region/segment）自动灌入数据，**不再需要每次手动点 "Import CSV"**。
+> - 两个文件若本地 `data/` 目录暂不存在，`fetch` 失败会被静默吞掉（`.catch`），不报错、不中断其他模块加载，手动 Import 按钮仍可作为后备方案。
+> - 维护方式：以后只需要更新 GitHub 仓库 `data/` 下的 `IMPORT_manual_all.csv` / `IMPORT_annual_all.csv` 两个文件（字段结构见 3.2 节、3.5 节的 CSV 契约），同步到本地 `data/` 目录后刷新页面即可看到最新数据。
+
 > ⚠️ **重要**：`init()` 用 `fc=PATH.fin.length` 动态计算偏移量，不能硬编码
 > `x[0].concat(x[1])`，否则后续变量全部错位，Trend/Capital Market/Heatmap/Cash Flow 全部无数据。
 
@@ -64,10 +71,16 @@ PATH = {
 | 06 | Working Capital `working-capital` | fin | AR/AP/净营运资本 |
 | 07 | Liquidity & Efficiency `liquidity` | fin | 流动比率、研发强度、SG&A 强度 |
 | 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 + A股底盘零部件行业 PE/PB 均值对比（见下方） |
-| 09 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成两张环形图（手动录入） |
+| 09 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成 + **Education Mix（学历构成饼图，2026-10-22 新增）** + **R&D Headcount & Compensation（研发人数+人均薪酬柱线图，2026-10-22 新增）** 四张图（手动录入，见 3.6 节） |
 | 10 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + ASP 线（手动录入） |
-| 11 | Annual Deep-Dive `annual-deep-dive` | **localStorage** | 年报口径四卡（见 3.5 节） |
+| 11 | Annual Deep-Dive `annual-deep-dive` | **localStorage，2026-10-22 起支持从 `data/` 自动加载** | 年报口径四卡（见 3.5 节） |
 | 12 | Benchmark Table `heatmap` | fin | 6 项指标同业相对排名热力图（数据附录，收尾） |
+
+> **2026-10-22：Annual Deep-Dive 9 张卡片的年份/季度选择器已从「顶部统一下拉」改为「逐卡片旁挂专属下拉框」**，不用再上下滚动对照。三组联动分组：
+> - **季度组 A**：`ownPeriod`（Shareholding Structure）↔ `ownPeriodRd`（R&D Headcount & Compensation）
+> - **年度组 B**：`annPeriod`（Headcount Mix）↔ `annPeriodEdu`（Education Mix）↔ `annPeriodPl`（Product Line）
+> - **年度组 C**：`adYear`（Company Profile）↔ `adYearCustomer`（Customer Concentration）↔ `adYearRegion`（Regional Performance）↔ `adYearSegment`（Product Segment P&L）
+> 同组内任一下拉框都是真实双向联动（选项列表、当前值、`change` 事件三者都同步），不是摆设镜像；每次 `boot()`/`render()` 都会重新同步一次。
 
 ### Capital Markets · 行业 PE/PB 均值对比卡（2026-10-19 新增）
 
@@ -81,6 +94,26 @@ PATH = {
   - `avg(arr)`：简单平均工具函数
   - 不进流水线、不进 CSV、不影响 `market_data_verified.csv` 的数据契约——这是看板本地展示层的手动基准线，和股权/员工/产品线手动板块同一思路（localStorage，按期间 key 隔离）
 - 每季度维护：打开 Capital Markets 卡片，手动从行业数据源（申万/东财等）查到当季度底盘与汽车零部件行业平均 PE、PB，填入两个输入框并点 Save
+
+### Historical Trends · Revenue/Profit Trend 的 QoQ 环比箭头（2026-10-22 新增）
+
+- Revenue Trend 和 Profit Trend 两张柱状图，原来每根柱子上只显示 **YoY（同比）** 箭头，现在同时显示 **QoQ（环比）** 箭头
+- 新增两个纯函数：
+  - `prevQKey(key)`：给定一个季度 key（如 `2025Q3`），返回上一季度 key（`2025Q2`；跨年正确处理 `2025Q1`→`2024Q4`）
+  - `qoqSeries()`：按 `prevQKey` 逻辑给 Revenue、Profit 各算一条 QoQ 变化率序列
+- 显示效果：柱子上方两行 `▲/▼ YoY xx.x%` + `▲/▼ QoQ xx.x%`，tooltip 同步两行
+- **自动适配未来数据**：纯函数式计算，不依赖写死年份；只要新增数据仍是 `YYYYQ[1-4]` 格式，QoQ 会自动算出，无需改代码
+- 纯年度数据（非季度格式）算不出上一季度时自动跳过 QoQ 显示（不报错），只显示 YoY
+
+### 次要图表 Notes 改为按需展开（2026-10-22 新增）
+
+- **保留不变**：Executive Signals 的 Notes 栏（`data-note-key="overview-notes"`）始终固定显示
+- **移除**：Capital Markets 区块的 Notes 栏已整体去掉，该区块改为占满整行宽度的单列布局
+- **其余 6 个区块**（History / Profitability / Positioning / Cash Flow / Working Capital / Liquidity / Benchmark Table）的 Notes 栏改为「💬 Add comment」开关：
+  - 默认收起：Notes 栏收窄成 34px 竖条，只露出一个 💬 按钮，图表区域占满剩余空间
+  - 点击展开：Notes 栏展开回原 286px 宽度，自动聚焦编辑框；再点一次收起
+  - **已有笔记内容的区块默认自动展开**（不会把已写内容藏起来），按钮同时高亮（橙色边框）提示"这里有笔记"；清空内容后高亮自动取消
+  - 展开/收起状态记忆在 `localStorage`，刷新页面保持上次的选择
 
 ### Executive Signals（2026-10-19 重构后的首屏核心）
 
@@ -167,6 +200,22 @@ productline,HASCO,2026Q2,热管理模块,,531.4,3760,
 - PDF 解析锚点：必须以 **"专业构成类别"** 为准（"专业构成"首次出现在小节标题里会误匹配）；跨页表拼接 idx..idx+3 页
 - 生成脚本在本地 `.workbuddy/tmp/em/`（`build_equity.py` / `parse_hc.py` / `make_seed.py`），输出 `05_output/manual_blocks/manual_blocks_A股股权与员工.csv`（262行）+ `manual_blocks_template.csv`
 - MANUAL_SEED 直接内联在 index.html 里（`window.MANUAL_SEED`），**更新数据 = 重新生成 seed 并替换该行**
+
+### 3.6 Education Mix & R&D Headcount and Compensation（2026-10-22 新增）
+
+位置：Ownership & People 板块，紧跟 Shareholding Structure / Headcount Mix 之后，两张图并排。
+
+| 图表 | 画布 id | 类型 | 数据模型 key | 值结构 | 联动下拉 |
+|---|---|---|---|---|---|
+| Education Mix | `eduPie` | 环形图（Doughnut），风格与 Shareholding/Headcount 两张饼图一致 | `ciEducationMix` | `{"公司\|期间":[{n:"Bachelor",v:46},...]}`，`v`=占比%，默认4档 Below bachelor / Bachelor / Master / PhD，可在 Edit 面板增删改 | `annPeriod`（主） / `annPeriodEdu`（镜像，年度组 B） |
+| R&D Headcount & Compensation | `rdChart` | 柱状图(人数,左轴) + 折线图(人均薪酬,右轴) 组合图，复用 Product Line 板块 `plChart` 的双轴实现 | `ciRdHeadcount` | `{"公司\|期间":{headcount:1499, comp:270}}`，`headcount`=研发人数(人)，`comp`=人均薪酬(CNY 千元/年) | `ownPeriod`（主） / `ownPeriodRd`（镜像，季度组 A） |
+
+- CSV 契约并入 3.2 节同一张导入表：`block` 新增 `education`（教育构成）/ `rd`（研发人数薪酬）两个取值（也接受中文别名）；`education` 行用 `name+value`（同 equity/headcount 的 `%`/人数填法），`rd` 行的 `name` 固定写 `headcount` 或 `comp`，`value` 填对应数字
+- `importData()`/`exportCsv()`/`TEMPLATE` 三处均已同步支持这两个新 block，Export 时会一并导出
+- 关键 bug 修复记录（2026-10-22）：
+  1. `importData()` 最初完全不识别 `education`/`rd`，CSV 导入会被静默跳过 → 已修复
+  2. `periodsAsc()`（R&D 图表的时间轴来源函数）最初没有扫描 `db.rd`，即使数据存进去了柱状图也拿不到横轴 → 已修复，现在会正确合并 `db.rd` 的所有历史期间
+- 真实数据来源：`Competitor Analysis for Reference/education-rd-import.csv`（逐字核对 4 家公司 PDF 原文：NASN/Baolong/Tuopu/BTL 的学历构成 + 研发人数/人均薪酬，Tuopu 因原文未披露具体研发人数，只有教育构成数据、未纳入 rd 行）
 
 ### 3.5 Annual Deep-Dive 年度深度板块（2026-10-19 新增，现位于 Product Line 之后、Benchmark Table 之前）
 
@@ -381,6 +430,49 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 ---
 
 ## 九、变更记录
+
+### 2026-10-22（本轮）
+
+| 改动 | 详情 |
+|---|---|
+| Education Mix + R&D Headcount & Compensation 新图表 | Ownership & People 板块新增两张图：学历构成饼图（`eduPie`，`ciEducationMix`）+ 研发人数/人均薪酬柱线组合图（`rdChart`，`ciRdHeadcount`）；CSV 契约新增 `education`/`rd` 两个 block；真实数据见 `Competitor Analysis for Reference/education-rd-import.csv`（逐字核对 NASN/Baolong/Tuopu/BTL 四家 PDF 原文，Tuopu 研发人数未披露故未纳入）；详见 3.6 节 |
+| 修复两个阻断性 bug | `importData()` 原不识别 `education`/`rd` block（CSV 导入被静默跳过）；`periodsAsc()` 原不扫描 `db.rd`（R&D 柱状图拿不到横轴数据）；两处均已修复，`exportCsv()`/`TEMPLATE` 同步支持 |
+| Annual Deep-Dive 自动从 `data/` 加载 | 页面加载时自动 `fetch('data/IMPORT_manual_all.csv')` + `fetch('data/IMPORT_annual_all.csv')` 并复用 `importData()`/`adImportData()` 自动灌入，不再需要每次手动点 Import；文件不存在时静默回退到手动 Import，不影响其他模块 |
+| Annual Deep-Dive 9 张卡片各配专属年份/季度下拉框 | 原先靠顶部统一下拉框控制全部卡片，上下滚动对照困难；改为逐卡片旁挂专属下拉框，分 3 组联动（季度组 A：Shareholding+R&D；年度组 B：Headcount+Education+Product Line；年度组 C：Profile+Customer+Region+Segment）；发现并修复了最初 6 个"镜像"下拉框只有 HTML 没有 JS 绑定、选中不生效的 bug，现在组内任一下拉框都真双向联动 |
+| Revenue/Profit Trend 新增 QoQ 环比箭头 | 原只有 YoY 同比箭头，新增 `prevQKey()`/`qoqSeries()` 两个纯函数计算环比，柱子上方 YoY/QoQ 两行箭头并列显示；季度格式数据自动支持未来期间，年度数据自动跳过不报错 |
+| 次要图表 Notes 改为按需展开 | Capital Markets 区块整体移除 Notes 栏（占满整行）；其余 6 个次要区块（History/Profitability/Positioning/Cash Flow/Working Capital/Liquidity/Benchmark Table）Notes 栏改为默认收起的「💬 Add comment」开关，有内容自动展开+高亮；Executive Signals 的 Notes 栏保持固定显示不变 |
+
+### 2026-10-22（交互/UI 走查，本轮追加）
+
+全站交互走查共发现 13 项不符合人类操作习惯的问题，按严重度分三档，已全部修复：
+
+**🔴 严重**
+
+| # | 问题 | 修复方式 |
+|---|---|---|
+| 1 | 自动滚动跳转——`data/` 自动加载成功后无条件 `scrollIntoView`，导致每次刷新页面都被强制拽到 Annual Deep-Dive | `applyImport()` 新增 `doScroll` 参数：仅用户**手动点击** Import 按钮时才滚动；自动 fetch 路径传 `false`，不再打断刷新体验 |
+| 2 | 清空类操作无二次确认——Clear quarter/year、行内 `×`、Product Line 删除行/按年删除、Notes Clear 均一键永久删除且无撤销 | 统一加 `confirm()` 弹窗；行内 `×` 仅当该行有实际内容时才弹确认（空行直接删，不打扰） |
+| 3 | Notes 格式工具栏 + Clear 按钮仅 hover 才显示，触屏设备无法发现 | 新增常驻「⋯」按钮（`hover:none` 媒体查询下显示），点击可手动固定展开工具栏 |
+
+**🟡 中等**
+
+| # | 问题 | 修复方式 |
+|---|---|---|
+| 4 | 4 套独立「期间」概念并存，容易误以为联动 | 顶部全局 period 旁加常驻提示文案；Annual Deep-Dive 9 个下拉框加彩色小标签区分三组（蓝 `Qtr`/绿 `Year·A`/粉 `Year·P`） |
+| 5 | R&D 卡片绑定季度选择器，但数据本质按年，Q1-Q3 误显示"无数据" | 改绑到年度组（`annPeriodRd`），`slotB()`/`annPeriods()` 同步识别 `rd`，与 Headcount/Education/Product Line 一致 |
+| 6 | Import Annual / Import Manual 按钮并排，选错只提示"No usable rows found" | 检测到列名对不上目标 block（如传了 `year` 列却点 Import Manual）时，明确提示"是否点错了按钮" |
+| 7 | CSS 死代码——`.chart.history`/`.chart.pl`/`.chart.positioning`/`.exec-block` grid 各有两份重复定义，后者覆盖前者 | 清理重复规则，每个 class 只保留一份生效定义 |
+| 8 | 原生 `title` 提示 hover-only，触屏不可见 | 随 #4 一并改为常驻可见标签 |
+
+**🟢 轻微**
+
+| # | 问题 | 修复方式 |
+|---|---|---|
+| 9 | Annual Deep-Dive 单卡折叠此前形同虚设——`.adive-card.is-open` 类从未真正控制显示（CSS 无条件 `display:block`） | 补上 `.adive-card:not(.is-open) .adive-body{display:none}`；9 张卡片标题栏新增可点击折叠箭头（▾/▸）+ 独立展开状态记忆（localStorage），下拉框/按钮点击不误触折叠 |
+| 10 | FX 汇率输入框改完数字要手动点"Apply FX"才生效，和其他控件行为不一致 | 输入框失焦(`change`)或按回车时自动触发 Apply FX |
+| 11 | Cash Flow Y 轴缩放滑块记忆值疑似跨公司残留 | 核查后确认 `render()` 已在切换公司时重置 `_cfUserMax=null`，无需改动 |
+| 12 | Peer Trend 图例可逐个隐藏公司，但无一键恢复 | 新增"Show all"按钮，清空隐藏集合、恢复全部公司曲线 |
+| 13 | 侧边栏折叠后切换公司要点两下 | 维持现状（鼠标浮窗展开+聚焦为刻意设计），走查中顺带发现并修复了 #9 更严重的单卡折叠失效问题 |
 
 ### 2026-10-19（本轮）
 
