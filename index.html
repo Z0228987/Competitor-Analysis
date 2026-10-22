@@ -968,6 +968,10 @@ section.exec-block .exec-signals{min-width:0}
 <label class="field-label" for="rdSal"><span class="fld-period" id="rdSalPeriod">&mdash;</span> avg R&amp;D comp <em>CNY k / yr</em></label>
 <input class="num-input" id="rdSal" min="0" placeholder="0" step="0.1" type="number"/>
 </div>
+<div class="pl-recorded">
+<span class="field-label">Recorded years</span>
+<div class="chip-row" id="rdChips"></div>
+</div>
 </div>
 </article></div>
 </article>
@@ -1621,7 +1625,14 @@ function syncRD(){
   if(!rdSalEl.matches(':focus')) rdSalEl.value=Number.isFinite(rec.sal)?rec.sal:'';
   var pts=rdPoints();
   $('rdSub').textContent=pts.length?('R&D staff count vs average annual compensation · '+pts.length+' year'+(pts.length===1?'':'s')+' on file'):'R&D staff count vs average annual compensation, by year';
-  drawRD();
+  updateRDChips();drawRD();
+}
+function updateRDChips(){
+  var pts=rdPoints(),box=$('rdChips');
+  if(!box) return;
+  box.innerHTML=pts.length?pts.map(function(x){
+    return '<span class="q-chip">'+esc(x.p.slice(0,4))+'<button data-p="'+esc(x.p)+'" title="Remove this year" type="button">&times;</button></span>';
+  }).join(''):'<span class="chip-empty">No years recorded yet</span>';
 }
 function rdSet(field,el){
   if(!co()||!ap()) return;
@@ -1795,6 +1806,13 @@ $('plChips').addEventListener('click',function(e){
   if(!window.confirm('Remove the '+yr+' record for "'+plLine+'"?')) return;
   delete db.pd[plKey(plLine,yr)];
   persist('pd');syncPL();
+});
+$('rdChips').addEventListener('click',function(e){
+  var btn=e.target.closest('button[data-p]');if(!btn||!co()) return;
+  var yr=btn.getAttribute('data-p');
+  if(!window.confirm('Remove the '+yr+' R&D headcount/compensation record for "'+co()+'"?')) return;
+  delete db.rd[co()+'|'+yr];
+  persist('rd');syncRD();
 });
 $('rdHc').addEventListener('input',function(){rdSet('hc',this)});
 $('rdSal').addEventListener('input',function(){rdSet('sal',this)});
