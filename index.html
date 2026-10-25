@@ -2753,10 +2753,15 @@ function ub64(s){return decodeURIComponent(escape(atob(s)))}
 function collect(){
   var d={};KEYS.forEach(function(k){var v=null;try{v=localStorage.getItem(k)}catch(e){}
     if(v!=null&&v!=='')try{d[k]=JSON.parse(v)}catch(e){d[k]=v}});
+  try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);
+    if(k&&k.indexOf('ciPartNote:')===0)d[k]=localStorage.getItem(k)}}catch(e){}
   return d;
 }
 function apply(d){
   var n=0;KEYS.forEach(function(k){if(d[k]!==undefined){try{localStorage.setItem(k,typeof d[k]==='string'?d[k]:JSON.stringify(d[k]))}catch(e){}n++}});
+  /* 各板块 comment（ciPartNote:*）为动态键，原 KEYS 清单没收录、换电脑 load 后评论为空 —— 此处补齐 */
+  Object.keys(d).forEach(function(k){if(k.indexOf('ciPartNote:')===0&&d[k]!=null){
+    try{localStorage.setItem(k,typeof d[k]==='string'?d[k]:String(d[k]))}catch(e){}n++}});
   try{localStorage.setItem(LS_STAMP,new Date().toISOString())}catch(e){}
   return n;
 }
