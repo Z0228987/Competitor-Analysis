@@ -223,6 +223,12 @@ PATH = {
 | NASN | （无披露，行已删） | 150 / 326 | 招股书披露研发人员平均年薪 32.6 万（经媒体转引，终版无按职能薪酬表；如需第一手出处可置空或查 2026-04-29 申请版本） |
 
 - HASCO 员工数双口径并存（都正确勿"修"）：Annual 卡 Employees 79,409(2024)/81,306(2025)=**全球全口径**；headcount 卡明细合计≈54,621=**境内口径**
+- **Headcount Mix「技术研发人员」≠ R&D headcount 是年报双口径，不是算错**（2026-10-26 确认）：
+  - headcount 卡的"技术研发人员"来自年报**「员工情况·专业构成」表**——按人事岗位序列对期末全部在职员工分类，技术序列含研发管理/工艺/质量/测试/IT 等所有技术岗
+  - rd 卡的 hc 来自年报**「研发投入·研发人员数量」表**——按是否实际从事研发活动统计，剔除研发管理、试制/量产工艺人员等，普遍小于专业构成数
+  - 两者都不是"正式工 vs 外包"的区别（外包/派遣本来就不计入在职员工）
+  - 数字对照：BTL 1885/2140 vs 1250/1535；HASCO 13016/13281 vs 6370/5895（差距最大：研发分散在下属子公司，研发投入表只归集实际研发人员）；Tuopu 5870/5981 vs 4159/4466；**Baolong 两处恰好一致**（1333/1499）
+  - 两卡各跟各的年报原表，均勿"修"；如需防读者误解可在卡片备注加一句说明
 
 #### 10b Product Line（localStorage + IMPORT_manual_all.csv，unit=百万 CNY）
 
@@ -544,6 +550,8 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | Annual Deep-Dive 年份下拉按卡过滤 | 原先 4 个下拉是同一份"四块并集"年份的纯镜像，选了某年常出现某卡无数据。现改为每卡独立：`buildYearOptions` 按 `yearsForBlock(company, block)` 填充，`yrByBlock` 按卡记当前年份，镜像 change 只影响本卡；切公司自动落到各卡最新有数年份。**下拉里没有的年份 = 这家公司这张卡没数据**。8 个内联脚本 node --check 全过，headless dump-dom 验证 BTL：Profile 2025/2024、Customer/Region 2023–2025、Segment 2021–2025 |
 | Annual 数据补齐 2023 | +14 行：region 2023 × 5 家 A 股（东财 F10 主营构成 RPT_F10_FN_MAINOP 分地区，口径与年报一致——先用 2024 值与 CSV 逐分位对照验证再取 2023）；customer 2023：BTL Top5 48.08 / HASCO Top5 50.31 / Baolong Top5 32.88+Top1 11.03（2023 年报原文）。覆盖现状：customer/region 六家 2023–2025（NASN region 仅 2025，真实缺口）；profile 的 Plants/RD_Centers 2024 年报不披露、不补 |
 | 修正 HASCO 证券代码别名 | index.html 两处 AD_ALIAS `'600699':'HASCO'` → `'600741':'HASCO'`（600699 是均胜电子，HASCO=华域汽车 600741，底表/qa_spot_check 本来就用 600741）。曾有用 600699 数据灌进华域卡的风险 |
+| hero 报告期下拉右移 | `.controls` 改单列（原 1fr 1fr 使控件卡在右列左半格）；hero 右内边距 26px→16px，使下拉右边缘与 Cloud Sync「Save token」按钮右对齐 |
+| 确认 headcount「技术研发人员」≠ rd hc 为年报双口径 | 不是算错也不是外包差异：headcount 卡=员工情况·专业构成表（岗位序列），rd 卡=研发投入·研发人员数量表（实际从事研发活动）。Baolong 两处恰好一致，BTL/HASCO/Tuopu 有差。详见 2.1 §10 新增条目 |
 
 ### 2026-10-25（本轮：口径定稿 + NASN 重建 + Cloud Sync）
 
