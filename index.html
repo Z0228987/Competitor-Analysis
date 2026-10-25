@@ -2158,6 +2158,13 @@ function importData(text){
     var target=b==='pd'?db.pd:db[b];
     Object.keys(acc[b]).forEach(function(k){target[k]=acc[b][k]});
   });
+  /* 种子 CSV 中已删除的历史残留键清理（勿回退）：
+     1) NASN rd 2023/2024 从未披露研发人数，旧值是研发开支(百万)被当人均薪酬，已从种子删除；
+        仅在无 hc 时清除，避免误删用户后来手工补的人数 */
+  ['NASN|2023Q4','NASN|2024Q4'].forEach(function(k){if(db.rd&&db.rd[k]&&!Number.isFinite(db.rd[k].hc))delete db.rd[k]});
+  /* 2) NASN productline 原"线控制动"汇总线已拆为 NBS/ESC/NBC，清理旧汇总线的名称注册与数据 */
+  if(db.pn&&Array.isArray(db.pn.NASN)){db.pn.NASN=db.pn.NASN.filter(function(nm){return nm!=='线控制动'});if(!db.pn.NASN.length)delete db.pn.NASN}
+  Object.keys(db.pd||{}).forEach(function(k){var a=k.split('|');if(a[0]==='NASN'&&a[1]==='线控制动')delete db.pd[k]});
   ['eq','hc','edu','rd','pn','pd'].forEach(function(k){write(KEY[k],db[k])});
   return {n:n,skipped:skipped,cos:Object.keys(cos),pers:Object.keys(pers)};
 }
