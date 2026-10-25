@@ -1,7 +1,7 @@
 {
  "app": "aumovio-dashboard",
  "version": 1,
- "updatedAt": "2026-10-25T13:39:16.535Z",
+ "updatedAt": "2026-10-25T14:11:17.387Z",
  "data": {
   "ciEquityStructure": {
    "BTL|2024Q4": [
@@ -1022,6 +1022,40 @@
      "v": 37.47,
      "c": 0.92
     }
+   ],
+   "NASN|2026Q2": [
+    {
+     "n": "陶喆(含员工平台及配偶)",
+     "v": 20.61
+    },
+    {
+     "n": "王涧鸣",
+     "v": 10.12
+    },
+    {
+     "n": "杭州创乾(左凌烨)",
+     "v": 6.53
+    },
+    {
+     "n": "上海长三角中银资本",
+     "v": 5.99
+    },
+    {
+     "n": "先进制造产业投资基金二期",
+     "v": 5.65
+    },
+    {
+     "n": "启明融科(启明创投)",
+     "v": 5.45
+    },
+    {
+     "n": "国投聚力",
+     "v": 5.19
+    },
+    {
+     "n": "其他股东",
+     "v": 40.46
+    }
    ]
   },
   "ciHeadcountMix": {
@@ -1252,6 +1286,24 @@
      "n": "行政管理人员",
      "v": 2781
     }
+   ],
+   "NASN|2025Q4": [
+    {
+     "n": "生产人员",
+     "v": 143
+    },
+    {
+     "n": "销售人员",
+     "v": 12
+    },
+    {
+     "n": "技术研发人员",
+     "v": 150
+    },
+    {
+     "n": "行政管理人员",
+     "v": 59
+    }
    ]
   },
   "ciEducationMix": {
@@ -1394,6 +1446,16 @@
      "n": "高中及以下",
      "v": 12721
     }
+   ],
+   "NASN|2025Q4": [
+    {
+     "n": "硕士及以上(研发)",
+     "v": 19
+    },
+    {
+     "n": "本科及以下(研发)",
+     "v": 131
+    }
    ]
   },
   "ciProductLineName": {
@@ -1403,7 +1465,9 @@
     "机械转向产品"
    ],
    "Baolong": [
-    "智能悬架"
+    "智能悬架",
+    "TPMS及配件和工具",
+    "传感器"
    ],
    "HASCO": [
     "功能件（底盘·转向·制动）"
@@ -1415,6 +1479,9 @@
     "底盘系统",
     "汽车电子",
     "减震系统"
+   ],
+   "Luxshare": [
+    "汽车电子"
    ]
   },
   "ciProductLineData": {
@@ -1599,6 +1666,62 @@
     "rev": 573.72,
     "price": 188.58,
     "gm": 10.18
+   },
+   "Luxshare|汽车电子|2021Q4": {
+    "rev": 4142.68,
+    "gm": 16.11
+   },
+   "Luxshare|汽车电子|2022Q4": {
+    "rev": 6149.36,
+    "gm": 16.09
+   },
+   "Luxshare|汽车电子|2023Q4": {
+    "rev": 9252.37,
+    "gm": 15.9
+   },
+   "Luxshare|汽车电子|2024Q4": {
+    "rev": 13757.63,
+    "gm": 16.1
+   },
+   "Luxshare|汽车电子|2025Q4": {
+    "rev": 39255,
+    "gm": 15.75
+   },
+   "Baolong|TPMS及配件和工具|2021Q4": {
+    "rev": 1331.74,
+    "gm": 25.46
+   },
+   "Baolong|TPMS及配件和工具|2022Q4": {
+    "rev": 1476.24,
+    "gm": 25.45
+   },
+   "Baolong|TPMS及配件和工具|2023Q4": {
+    "rev": 1910.89,
+    "gm": 24.31
+   },
+   "Baolong|TPMS及配件和工具|2024Q4": {
+    "rev": 2145.91,
+    "gm": 24.7
+   },
+   "Baolong|TPMS及配件和工具|2025Q4": {
+    "rev": 2523,
+    "gm": 23.44
+   },
+   "Baolong|传感器|2022Q4": {
+    "rev": 365.52,
+    "gm": 23.66
+   },
+   "Baolong|传感器|2023Q4": {
+    "rev": 530.58,
+    "gm": 20.67
+   },
+   "Baolong|传感器|2024Q4": {
+    "rev": 665.2,
+    "gm": 17.1
+   },
+   "Baolong|传感器|2025Q4": {
+    "rev": 788,
+    "gm": 17.55
    }
   },
   "ciRdHeadcount": {
@@ -1637,7 +1760,14 @@
     "sal": 147
    },
    "NASN|2025Q4": {
-    "hc": 150
+    "hc": 150,
+    "sal": 83
+   },
+   "NASN|2023Q4": {
+    "sal": 96.5
+   },
+   "NASN|2024Q4": {
+    "sal": 87.6
    }
   },
   "ciAdProfile": {
@@ -1674,7 +1804,7 @@
    "NASN|2025": [
     {
      "n": "Employees",
-     "v": 384
+     "v": 364
     },
     {
      "n": "Plants",
@@ -1682,6 +1812,10 @@
     },
     {
      "n": "RD_Centers",
+     "v": 1
+    },
+    {
+     "n": "Countries",
      "v": 1
     }
    ],
@@ -2363,19 +2497,23 @@
     },
     {
      "n": "电脑互联产品及精密组件",
-     "rev": 7856.6
+     "rev": 7856.6,
+     "gm": 19.86
     },
     {
      "n": "汽车互联产品及精密组件",
-     "rev": 4142.68
+     "rev": 4142.68,
+     "gm": 16.11
     },
     {
      "n": "通讯互联产品及精密组件",
-     "rev": 3269.48
+     "rev": 3269.48,
+     "gm": 17.41
     },
     {
      "n": "其他连接器及其他业务",
-     "rev": 4039.35
+     "rev": 4039.35,
+     "gm": 19.84
     }
    ],
    "Luxshare|2022": [
@@ -2435,11 +2573,13 @@
    "NASN|2023": [
     {
      "n": "NBS",
-     "rev": 187
+     "rev": 187,
+     "gm": 2
     },
     {
      "n": "ESC",
-     "rev": 80
+     "rev": 80,
+     "gm": -3.3
     },
     {
      "n": "NBC",
@@ -2750,6 +2890,13 @@
    ]
   },
   "eurCnyRate": 7.92,
-  "hkdCnyRate": 1
+  "hkdCnyRate": 1,
+  "ciPartNote:cashflow-notes": "<ul><li>Luxshare 收购京西智行</li><li>占股多少;金额多少</li><li>EBS Competitor</li><li>汽车相关投资</li><li>Nasn comment一下</li></ul>",
+  "ciPartNote:benchmark-table-notes": "09 Part 2变成年度数据<div>company profile 放到annual deep-dive最上面</div><div>价格不放 可以先hide</div><div>peer benchmark heatmap可以放前面</div>",
+  "ciPartNote:history-notes": "<ul><li>改成H1</li><li>Q1换成灰色</li><li>quarterly颜色改一下</li><li>After Tax</li></ul>",
+  "ciPartNote:profitability-notes": "<ul><li>公式</li><li>A股 Gross Margin - Overhead(Before Tax）</li><li>改成内部缩写（Xiao Mei）EBIT，EBT</li><li>Nasn对应BTL oper</li><li>70939</li></ul>",
+  "ciPartNote:liquidity-notes": "<ul><li>Overhead</li><li>R&amp;D To Revenue</li><li>Sales Expense</li><li>G&amp;A</li><li>Current Ratio不要</li></ul>",
+  "ciPartNote:working-capital-notes": "<ul><li>直接显示百分比</li><li>把它放到annual里</li></ul>",
+  "ciPartNote:overview-notes": ""
  }
 }
