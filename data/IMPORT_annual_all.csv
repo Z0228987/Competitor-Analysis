@@ -1,4 +1,4 @@
-block,company,year,name,value,revenue,gm
+﻿block,company,year,name,value,revenue,gm
 segment,Tuopu,2021,减震器,,3347.13,23.82
 segment,Tuopu,2021,内饰功能件,,3578.32,17.25
 segment,Tuopu,2021,底盘系统,,2624.15,17.68
@@ -70,8 +70,8 @@ segment,Luxshare,2023,电脑互联产品及精密组件,,7492.41,20.75
 segment,Luxshare,2023,汽车互联产品及精密组件,,9252.37,15.90
 segment,Luxshare,2023,通讯互联产品及精密组件,,14538.26,15.80
 segment,Luxshare,2023,其他连接器及其他业务,,3439.11,18.84
-segment,NASN,2023,NBS,,187.00,
-segment,NASN,2023,ESC,,80.00,
+segment,NASN,2023,NBS,,187.00,2.0
+segment,NASN,2023,ESC,,80.00,-3.3
 segment,NASN,2023,NBC,,4.00,
 profile,HASCO,2024,Employees,79409,,
 customer,HASCO,2024,Top5 Customers,42.18,,
@@ -124,7 +124,7 @@ customer,NASN,2024,Top1 Customer,67.2,,
 segment,NASN,2024,NBS,,161,7.9
 segment,NASN,2024,ESC,,180,15.5
 segment,NASN,2024,NBC,,40,2.3
-profile,NASN,2025,Employees,384,,
+profile,NASN,2025,Employees,364,,
 profile,HASCO,2025,Employees,81306,,
 customer,HASCO,2025,Top5 Customers,39.60,,
 region,HASCO,2025,China,,143342,13.63
@@ -206,3 +206,4 @@ profile,Luxshare,2025,Countries,30,,
 profile,Tuopu,2025,Countries,11,,
 region,NASN,2025,China,,603.27,
 region,NASN,2025,Overseas,,11.24,
+profile,NASN,2025,Countries,1,,
