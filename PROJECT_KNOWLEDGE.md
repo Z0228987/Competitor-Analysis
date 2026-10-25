@@ -1,6 +1,6 @@
 # AUMOVIO 竞争情报项目 — 完整知识文档
-> 最后更新：2026-10-22 | 适用于下次对话直接喂给 AI 使用
-> 本次更新：Education Mix + R&D Headcount & Compensation 两张新图表、Annual Deep-Dive 自动从 `data/` 目录读取 CSV（免手动 Import）、Annual Deep-Dive 9 张卡片各自配专属年份/季度下拉框（含镜像联动修复）、Revenue/Profit Trend 新增 QoQ 环比箭头（与原有 YoY 同比并列）、次要图表 Notes 改为按需展开的"💬 Add comment"开关、Capital Markets 区块移除 Notes 栏、**全站交互/UI 走查并修复 13 项问题**（自动滚动跳转、破坏性操作二次确认、Notes 工具栏触屏可发现性、R&D 维度绑定、CSS 死代码、Import 按钮误选提示、时间维度分组标识、Annual Deep-Dive 单卡折叠、FX 自动生效、Peer Trend 一键恢复等）
+> 最后更新：2026-10-25 | 适用于下次对话直接喂给 AI 使用
+> 本次更新：**全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）**、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
 
 ---
 
@@ -69,10 +69,10 @@ PATH = {
 | 04 | Positioning `positioning` | fin | 增长-盈利气泡图（四象限，综合 02+03） |
 | 05 | Cash Flow `cashflow` | fin | **合并单图**：OCF/ICF/融资现金流柱（左轴 CNY bn）+ OCF/自由现金流利润率线（右轴 % of revenue） |
 | 06 | Working Capital `working-capital` | fin | AR/AP/净营运资本 |
-| 07 | Liquidity & Efficiency `liquidity` | fin | 流动比率、研发强度、SG&A 强度 |
+| 07 | Liquidity & Efficiency `liquidity` | fin | R&D to Revenue、Selling Expense、G&A Expense 三图（Current Ratio 卡已删，SG&A 拆分为两图） |
 | 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 + A股底盘零部件行业 PE/PB 均值对比（见下方） |
 | 09 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成 + **Education Mix（学历构成饼图，2026-10-22 新增）** + **R&D Headcount & Compensation（研发人数+人均薪酬柱线图，2026-10-22 新增）** 四张图（手动录入，见 3.6 节） |
-| 10 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + ASP 线（手动录入） |
+| 10 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + 毛利率（ASP 线与录入入口已删，price 列仅保留兼容） |
 | 11 | Annual Deep-Dive `annual-deep-dive` | **localStorage，2026-10-22 起支持从 `data/` 自动加载** | 年报口径四卡（见 3.5 节） |
 | 12 | Benchmark Table `heatmap` | fin | 6 项指标同业相对排名热力图（数据附录，收尾） |
 
@@ -144,6 +144,112 @@ PATH = {
 1. **FCF 是近似值**：用 `ocf+icf` 代替严格的 `ocf-capex`
 2. **NASN 净利润替代**：净利润缺失时用 `-|税前亏损|` 近似
 3. **热力图是相对排名**：颜色是当期所有公司的排名着色，不是绝对达标标准
+
+### 2.1 各板块展示数据口径总表（2026-10-25 定稿）
+
+> 逐板块逐指标记录口径与出处。改数据/改公式前先对照本表；改动后必须同步更新本表。
+
+#### 通用口径（全站适用）
+
+| 项目 | 口径 |
+|---|---|
+| 期间显示 | **所有 `YYYYQ2` 全局显示为 `H1`**（`pLabel`/`pL` 正则 `^(\d{4})Q2$→$1H1`），覆盖下拉/标题/副标题/x轴/tooltip；**数据键保持 Qx 不变**，CSV 与 localStorage 不受影响 |
+| 币种与折算 | 财务数据统一显示 CNY：A股=1；**NASN 报表本身 CNY，companyRate 对 `currency=CNY` 返回 1**（只有股价/市值 HKD × hkdRate 0.855）；Aumovio EUR × eurRate（默认 8.35） |
+| 底表 | `fact_financials_combined.csv`（455 行，2026-10-25 版）；去重键 `(company, statement_type, period, item_code)` |
+| 全局期间过滤 | `periods()` 只显示 `pk>=20261`（2026 年起）；pk=YYYY×10+Q、FY 按 Q4。**2027 年不会误删 2026FY**（20264≥20261），此前"定时炸弹"说法是误报 |
+
+#### 01 Executive Overview（8 张信号卡）
+
+| 指标 | 口径 |
+|---|---|
+| Revenue scale | IS_REV，B CNY |
+| Gross/Operating/Net margin | gross 优先 IS_GROSS_PROFIT（无则 revenue−\|cost\|）；op=IS_OP；np=IS_NP（NASN 缺失时 −\|税前亏损\| 兜底） |
+| 研发强度 | rnd/revenue（旧 sgaIntensity 口径保留给 Executive 卡） |
+
+#### 02 Historical Trends
+
+- 年度柱(FY)=紫 #534AB7、历史季度柱=灰、当前期=橙 #D85A30；**x 轴年份刻度统一灰色**（2026-10-25 用户明确：不要刻度染紫，只柱子紫）
+- 柱上 YoY+QoQ 双箭头（`prevQKey`/`qoqSeries` 纯函数，自动适配未来期间）
+- 季度趋势**故意把 Q1 单季与 Q2 半年累计画同轴**（用户设计意图，勿做单季还原）
+
+#### 03 Profitability / 04 Positioning / 09 Heatmap
+
+- 毛利率/营业/净利率、OCF margin：见通用公式表；热力图为**当期同业相对排名**着色
+- NASN 关键口径：**毛利 IS_GROSS_PROFIT 为正数**（2026-10-25 修复过符号翻转 bug）；IS_NP/IS_OP 亏损期为负（港股报表亏损记正数，重建脚本里取反）
+
+#### 05 Cash Flow
+
+- 三柱=OCF/ICF/融资现金流（CNY bn）；线=OCF margin、FCF margin（FCF=ocf+icf 近似）
+- NASN CF_FIN_NET 2026Q2 = **−3.455M**（中报 PDF 自然符号，筹资净流出；旧值 +3.455M 是错的）
+
+#### 06 Working Capital
+
+- AR/AP/净营运资本 % of revenue；数据标签读 `c.dataset.data[c.dataIndex]`（datalabels v2 scriptable 上下文**没有 c.raw**，勿回退）
+
+#### 07 Liquidity & Efficiency（三图）
+
+| 图 | 公式 | 备注 |
+|---|---|---|
+| R&D to Revenue | rnd/revenue | |
+| Selling Expense | `\|IS_COST_SELL_EXPE\|/revenue`（sellIntensity） | Aumovio 费用源数据为负号，取绝对值 |
+| G&A Expense | `\|IS_COST_ADMI_EXPE\|/revenue`（adminIntensity） | 同上；与旧 sgaIntensity（sell+admin 合成）并存，后者仅供 Executive 卡 |
+- Current Ratio 卡已删除（2026-10-25 用户要求）
+
+#### 08 Capital Markets
+
+- PE/PB 数据源 = `market_data_verified.csv`（**GitHub workflow 每日更新，线上为准，勿手改**）
+- **负 P/B 原样显示**（如 NASN −7.0x；`multTxt`/`fmtV` 仅对 0/缺失显示 n/a）——用户明确要求保留并人工解释；详细解释在 **Market Metrics Explained** 卡的 P/B 定义里（净负债状态、何时转正）
+- NASN PE = n/a：TTM 亏损无意义；PB −6.96：2026H1 净资产约 −11.6 亿（总资产 11.71 亿 − 总负债 23.29 亿，上市前资不抵债）
+- Peer Avg P/E·P/B = 5 家 A 股简单平均（不含 Aumovio/NASN）；Industry Avg 手动录入存 `ciIndustryBench_<period>`
+
+#### 10 Ownership & People（localStorage + IMPORT_manual_all.csv）
+
+| 卡 | 口径 | 出处 |
+|---|---|---|
+| equity 股权 | ≥5% 股东 + 其他，%；change=环比 pp（首期留空） | A股=东财十大股东；NASN 2026Q2=中报 p13-15 上市日（2026-08-07）结构，合计 59.54% |
+| headcount 员工 | **人数**（非 %），年报"专业构成"分类 | A股年报 PDF；NASN 2025=招股书 p157：生产143/销售12/研发150/行政59 |
+| education 学历 | **人数**（UNIT.edu='ppl'，非 %），占比由 doughnut 自动算 | 年报学历构成；NASN 仅研发团队披露（硕士及以上19/本科及以下131，name 带"(研发)"标注） |
+| rd 研发 | **hc=年报披露研发人员数；comp(人均薪酬)=年报附注「研发费用」中职工薪酬 ÷ 研发人数**（CNY k/yr）。⚠️ **不可用研发投入合计÷人数**（研发投入含材料/模具/折旧/外包）——用户明确口径 | 见下方分表 |
+
+**rd comp 权威数据表（2026-10-25 定稿，源 PDF 存 `01_source_docs/annual_reports/`）**：
+
+| 公司 | 2024 hc/comp | 2025 hc/comp | 薪酬出处 |
+|---|---|---|---|
+| BTL | 1250 / 269.3 | 1535 / 237.0 | 年报附注65 工资薪酬（3.367/3.638 亿） |
+| Baolong | 1333 / 275.1 | 1499 / 269.8 | 年报附注65 职工薪酬（3.667/4.045 亿） |
+| HASCO | **6370** / 264.8 | **5895** / 390.0 | 附注65 开发人员支出（16.87/22.99 亿）；人数年报口径 13.33%/13.35%（旧值 11003/11326 无出处已废） |
+| Luxshare | 22583 / 210.0 | **34357** / 169.3 | 附注56 人员薪酬（47.43/58.17 亿）；人数=年报标准口径（48,765 是"专职研发人员"宣传口径，勿混用） |
+| Tuopu | 4159 / 136.1 | 4466 / 124.5 | H股招股书成本明细 员工福利开支（5.66/5.56 亿）；旧值 147.0 无出处已改 |
+| NASN | （无披露，行已删） | 150 / 326 | 招股书披露研发人员平均年薪 32.6 万（经媒体转引，终版无按职能薪酬表；如需第一手出处可置空或查 2026-04-29 申请版本） |
+
+- HASCO 员工数双口径并存（都正确勿"修"）：Annual 卡 Employees 79,409(2024)/81,306(2025)=**全球全口径**；headcount 卡明细合计≈54,621=**境内口径**
+
+#### 10b Product Line（localStorage + IMPORT_manual_all.csv，unit=百万 CNY）
+
+- **ASP 录入入口已删除**（编辑面板只剩 Revenue + Gross Margin）；CSV `price` 列保留兼容旧数据；NASN 旧汇总线"线控制动"及整体 ASP 已删
+- 现有产品线：
+  - **Luxshare 汽车电子** 2021–2025：4142.68/6149.36/9252.37/13757.63/39255，gm −/16.09/15.90/16.1/15.75（2021–2023 年报科目名"汽车互联产品及精密组件"，同一产品线统一现名；2021 各产品线 gm 按年报原文：电脑 19.86/汽车 16.11/通讯 17.41/其他 19.84）
+  - **Baolong TPMS及配件和工具** 2021–2025：1331.74/1476.24/1910.89/2145.91/2523，gm 25.46/25.45/24.31/24.7/23.44
+  - **Baolong 传感器** 2022–2025（2021 未单独披露）：365.52/530.58/665.2/788，gm 23.66/20.67/17.1/17.55
+  - **NASN NBS/ESC/NBC** 三条线（与 segment 同源）：NBS 187/161/119 gm 2.0/7.9/6.1；ESC 80/180/178 gm −3.3/15.5/23.3；NBC 4/40/301 gm −/2.3/9.2（NBC 2023 未披露）
+
+#### 11 Annual Deep-Dive（IMPORT_annual_all.csv，营收单位 CNY mn）
+
+| 卡 | 口径 |
+|---|---|
+| profile | Plants/RD_Centers/Employees/Countries；NASN 2025 **Employees=364**（招股书 p157 四类合计；384 系笔误已改）、Countries=1 |
+| customer | Top5 客户占比 %（+Top1）；2023 已补齐：BTL 48.08 / HASCO 50.31 / Baolong 32.88+Top1 11.03（2023 年报原文） |
+| region | 中国 vs 海外：revenue CNY mn + gm %；**2023 已补齐** 5 家 A 股（东财主营构成分地区，与年报一致，已用 2024 值逐分位对照验证）；NASN 仅 2025（98%/2%，2023/2024 无精确拆分留空不造数） |
+| segment | 分部 revenue CNY mn + gm %；NASN 2023 gm：NBS 2.0 / ESC −3.3（NBC 未披露） |
+| 布局 | Part 2 置尾（heatmap 后）：profile/customer/region 三卡一行（`.adive-grid-3`）→ equity/hc/edu/rd 四宫格（`.adive-grid`）→ segment → productline；整块可折叠（`ciAdFolded`） |
+| **年份下拉** | **每张卡独立按"该公司该 block 真有数据的年份"过滤**（`buildYearOptions` 用 `yearsForBlock(co(), block)`，`yrByBlock` 按卡记值；主下拉=profile，镜像 adYearCustomer/Region/Segment 各自独立）。下拉里不出现的年份就是这家公司这张卡没数据；切公司自动落到各卡最新有数年份 |
+
+> ⚠️ **HASCO = 华域汽车（600741.SH）**，不是 600699（均胜电子）。index.html 两处 AD_ALIAS 曾把 600699 错映到 HASCO，已改 600741。验证锚点：华域 FY2024 营收 1696.04 亿、region 国内 126,388.14 百万/gm 14.49 与底表一致。
+
+#### 前端依赖与跨设备
+
+- chart.js/papaparse/chartjs-plugin-datalabels 本地化在仓库 `js/` 目录，`<head>` 先本地后 CDN 回退；**每次重传 index.html 必须确认 3 个 js 在 js/ 下**
+- Cloud Sync：Git Data API 五步流（blob→tree→commit→ref）推快照到 `data/user_cache/manual_data.json`；快照=14 个 localStorage 键 + **全部 `ciPartNote:<key>` 评论键（动态扫描）**；token 只存本机 localStorage 不进仓库，换电脑需重配（Contents:RW）
 
 ---
 
@@ -372,7 +478,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 
 | 文件 | 来源 | 说明 |
 |---|---|---|
-| `fact_financials_combined.csv` | 流水线 | **主数据文件**（⚠️ 当前线上版本仅 459 行/19 个 item_code，A股只有 2025Q1/Q2/Q4+2026Q1/Q2，缺 2025Q3 与 2024 全年，历史趋势靠 sales/profit 两张历史表支撑） |
+| `fact_financials_combined.csv` | 流水线 | **主数据文件**（本地 2026-10-25 版 = 455 行：A股 5 家各 62 行、Luxshare 60、NASN 85/7期；⚠️ 上传时以此为准，线上旧版可能滞后） |
 | `fact_sales_history.csv` / `fact_profit_history.csv` | 流水线 | 年度+季度历史趋势 |
 | `market_data_verified.csv` / `market_history.csv` | GitHub workflow | 股价（每日自动更新） |
 
@@ -405,7 +511,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | A股 Q1 对比列是上年同期数但列头写期末日期 | ✅已处理 | 非 BS 报表强制 derive_comparison_period |
 | 半年度列头（"2026年半年度"→Q2）解析 | ✅已处理 | 否则 IS/CF 期间整体左移一期 |
 | combined 表期间覆盖不全 | ⚠️待补 | 缺 2025Q3/2024 全年；A股Q1 数据看板未同步 |
-| NASN 源头缺 2025Q2/2026Q2 | ⚠️ | 线上历史表有，本地 workspace 无法复现 |
+| NASN 中期数据 | ✅已解决（方案A） | 2026Q2/2025Q2 走 NASN_table.xlsx 中期列 → convert_nasn → patch 重建；2025Q2 BS 为真实缺口（原为错标的 2025 年末值，已剔除）；以后新增中期 = xlsx 加列后按 convert_nasn.py → patch_nasn_selling.py 顺序重跑 |
 | 净利润口径 | ⚠️ | combined 主表 IS_NP（含少数股东）vs 历史表归母优先，两处不同口径 |
 | CCC 分析层（DSO/DPO/DIO） | 📝设计稿 | `05_output/analysis_layer_design.md`；依赖的 BS_CA_INV 等不在 19 个 item_code 白名单，落地需先扩白名单 |
 | `00_source_registry/mdna_notes.csv` / `product_lines.csv` | ⚠️ | 实为 xlsx 改后缀，CSV 读取会报错 |
@@ -430,6 +536,42 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 ---
 
 ## 九、变更记录
+
+### 2026-10-26（凌晨）
+
+| 改动 | 详情 |
+|---|---|
+| Annual Deep-Dive 年份下拉按卡过滤 | 原先 4 个下拉是同一份"四块并集"年份的纯镜像，选了某年常出现某卡无数据。现改为每卡独立：`buildYearOptions` 按 `yearsForBlock(company, block)` 填充，`yrByBlock` 按卡记当前年份，镜像 change 只影响本卡；切公司自动落到各卡最新有数年份。**下拉里没有的年份 = 这家公司这张卡没数据**。8 个内联脚本 node --check 全过，headless dump-dom 验证 BTL：Profile 2025/2024、Customer/Region 2023–2025、Segment 2021–2025 |
+| Annual 数据补齐 2023 | +14 行：region 2023 × 5 家 A 股（东财 F10 主营构成 RPT_F10_FN_MAINOP 分地区，口径与年报一致——先用 2024 值与 CSV 逐分位对照验证再取 2023）；customer 2023：BTL Top5 48.08 / HASCO Top5 50.31 / Baolong Top5 32.88+Top1 11.03（2023 年报原文）。覆盖现状：customer/region 六家 2023–2025（NASN region 仅 2025，真实缺口）；profile 的 Plants/RD_Centers 2024 年报不披露、不补 |
+| 修正 HASCO 证券代码别名 | index.html 两处 AD_ALIAS `'600699':'HASCO'` → `'600741':'HASCO'`（600699 是均胜电子，HASCO=华域汽车 600741，底表/qa_spot_check 本来就用 600741）。曾有用 600699 数据灌进华域卡的风险 |
+
+### 2026-10-25（本轮：口径定稿 + NASN 重建 + Cloud Sync）
+
+| 改动 | 详情 |
+|---|---|
+| **全看板数据口径总表** | 新增 2.1 节，逐板块逐指标记录口径/公式/出处（含 rd 薪酬权威数据表）；此后改数据或公式必须同步该表 |
+| SG&A 拆分 | Liquidity 恢复三图：R&D to Revenue / Selling Expense / G&A Expense（`sellIntensity`/`adminIntensity` 用 Math.abs，与旧 sga 合成口径一致）；Current Ratio 卡删除 |
+| Cloud Sync · GitHub | 顶部可折叠面板：token/repo 存 localStorage（`ciGhToken`/`ciGhRepo`，不入仓库），推送走 **Git Data API 五步流**（blob→tree→commit→ref，因 briefing base64 可能超 1MB 不用 Contents PUT）；快照=`data/user_cache/manual_data.json`，14 键 + **评论 `ciPartNote:<key>` 动态键**（初版漏了评论导致换电脑评论消失，已修）；换电脑需重新粘 token（403/404 多为 token 没配或缺 Contents:RW） |
+| NASN 数据链路重建（方案 A：xlsx 加列走流水线） | `add_nasn_h1_columns.py` 给 NASN_table.xlsx 三 sheet 加「2025/2026 中期」列（数值取自中报 PDF）→ `hk_item_mapping_with_code.csv` 加 5 条映射 → `convert_nasn.py` PERIOD_MAP 扩展中期列 → `patch_nasn_selling.py` 升级为 **NASN 区全量幂等重建**（从 fact_nasn 重建 combined 的 NASN 85 行/7 期）。期间修复三个 bug：①前置过滤先于改名导致销售费用行被静默丢弃（改为先 `to_combined_code()` 再过滤白名单）；②符号规则改为**只对 IS_NP/IS_OP 取反**（盲用 mapping sign 把正的毛利全期翻负，热力图 GM 曾显示 −13.37%），其余科目透传；③`%g` 格式化丢千位精度改 `str()`。最终与重建前备份逐分位一致，仅新增销售费用 7 行 + CF_FIN_NET 2026Q2=−3.455M（PDF 自然符号） |
+| NASN Annual Deep-Dive 数据补全 | profile Employees 384→**364**（招股书 p157）、Countries=1；segment 2023 gm NBS 2.0/ESC −3.3；manual +17 行：equity 2026Q2（中报 p13-15 上市日结构）、headcount 2025（招股书）、education 2025（仅研发团队披露）、rd 开支 96.5/87.6/83.0 百万 |
+| Product Line 数据扩充 | +Luxshare 汽车电子 2021–2025（2021–2023 原名"汽车互联产品及精密组件"）；+Baolong TPMS 2021–2025、传感器 2022–2025；NASN 拆 **NBS/ESC/NBC** 三线（删旧汇总线"线控制动"及整体 ASP）；Luxshare 2021 各产品线 gm 按年报原文补齐（此前漏录非未披露）；**ASP 录入入口删除**（`.pl-price` CSS 类被薪酬卡复用勿删） |
+| 全局 Q2→H1 显示 | `pLabel`/`pL` 正则化：所有年份 Q2 显示 H1（2025H1/2024H1…），数据键不变 |
+| 负 P/B 保留显示 | `multTxt`/`fmtV`：PE/PB 负值原样显示（NASN −7.0x），仅 0/缺失 n/a；详细解释移入 Market Metrics Explained 卡（净负债状态/何时转正），顶部注释缩为一句话指向 Guide 卡。用户明确：负 PB 保留并人工解释，勿回退 |
+| rd 人均薪酬口径重定 | **comp = 年报附注研发费用-职工薪酬 ÷ 研发人数**（不可用研发投入÷人数，用户指正）；下载 4 家 2025 年报+NASN 招股书存 `01_source_docs/annual_reports/` 逐家解析附注；HASCO 研发人数修正 11003/11326→6370/5895（旧值无出处）；Luxshare 定 34,357（年报口径）；NASN 2023/2024 rd 行删除；权威数据表见 2.1 节 |
+| importData 残留键清理 | 种子 CSV 里删掉的键不会自动从 localStorage 消失，加了定向清理（NASN 2023/2024 rd、NASN"线控制动"pn/pd），勿回退 |
+| 全页体检 | Edge headless 逐段审查 12 板块：间距统一无重叠/截断/溢出；顺带抓到 NASN 毛利符号翻转 bug（见上） |
+| 误报澄清 | `periods()` 的"2027 定时炸弹"不成立：pk=YYYY×10+Q，20264/20271 均 ≥20261，无需改代码 |
+
+**本轮上传清单**：`index.html` + `data/fact_financials_combined.csv` + `data/IMPORT_annual_all.csv` + `data/IMPORT_manual_all.csv`（market_* 两张表线上为准勿覆盖）。备份链：combined `.bak_sga`、IMPORT_manual `.bak_nasn/.bak_pl/.bak_pl2/.bak_rd/.bak_rd2`、IMPORT_annual `.bak_nasn`、NASN_table.xlsx `.bak_h1`。
+
+### 2026-10-24（本轮：界面六项 + 布局调整）
+
+| 改动 | 详情 |
+|---|---|
+| Annual Deep-Dive 布局 | profile/customer/region 三卡一行 + equity/hc/edu/rd 四宫格（页面 9370→8493px）；整块移至 heatmap 后标 Part 2，导航编号 08→09→P2，heatmap 10→09 |
+| Historical Trends 配色 | 年度柱紫/历史季灰/当前期橙，图例三项 |
+| Working Capital 标签修复 | datalabels scriptable 上下文无 `c.raw`，改 `c.dataset.data[c.dataIndex]` |
+| NASN 中报核实 | Nasn_2026Q2.pdf 逐项核对手工录入数值全对，仅漏销售费用两期；发现 2025Q2 BS 是错标的 2025 年末值（中报 BS 比较列为年末），重建后 2025Q2 BS 为真实缺口 |
 
 ### 2026-10-22（本轮）
 
