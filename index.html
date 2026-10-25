@@ -1142,8 +1142,6 @@ section.exec-block .exec-signals{min-width:0}
 <input class="num-input" id="plRev" min="0" placeholder="0.00" step="0.01" type="number"/>
 <label class="field-label" for="plGm"><span class="fld-period" id="plGmPeriod">2026H1</span> gross margin <em>%</em></label>
 <input class="num-input" id="plGm" placeholder="0.00" step="0.01" type="number"/>
-<label class="field-label" for="plPrice"><span class="fld-period" id="plPricePeriod">2026H1</span> ASP <em>CNY / unit</em></label>
-<input class="num-input" id="plPrice" min="0" placeholder="0.00" step="0.01" type="number"/>
 </div>
 <div class="pl-recorded">
 <span class="field-label">Recorded years <span class="chip-hint">click a year to edit &middot; &times; to remove</span> <button class="linkbtn" id="plDelLine" type="button">delete line</button></span>
@@ -1311,12 +1309,12 @@ var UNIT={eq:'%',hc:'ppl',edu:'ppl'};
 var EMPTY_MSG={eq:'No holders recorded yet',hc:'No headcount recorded yet',edu:'No education data recorded yet'};
 var CANVAS_ID={eq:'equityPie',hc:'headcountPie',edu:'eduPie'};
 var $=function(id){return document.getElementById(id)};
-var elCo=$('company'),elPe=$('period'),elOp=$('ownPeriod'),elAp=$('annPeriod'),plName=$('plName'),plRev=$('plRev'),plPrice=$('plPrice'),plGm=$('plGm');
+var elCo=$('company'),elPe=$('period'),elOp=$('ownPeriod'),elAp=$('annPeriod'),plName=$('plName'),plRev=$('plRev'),plGm=$('plGm');
 var elOpMirrors=[].filter(Boolean),elApMirrors=[$('annPeriodEdu')].filter(Boolean);
 /* R&D 与 Product line 的图本身就是按年份铺开的，不需要"选年份"下拉；它们各自维护编辑年份 */
 var rdYear='',plYear='',lastCoRD='',lastCoPL='',lastPlLine='';
 var extraAnnYears={}; // 按公司记录"手工新增但还没填数据"的年份（填了数就自然进池，否则刷新即消失）
-if(!elCo||!elPe||!plName||!plRev||!plPrice||!plGm) return;
+if(!elCo||!elPe||!plName||!plRev||!plGm) return;
 var SEED=window.MANUAL_SEED||{eq:{},hc:{}};
 
 function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return{}}}
@@ -1829,11 +1827,9 @@ function syncPL(){
   var yrTxt=plSyncYear()?plYear.slice(0,4):'—';
   $('plRevPeriod').textContent=yrTxt;
   $('plGmPeriod').textContent=yrTxt;
-  $('plPricePeriod').textContent=yrTxt;
   var rec=(nm&&plYear&&db.pd[plKey(nm,plYear)])||{};
   if(!plRev.matches(':focus')) plRev.value=Number.isFinite(rec.rev)?rec.rev:'';
   if(!plGm.matches(':focus')) plGm.value=Number.isFinite(rec.gm)?rec.gm:'';
-  if(!plPrice.matches(':focus')) plPrice.value=Number.isFinite(rec.price)?rec.price:'';
   var del=$('plDelLine');
   if(del) del.style.display=nm?'':'none';
   updatePLChips();drawPL();
@@ -1971,7 +1967,7 @@ bindEditor('eq');bindEditor('hc');bindEditor('edu');
 plName.addEventListener('change',function(){plRenameLine(this.value);syncPL()});
 plRev.addEventListener('input',function(){plSet('rev',this)});
 plGm.addEventListener('input',function(){plSet('gm',this)});
-plPrice.addEventListener('input',function(){plSet('price',this)});
+/* ASP 录入入口已按要求移除；CSV price 列仍在库（导入兼容），不再提供编辑界面 */
 $('plLineChips').addEventListener('click',function(e){
   var b=e.target.closest('.pl-line-chip');if(!b) return;
   plLine=b.getAttribute('data-l')||'';syncPL();
