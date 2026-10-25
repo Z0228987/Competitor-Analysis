@@ -499,6 +499,8 @@ main{padding:18px}
 .nav a.is-ghost{opacity:.42}
 .nav a.is-ghost .annual-tag{background:rgba(255,255,255,.08)}
 .adive-cards{display:flex;flex-direction:column;gap:12px}
+.adive-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+@media(max-width:960px){.adive-grid{grid-template-columns:1fr}}
 .adive-card{border:1px solid rgba(43,39,80,.09);border-radius:16px;background:rgba(255,255,255,.72);overflow:hidden}
 .adive-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px 11px;border-bottom:1px solid rgba(43,39,80,.06);cursor:pointer;user-select:none}
 .adive-head .card-collapse-chev{flex:0 0 auto;color:var(--faint);font-size:11px;transition:transform .16s var(--ease)}
@@ -918,6 +920,8 @@ section.exec-block .exec-signals{min-width:0}
 
 <div class="adive-cards">
 
+<div class="adive-grid" id="adGrid">
+
 <article class="adive-card is-open" data-card="equity">
 <div class="adive-head">
 <div class="adive-head-left"><h3>Shareholding Structure</h3><select aria-label="Shareholding quarter" class="mini-select card-period-select" id="ownPeriod" title="Quarter — controls Shareholding Structure"></select><span class="card-period-group grp-q">Qtr</span></div>
@@ -1058,6 +1062,8 @@ section.exec-block .exec-signals{min-width:0}
 </div>
 </article></div>
 </article>
+
+</div>
 
 <article class="adive-card is-open" data-card="profile">
 <div class="adive-head" data-toggle="profile">
@@ -2763,7 +2769,7 @@ $('ghPush').onclick=function(){
     var hc=await api('/repos/'+r+'/git/commits/'+headSha);if(!hc.ok){say('Cannot read HEAD commit ('+hc.status+')','err');btn.disabled=false;return}
     var treeSha=(await hc.json()).tree.sha;
     var bb=await api('/repos/'+r+'/git/blobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:b64(JSON.stringify(payload,null,1)),encoding:'base64'})});
-    if(!bb.ok){say('Blob upload failed ('+bb.status+') — check token Contents:RW','err');btn.disabled=false;return}
+    if(!bb.ok){var m='';try{m=await bb.text()}catch(e){}say('Blob upload failed ('+bb.status+')'+(m?' · GitHub says: '+String(m).slice(0,140):' · token lacks write permission (need Contents: Read and write)'),'err');btn.disabled=false;return}
     var blobSha=(await bb.json()).sha;
     var tt=await api('/repos/'+r+'/git/trees',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({base_tree:treeSha,tree:[{path:LS_SNAP,mode:'100644',type:'blob',sha:blobSha}]})});
     if(!tt.ok){say('Tree creation failed ('+tt.status+')','err');btn.disabled=false;return}
