@@ -1,6 +1,6 @@
 # AUMOVIO 竞争情报项目 — 完整知识文档
-> 最后更新：2026-10-25 | 适用于下次对话直接喂给 AI 使用
-> 本次更新：**全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）**、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
+> 最后更新：2026-10-26 | 适用于下次对话直接喂给 AI 使用
+> 本次更新：**07 板块改名 Liquidity & Investment Intensity → Overhead**（仅文案，id/锚点/逻辑不变）；此前更新：全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
 
 ---
 
@@ -69,7 +69,7 @@ PATH = {
 | 04 | Positioning `positioning` | fin | 增长-盈利气泡图（四象限，综合 02+03） |
 | 05 | Cash Flow `cashflow` | fin | **合并单图**：OCF/ICF/融资现金流柱（左轴 CNY bn）+ OCF/自由现金流利润率线（右轴 % of revenue） |
 | 06 | Working Capital `working-capital` | fin | AR/AP/净营运资本 |
-| 07 | Liquidity & Efficiency `liquidity` | fin | R&D to Revenue、Selling Expense、G&A Expense 三图（Current Ratio 卡已删，SG&A 拆分为两图） |
+| 07 | Overhead `liquidity` | fin | R&D to Revenue、Selling Expense、G&A Expense 三图（Current Ratio 卡已删，SG&A 拆分为两图；2026-10-26 板块名由「Liquidity & Investment Intensity」改为「Overhead」，id/锚点 `liquidity` 不变） |
 | 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 + A股底盘零部件行业 PE/PB 均值对比（见下方） |
 | 09 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成 + **Education Mix（学历构成饼图，2026-10-22 新增）** + **R&D Headcount & Compensation（研发人数+人均薪酬柱线图，2026-10-22 新增）** 四张图（手动录入，见 3.6 节） |
 | 10 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + 毛利率（ASP 线与录入入口已删，price 列仅保留兼容） |
@@ -109,7 +109,7 @@ PATH = {
 
 - **保留不变**：Executive Signals 的 Notes 栏（`data-note-key="overview-notes"`）始终固定显示
 - **移除**：Capital Markets 区块的 Notes 栏已整体去掉，该区块改为占满整行宽度的单列布局
-- **其余 6 个区块**（History / Profitability / Positioning / Cash Flow / Working Capital / Liquidity / Benchmark Table）的 Notes 栏改为「💬 Add comment」开关：
+- **其余 6 个区块**（History / Profitability / Positioning / Cash Flow / Working Capital / Overhead / Benchmark Table）的 Notes 栏改为「💬 Add comment」开关：
   - 默认收起：Notes 栏收窄成 34px 竖条，只露出一个 💬 按钮，图表区域占满剩余空间
   - 点击展开：Notes 栏展开回原 286px 宽度，自动聚焦编辑框；再点一次收起
   - **已有笔记内容的区块默认自动展开**（不会把已写内容藏起来），按钮同时高亮（橙色边框）提示"这里有笔记"；清空内容后高亮自动取消
@@ -186,7 +186,7 @@ PATH = {
 
 - AR/AP/净营运资本 % of revenue；数据标签读 `c.dataset.data[c.dataIndex]`（datalabels v2 scriptable 上下文**没有 c.raw**，勿回退）
 
-#### 07 Liquidity & Efficiency（三图）
+#### 07 Overhead（三图，原名 Liquidity & Investment Intensity，2026-10-26 改名）
 
 | 图 | 公式 | 备注 |
 |---|---|---|
@@ -543,6 +543,12 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 
 ## 九、变更记录
 
+### 2026-10-26（本轮：板块改名）
+
+| 改动 | 详情 |
+|---|---|
+| 07 板块改名 | 导航标签 + 面板标题由「Liquidity & Investment Intensity」改为「Overhead」；section id（`liquidity`）、锚点（`#liquidity`）、canvas id（`rndChart`/`sellChart`/`admChart`）、Notes key（`data-note-key="liquidity-notes"`）等全部保持不变，仅展示文案调整，不影响任何数据绑定或 JS 逻辑 |
+
 ### 2026-10-26（凌晨）
 
 | 改动 | 详情 |
@@ -558,7 +564,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | 改动 | 详情 |
 |---|---|
 | **全看板数据口径总表** | 新增 2.1 节，逐板块逐指标记录口径/公式/出处（含 rd 薪酬权威数据表）；此后改数据或公式必须同步该表 |
-| SG&A 拆分 | Liquidity 恢复三图：R&D to Revenue / Selling Expense / G&A Expense（`sellIntensity`/`adminIntensity` 用 Math.abs，与旧 sga 合成口径一致）；Current Ratio 卡删除 |
+| SG&A 拆分 | Overhead（原 Liquidity）恢复三图：R&D to Revenue / Selling Expense / G&A Expense（`sellIntensity`/`adminIntensity` 用 Math.abs，与旧 sga 合成口径一致）；Current Ratio 卡删除 |
 | Cloud Sync · GitHub | 顶部可折叠面板：token/repo 存 localStorage（`ciGhToken`/`ciGhRepo`，不入仓库），推送走 **Git Data API 五步流**（blob→tree→commit→ref，因 briefing base64 可能超 1MB 不用 Contents PUT）；快照=`data/user_cache/manual_data.json`，14 键 + **评论 `ciPartNote:<key>` 动态键**（初版漏了评论导致换电脑评论消失，已修）；换电脑需重新粘 token（403/404 多为 token 没配或缺 Contents:RW） |
 | NASN 数据链路重建（方案 A：xlsx 加列走流水线） | `add_nasn_h1_columns.py` 给 NASN_table.xlsx 三 sheet 加「2025/2026 中期」列（数值取自中报 PDF）→ `hk_item_mapping_with_code.csv` 加 5 条映射 → `convert_nasn.py` PERIOD_MAP 扩展中期列 → `patch_nasn_selling.py` 升级为 **NASN 区全量幂等重建**（从 fact_nasn 重建 combined 的 NASN 85 行/7 期）。期间修复三个 bug：①前置过滤先于改名导致销售费用行被静默丢弃（改为先 `to_combined_code()` 再过滤白名单）；②符号规则改为**只对 IS_NP/IS_OP 取反**（盲用 mapping sign 把正的毛利全期翻负，热力图 GM 曾显示 −13.37%），其余科目透传；③`%g` 格式化丢千位精度改 `str()`。最终与重建前备份逐分位一致，仅新增销售费用 7 行 + CF_FIN_NET 2026Q2=−3.455M（PDF 自然符号） |
 | NASN Annual Deep-Dive 数据补全 | profile Employees 384→**364**（招股书 p157）、Countries=1；segment 2023 gm NBS 2.0/ESC −3.3；manual +17 行：equity 2026Q2（中报 p13-15 上市日结构）、headcount 2025（招股书）、education 2025（仅研发团队披露）、rd 开支 96.5/87.6/83.0 百万 |
@@ -590,7 +596,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | Annual Deep-Dive 自动从 `data/` 加载 | 页面加载时自动 `fetch('data/IMPORT_manual_all.csv')` + `fetch('data/IMPORT_annual_all.csv')` 并复用 `importData()`/`adImportData()` 自动灌入，不再需要每次手动点 Import；文件不存在时静默回退到手动 Import，不影响其他模块 |
 | Annual Deep-Dive 9 张卡片各配专属年份/季度下拉框 | 原先靠顶部统一下拉框控制全部卡片，上下滚动对照困难；改为逐卡片旁挂专属下拉框，分 3 组联动（季度组 A：Shareholding+R&D；年度组 B：Headcount+Education+Product Line；年度组 C：Profile+Customer+Region+Segment）；发现并修复了最初 6 个"镜像"下拉框只有 HTML 没有 JS 绑定、选中不生效的 bug，现在组内任一下拉框都真双向联动 |
 | Revenue/Profit Trend 新增 QoQ 环比箭头 | 原只有 YoY 同比箭头，新增 `prevQKey()`/`qoqSeries()` 两个纯函数计算环比，柱子上方 YoY/QoQ 两行箭头并列显示；季度格式数据自动支持未来期间，年度数据自动跳过不报错 |
-| 次要图表 Notes 改为按需展开 | Capital Markets 区块整体移除 Notes 栏（占满整行）；其余 6 个次要区块（History/Profitability/Positioning/Cash Flow/Working Capital/Liquidity/Benchmark Table）Notes 栏改为默认收起的「💬 Add comment」开关，有内容自动展开+高亮；Executive Signals 的 Notes 栏保持固定显示不变 |
+| 次要图表 Notes 改为按需展开 | Capital Markets 区块整体移除 Notes 栏（占满整行）；其余 6 个次要区块（History/Profitability/Positioning/Cash Flow/Working Capital/Overhead/Benchmark Table）Notes 栏改为默认收起的「💬 Add comment」开关，有内容自动展开+高亮；Executive Signals 的 Notes 栏保持固定显示不变 |
 
 ### 2026-10-22（交互/UI 走查，本轮追加）
 
