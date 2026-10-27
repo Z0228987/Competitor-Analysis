@@ -1,7 +1,7 @@
 {
  "app": "aumovio-dashboard",
  "version": 1,
- "updatedAt": "2026-10-27T06:18:00.321Z",
+ "updatedAt": "2026-10-27T07:07:48.166Z",
  "data": {
   "ciEquityStructure": {
    "BTL|2024Q4": [
@@ -2993,11 +2993,11 @@
   },
   "eurCnyRate": 7.92,
   "hkdCnyRate": 1,
-  "ciPartNote:cashflow-notes": "<ul><li>Luxshare&nbsp;增持德国 Leoni（莱尼）持股由 <strong>50.1% → 74.9%，绝对控股；</strong>业务：车载线束、车载电网、高压线束，不是底盘制动</li><li>Luxshare 收购京西智行集团 100% 股权 → 间接控股【京西国际 02339.HK】59.5%</li><li>大额financing cash flow 来源：新增短期借款、长期银行授信、债券、7 月港股 IPO 募资（243 亿港元，部分资金在 H1 已经启动授信安排）。\n目的分两块：</li>\n<ul style=\"list-style-type: disc;\">\n<li>一部分，就是<strong>为后面京西、Leoni 的收购、后续整合资金做储备</strong>（战略融资，先拿钱存着，H2 再付收购款）；</li>\n<li>另一部分，对冲上面经营现金流阶段性流出、持续资本开支（海外厂房、产线）、置换旧债； 所以筹资大增是<strong>提前储备弹药</strong>，不是当期已经付钱收购证券时报</li>\n</ul><ol start=\"3\"></ol><li>占股多少;金额多少</li><li>EBS Competitor</li><li>汽车相关投资</li><li>Nasn comment一下</li></ul>",
+  "ciPartNote:cashflow-notes": "<ul><li>Luxshare&nbsp;增持德国 Leoni（莱尼）持股由 <strong>50.1% → 74.9%，绝对控股；</strong>业务：车载线束、车载电网、高压线束，不是底盘制动</li><li>Luxshare 收购京西智行集团 100% 股权 → 间接控股【京西国际 02339.HK】59.5%</li><li>大额financing cash flow 来源：新增短期借款、长期银行授信、债券、7 月港股 IPO 募资（243 亿港元，部分资金在 H1 已经启动授信安排）。\n目的分两块：</li>\n<ul style=\"list-style-type: disc;\">\n<li>一部分，就是<strong>为后面京西、Leoni 的收购、后续整合资金做储备</strong>；</li>\n<li>模式：<strong>大进大出、滚动理财</strong>：筹资拿到一大笔钱（筹资净流入 449 亿），闲置资金拿去买理财，理财到期又收回，所以投资流入、流出都非常巨大，净额是剩下的部分</li>\n</ul><ol start=\"3\"></ol><li>占股多少;金额多少</li><li>汽车相关投资</li></ul>",
   "ciPartNote:benchmark-table-notes": "09 Part 2变成年度数据<div>company profile 放到annual deep-dive最上面</div><div>价格不放 可以先hide</div><div>peer benchmark heatmap可以放前面</div>",
   "ciPartNote:history-notes": "<ul><li>After Tax</li><li><strong>净利润(Net Profit) </strong>&nbsp;= 扣完所得税之后、<strong>尚未扣减少数股东损益</strong>的集团整体合并利润（归母净利润）</li></ul>",
   "ciPartNote:profitability-notes": "<ul><li>改成内部缩写（Xiao Mei）EBIT，EBT</li><li>gross margin 去掉生产成本的利润额</li><li>EBT=扣研发费+研发收入-销售&amp;财务费用</li><li>EBIT =&nbsp;营业利润 + 财务费用</li><li>Operating Profit = EBIT - 财务费用</li><li><b>Nasn 净利润的大幅下降重要原因包括 70939000&nbsp;</b>股本回购导致净利润大幅减少</li></ul>",
-  "ciPartNote:liquidity-notes": "<ul><li>Overhead</li><li>R&amp;D To Revenue</li><li>Sales Expense</li><li>G&amp;A</li><li>Current Ratio不要</li></ul>",
+  "ciPartNote:liquidity-notes": "",
   "ciPartNote:working-capital-notes": "<ul><li>直接显示百分比</li><li>把它放到annual里</li></ul>",
   "ciPartNote:overview-notes": ""
  }
