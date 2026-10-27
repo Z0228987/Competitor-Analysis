@@ -1,6 +1,6 @@
 # AUMOVIO 竞争情报项目 — 完整知识文档
-> 最后更新：2026-10-26 | 适用于下次对话直接喂给 AI 使用
-> 本次更新：**07 板块改名 Liquidity & Investment Intensity → Overhead**（仅文案，id/锚点/逻辑不变）；此前更新：全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
+> 最后更新：2026-10-27 | 适用于下次对话直接喂给 AI 使用
+> 本次更新：**Aumovio Operating Profit 口径修正**（IS_OP 从 EBIT 改为 Earnings before tax，对标 A股「营业利润」已扣财务费用的口径）、**Historical Trends 净利润口径统一**（A股/Aumovio 改用含少数股东的净利润，不再优先归母）；此前更新：**07 板块改名 Liquidity & Investment Intensity → Overhead**（仅文案，id/锚点/逻辑不变）；更早更新：全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
 
 ---
 
@@ -163,7 +163,7 @@ PATH = {
 | 指标 | 口径 |
 |---|---|
 | Revenue scale | IS_REV，B CNY |
-| Gross/Operating/Net margin | gross 优先 IS_GROSS_PROFIT（无则 revenue−\|cost\|）；op=IS_OP；np=IS_NP（NASN 缺失时 −\|税前亏损\| 兜底） |
+| Gross/Operating/Net margin | gross 优先 IS_GROSS_PROFIT（无则 revenue−\|cost\|）；op=IS_OP；np=IS_NP（NASN 缺失时 −\|税前亏损\| 兜底）。**⚠️ Aumovio 的 IS_OP 口径 2026-10-27 已修正，见下方说明** |
 | 研发强度 | rnd/revenue（旧 sgaIntensity 口径保留给 Executive 卡） |
 
 #### 02 Historical Trends
@@ -176,6 +176,11 @@ PATH = {
 
 - 毛利率/营业/净利率、OCF margin：见通用公式表；热力图为**当期同业相对排名**着色
 - NASN 关键口径：**毛利 IS_GROSS_PROFIT 为正数**（2026-10-25 修复过符号翻转 bug）；IS_NP/IS_OP 亏损期为负（港股报表亏损记正数，重建脚本里取反）
+- **⚠️ Aumovio「Operating Profit」口径（2026-10-27 修正）**：A股利润表「三、营业利润」已经扣减财务费用（利息净额/汇兑/衍生品公允价值变动等），但 Aumovio 原口径用的「EBIT」是息税前利润，**尚未扣减财务费用**，与 A股不是同一计算阶段，不可直接对标。已改为：
+  - `extract_aumovio.py` 里 `EBIT` 改映射到 `IS_EBIT_RAW`（不在白名单内，不进 dashboard，仅做追溯参考）
+  - `Earnings before tax`（= EBIT + Financial result，与 A股营业利润同样是"扣减财务费用后、所得税前"的口径）改映射到 `IS_OP`，承载看板 Operating Profit 的数值
+  - 已对 `aumovio_financials_2026_Q1_eur.csv`、`aumovio_financials_2026_Q2_eur.csv`、合并版 `aumovio_financials.csv` 做了精确补丁（4 期：2025Q1/2025H1/2026Q1/2026H1 的 IS_OP 从 EBIT 值改为 Earnings before tax 值），并重跑 `filter_dashboard_fields.py` + `archive_dashboard_history.py` 传导到 `dashboard_ready/fact_financials_combined.csv`
+  - 若后续有新季度 PDF 需要跑 `extract_aumovio.py` 重新提取，映射已经改好，无需再手动补丁
 
 #### 05 Cash Flow
 
@@ -542,6 +547,13 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 ---
 
 ## 九、变更记录
+
+### 2026-10-27（本轮：Aumovio Operating Profit 口径修正 + 净利润历史口径统一）
+
+| 改动 | 详情 |
+|---|---|
+| Aumovio Operating Profit 改口径 | 原来 `IS_OP` 取的是 EBIT（息税前利润，未扣财务费用），和 A股「营业利润」（已扣财务费用）不是同一计算阶段，不可直接对标。改为 `IS_OP` 取 `Earnings before tax`（= EBIT + Financial result），EBIT 原始值改存 `IS_EBIT_RAW`（白名单外，仅追溯参考）。影响 `extract_aumovio.py` 映射表 + 4 期已提取数据的精确补丁（2025Q1/2025H1/2026Q1/2026H1）+ 重新生成的 `fact_financials_combined.csv` |
+| Historical Trends 净利润口径统一 | `fact_profit_history.csv`（Historical Trends 板块数据源）原来 A股/Aumovio 优先取归母净利润 `IS_NP_PARENT`，和 `fact_financials_combined.csv` 主表用的「净利润(含少数股东)」口径不一致。已改为统一用 `IS_NP`（A股/NASN）/`IS_NP_PROF_CONT_OPER`（Aumovio），两张表口径现已一致。Aumovio 2024FY/2025FY 两个手工历史年度值也相应从归母净利润（-289/-655）修正为净利润含少数股东（-272/-630，数据源 stockanalysis.com/S&P Global，经年报归母净利润反推验证） |
 
 ### 2026-10-26（本轮：板块改名）
 
