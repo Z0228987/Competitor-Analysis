@@ -1,7 +1,7 @@
 {
  "app": "aumovio-dashboard",
  "version": 1,
- "updatedAt": "2026-10-27T08:08:36.821Z",
+ "updatedAt": "2026-10-27T08:46:05.774Z",
  "data": {
   "ciEquityStructure": {
    "BTL|2024Q4": [
@@ -2995,7 +2995,7 @@
   "hkdCnyRate": 1,
   "ciPartNote:cashflow-notes": "<ul><li>Luxshare&nbsp;增持德国 Leoni（莱尼）持股由 <strong>50.1% → 74.9%，绝对控股；</strong>业务：车载线束、车载电网、高压线束，不是底盘制动</li><li>Luxshare 收购京西智行集团 100% 股权 → 间接控股【京西国际 02339.HK】59.5%</li><li>大额financing cash flow 来源：新增短期借款、长期银行授信、债券、7 月港股 IPO 募资（243 亿港元，部分资金在 H1 已经启动授信安排）。\n目的分两块：</li>\n<ul style=\"list-style-type: disc;\">\n<li>一部分，就是<strong>为后面京西、Leoni 的收购、后续整合资金做储备</strong>；</li>\n<li>模式：<strong>大进大出、滚动理财</strong>：筹资拿到一大笔钱（筹资净流入 449 亿），闲置资金拿去买理财，理财到期又收回，所以投资流入、流出都非常巨大，净额是剩下的部分</li></ul></ul>",
   "ciPartNote:history-notes": "<ul><li><strong>净利润(Net Profit) </strong>&nbsp;= <b>扣完所得税</b>之后、<strong>尚未扣减少数股东损益</strong>的集团整体合并利润（归母净利润+少数股东损益）</li></ul>",
-  "ciPartNote:profitability-notes": "<ul><li>Gross Margin 去掉生产成本的利润额</li><li>EBT=扣研发费+研发收入-销售&amp;财务费用</li><li>EBIT =&nbsp;营业利润 + 财务费用</li><li>Operating Profit = EBIT - 财务费用</li><li><b>Nasn 净利润的大幅下降重要原因包括 70939000&nbsp;</b>股本回购导致净利润大幅减少</li></ul>",
+  "ciPartNote:profitability-notes": "<ul><li>Gross Margin 去掉生产成本的利润额</li><li>EBT=扣研发费+研发收入-销售&amp;财务费用</li><li>EBIT =&nbsp;营业利润 + 财务费用</li><li>Operating Profit = EBIT - 财务费用</li><li><b>Nasn 净利润的大幅下降重要原因： -70939000&nbsp;</b>股本回购</li></ul>",
   "ciPartNote:liquidity-notes": "",
   "ciPartNote:working-capital-notes": "<ul><li>强议价（AP 占比高，对冲应收）：立讯、华域</li><li>均衡稳健：AUMOVIO、拓普</li><li>垫资压力大：伯特利（高 NWC）</li><li>特殊红利期：拿森（负 NWC，上游垫资）</li></ul>",
   "ciPartNote:overview-notes": ""
