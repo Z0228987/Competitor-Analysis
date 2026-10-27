@@ -1,7 +1,7 @@
 {
  "app": "aumovio-dashboard",
  "version": 1,
- "updatedAt": "2026-10-25T14:11:17.387Z",
+ "updatedAt": "2026-10-27T06:18:00.321Z",
  "data": {
   "ciEquityStructure": {
    "BTL|2024Q4": [
@@ -1473,7 +1473,9 @@
     "功能件（底盘·转向·制动）"
    ],
    "NASN": [
-    "线控制动"
+    "NBS",
+    "ESC",
+    "NBC"
    ],
    "Tuopu": [
     "底盘系统",
@@ -1565,21 +1567,6 @@
    "HASCO|功能件（底盘·转向·制动）|2025Q4": {
     "rev": 29193.81,
     "gm": 11.44
-   },
-   "NASN|线控制动|2023Q4": {
-    "rev": 272,
-    "price": 785.86,
-    "gm": 1.1
-   },
-   "NASN|线控制动|2024Q4": {
-    "rev": 391,
-    "price": 734.5,
-    "gm": 10.7
-   },
-   "NASN|线控制动|2025Q4": {
-    "rev": 615,
-    "price": 835.36,
-    "gm": 13.6
    },
    "Tuopu|底盘系统|2021Q4": {
     "rev": 2624.15,
@@ -1722,14 +1709,51 @@
    "Baolong|传感器|2025Q4": {
     "rev": 788,
     "gm": 17.55
+   },
+   "NASN|NBS|2023Q4": {
+    "rev": 187,
+    "gm": 2
+   },
+   "NASN|NBS|2024Q4": {
+    "rev": 161,
+    "gm": 7.9
+   },
+   "NASN|NBS|2025Q4": {
+    "rev": 119,
+    "gm": 6.1
+   },
+   "NASN|ESC|2023Q4": {
+    "rev": 80,
+    "gm": -3.3
+   },
+   "NASN|ESC|2024Q4": {
+    "rev": 180,
+    "gm": 15.5
+   },
+   "NASN|ESC|2025Q4": {
+    "rev": 178,
+    "gm": 23.3
+   },
+   "NASN|NBC|2023Q4": {
+    "rev": 4
+   },
+   "NASN|NBC|2024Q4": {
+    "rev": 40,
+    "gm": 2.3
+   },
+   "NASN|NBC|2025Q4": {
+    "rev": 301,
+    "gm": 9.2
    }
   },
   "ciRdHeadcount": {
    "BTL|2024Q4": {
-    "hc": 1250
+    "hc": 1250,
+    "sal": 269.3
    },
    "BTL|2025Q4": {
-    "hc": 1535
+    "hc": 1535,
+    "sal": 237
    },
    "Baolong|2024Q4": {
     "hc": 1333,
@@ -1740,16 +1764,20 @@
     "sal": 269.8
    },
    "HASCO|2024Q4": {
-    "hc": 11003
+    "hc": 6370,
+    "sal": 264.8
    },
    "HASCO|2025Q4": {
-    "hc": 11326
+    "hc": 5895,
+    "sal": 390
    },
    "Luxshare|2024Q4": {
-    "hc": 22583
+    "hc": 22583,
+    "sal": 210
    },
    "Luxshare|2025Q4": {
-    "hc": 34357
+    "hc": 34357,
+    "sal": 169.3
    },
    "Tuopu|2024Q4": {
     "hc": 4159,
@@ -1757,17 +1785,11 @@
    },
    "Tuopu|2025Q4": {
     "hc": 4466,
-    "sal": 147
+    "sal": 124.5
    },
    "NASN|2025Q4": {
     "hc": 150,
-    "sal": 83
-   },
-   "NASN|2023Q4": {
-    "sal": 96.5
-   },
-   "NASN|2024Q4": {
-    "sal": 87.6
+    "sal": 326
    }
   },
   "ciAdProfile": {
@@ -2019,6 +2041,10 @@
     {
      "n": "Top1 Customer",
      "v": 38.7
+    },
+    {
+     "n": "Top5 Customers",
+     "v": 48.08
     }
    ],
    "NASN|2023": [
@@ -2049,6 +2075,22 @@
     {
      "n": "Top5 Customers",
      "v": 82.4
+    }
+   ],
+   "HASCO|2023": [
+    {
+     "n": "Top5 Customers",
+     "v": 50.31
+    }
+   ],
+   "Baolong|2023": [
+    {
+     "n": "Top5 Customers",
+     "v": 32.88
+    },
+    {
+     "n": "Top1 Customer",
+     "v": 11.03
     }
    ]
   },
@@ -2181,6 +2223,66 @@
     {
      "n": "Overseas",
      "rev": 11.24
+    }
+   ],
+   "BTL|2023": [
+    {
+     "n": "China",
+     "rev": 6351.39,
+     "gm": 18
+    },
+    {
+     "n": "Overseas",
+     "rev": 869.4,
+     "gm": 36.34
+    }
+   ],
+   "Baolong|2023": [
+    {
+     "n": "China",
+     "rev": 2767.47,
+     "gm": 20.21
+    },
+    {
+     "n": "Overseas",
+     "rev": 3014.77,
+     "gm": 33.43
+    }
+   ],
+   "HASCO|2023": [
+    {
+     "n": "China",
+     "rev": 128439.14,
+     "gm": 14.93
+    },
+    {
+     "n": "Overseas",
+     "rev": 31080,
+     "gm": 3.2
+    }
+   ],
+   "Luxshare|2023": [
+    {
+     "n": "China",
+     "rev": 25149.44,
+     "gm": 16.7
+    },
+    {
+     "n": "Overseas",
+     "rev": 206756.02,
+     "gm": 10.96
+    }
+   ],
+   "Tuopu|2023": [
+    {
+     "n": "China",
+     "rev": 12955.13,
+     "gm": 21.26
+    },
+    {
+     "n": "Overseas",
+     "rev": 5772.91,
+     "gm": 23.51
     }
    ]
   },
@@ -2891,10 +2993,10 @@
   },
   "eurCnyRate": 7.92,
   "hkdCnyRate": 1,
-  "ciPartNote:cashflow-notes": "<ul><li>Luxshare 收购京西智行</li><li>占股多少;金额多少</li><li>EBS Competitor</li><li>汽车相关投资</li><li>Nasn comment一下</li></ul>",
+  "ciPartNote:cashflow-notes": "<ul><li>Luxshare&nbsp;增持德国 Leoni（莱尼）持股由 <strong>50.1% → 74.9%，绝对控股；</strong>业务：车载线束、车载电网、高压线束，不是底盘制动</li><li>Luxshare 收购京西智行集团 100% 股权 → 间接控股【京西国际 02339.HK】59.5%</li><li>大额financing cash flow 来源：新增短期借款、长期银行授信、债券、7 月港股 IPO 募资（243 亿港元，部分资金在 H1 已经启动授信安排）。\n目的分两块：</li>\n<ul style=\"list-style-type: disc;\">\n<li>一部分，就是<strong>为后面京西、Leoni 的收购、后续整合资金做储备</strong>（战略融资，先拿钱存着，H2 再付收购款）；</li>\n<li>另一部分，对冲上面经营现金流阶段性流出、持续资本开支（海外厂房、产线）、置换旧债； 所以筹资大增是<strong>提前储备弹药</strong>，不是当期已经付钱收购证券时报</li>\n</ul><ol start=\"3\"></ol><li>占股多少;金额多少</li><li>EBS Competitor</li><li>汽车相关投资</li><li>Nasn comment一下</li></ul>",
   "ciPartNote:benchmark-table-notes": "09 Part 2变成年度数据<div>company profile 放到annual deep-dive最上面</div><div>价格不放 可以先hide</div><div>peer benchmark heatmap可以放前面</div>",
-  "ciPartNote:history-notes": "<ul><li>改成H1</li><li>Q1换成灰色</li><li>quarterly颜色改一下</li><li>After Tax</li></ul>",
-  "ciPartNote:profitability-notes": "<ul><li>公式</li><li>A股 Gross Margin - Overhead(Before Tax）</li><li>改成内部缩写（Xiao Mei）EBIT，EBT</li><li>Nasn对应BTL oper</li><li>70939</li></ul>",
+  "ciPartNote:history-notes": "<ul><li>After Tax</li><li><strong>净利润(Net Profit) </strong>&nbsp;= 扣完所得税之后、<strong>尚未扣减少数股东损益</strong>的集团整体合并利润（归母净利润）</li></ul>",
+  "ciPartNote:profitability-notes": "<ul><li>改成内部缩写（Xiao Mei）EBIT，EBT</li><li>gross margin 去掉生产成本的利润额</li><li>EBT=扣研发费+研发收入-销售&amp;财务费用</li><li>EBIT =&nbsp;营业利润 + 财务费用</li><li>Operating Profit = EBIT - 财务费用</li><li><b>Nasn 净利润的大幅下降重要原因包括 70939000&nbsp;</b>股本回购导致净利润大幅减少</li></ul>",
   "ciPartNote:liquidity-notes": "<ul><li>Overhead</li><li>R&amp;D To Revenue</li><li>Sales Expense</li><li>G&amp;A</li><li>Current Ratio不要</li></ul>",
   "ciPartNote:working-capital-notes": "<ul><li>直接显示百分比</li><li>把它放到annual里</li></ul>",
   "ciPartNote:overview-notes": ""
