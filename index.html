@@ -1056,31 +1056,31 @@ section.exec-block .exec-signals{min-width:0}
 
 <article class="adive-card is-open" data-card="rd">
 <div class="adive-head">
-<div class="adive-head-left"><h3>R&amp;D Headcount &amp; Compensation</h3><span class="card-period-group grp-all">All years</span></div>
+<div class="adive-head-left"><h3>R&amp;D Headcount &amp; R&amp;D Personnel Cost per Employee</h3><span class="card-period-group grp-all">All years</span></div>
 <span class="adive-stamp">Manual · per company &amp; year</span>
 </div>
 <div class="adive-body"><article class="panel pie-panel">
 <div class="ph">
 <div>
-<p class="ps" id="rdSub">R&amp;D staff count vs average annual compensation, by period</p>
+<p class="ps" id="rdSub">R&amp;D headcount &amp; R&amp;D personnel cost per employee · annual R&amp;D personnel compensation cost ÷ year-end R&amp;D headcount</p>
 </div>
 <div class="panel-actions">
 <button class="mini-btn" id="rdEdit" type="button">Edit</button>
 </div>
 </div>
 <div class="chart sm">
-<canvas aria-label="Bar and line chart of R&amp;D headcount and average compensation" id="rdChart" role="img"></canvas>
+<canvas aria-label="Bar and line chart of R&amp;D headcount and R&amp;D personnel cost per employee" id="rdChart" role="img"></canvas>
 <div class="pie-empty" id="rdEmpty" hidden="">No R&amp;D data yet<br/>click Edit, then add a year</div>
 </div>
 <div class="pl-legend">
 <span><i class="dot pl-rev"></i>R&amp;D headcount &middot; ppl</span>
-<span><i class="dot pl-price"></i>Avg comp &middot; CNY k / yr</span>
+<span><i class="dot pl-price"></i>R&amp;D personnel cost per employee &middot; CNY k / employee / yr</span>
 </div>
 <div class="entry" hidden="" id="rdEntry">
 <div class="pl-inputs" style="margin:10px 0 0">
 <label class="field-label" for="rdHc"><span class="fld-period" id="rdHcPeriod">&mdash;</span> R&amp;D headcount <em>ppl</em></label>
 <input class="num-input" id="rdHc" min="0" placeholder="0" type="number"/>
-<label class="field-label" for="rdSal"><span class="fld-period" id="rdSalPeriod">&mdash;</span> avg R&amp;D comp <em>CNY k / yr</em></label>
+<label class="field-label" for="rdSal"><span class="fld-period" id="rdSalPeriod">&mdash;</span> R&amp;D personnel cost per employee <em>CNY k / employee / yr</em></label>
 <input class="num-input" id="rdSal" min="0" placeholder="0" step="0.1" type="number"/>
 </div>
 <div class="pl-recorded">
@@ -1785,10 +1785,10 @@ function drawRD(){
   var labels=pts.map(function(x){return x.p.slice(0,4)}),hcs=pts.map(function(x){return x.hc}),sals=pts.map(function(x){return x.sal});
   var data={labels:labels,datasets:[
     {type:'bar',label:'R&D headcount',data:hcs,backgroundColor:'rgba(127,119,221,.55)',hoverBackgroundColor:'rgba(127,119,221,.82)',borderRadius:6,barPercentage:.55,yAxisID:'y',order:2},
-    {type:'line',label:'Avg comp',data:sals,borderColor:'#D85A30',backgroundColor:'#fff',borderWidth:2,pointRadius:3,pointHoverRadius:5,pointBorderWidth:2,pointBorderColor:'#D85A30',pointBackgroundColor:'#fff',tension:.32,spanGaps:true,yAxisID:'y1',order:1}
+    {type:'line',label:'R&D personnel cost per employee',data:sals,borderColor:'#D85A30',backgroundColor:'#fff',borderWidth:2,pointRadius:3,pointHoverRadius:5,pointBorderWidth:2,pointBorderColor:'#D85A30',pointBackgroundColor:'#fff',tension:.32,spanGaps:true,yAxisID:'y1',order:1}
   ]};
   if(charts.rd){charts.rd.data=data;charts.rd.update()}
-  else charts.rd=new CH(canvas,{type:'bar',data:data,options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{backgroundColor:'rgba(43,39,80,.94)',padding:10,callbacks:{label:function(c){var v=c.parsed.y;if(v==null)return null;return c.dataset.label==='R&D headcount'?('R&D headcount: '+Math.round(v).toLocaleString('en-US')+' ppl'):('Avg comp: '+num(v).toFixed(1)+' CNY k/yr')}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:10},autoSkip:false,maxRotation:45}},y:{position:'left',beginAtZero:true,grid:{color:'rgba(83,74,183,.07)'},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}},y1:{position:'right',beginAtZero:true,grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}}}}});
+  else charts.rd=new CH(canvas,{type:'bar',data:data,options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{backgroundColor:'rgba(43,39,80,.94)',padding:10,callbacks:{label:function(c){var v=c.parsed.y;if(v==null)return null;return c.dataset.label==='R&D headcount'?('R&D headcount: '+Math.round(v).toLocaleString('en-US')+' ppl'):('R&D personnel cost per employee: '+num(v).toFixed(1)+' CNY k/employee/yr')}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:10},autoSkip:false,maxRotation:45}},y:{position:'left',beginAtZero:true,grid:{color:'rgba(83,74,183,.07)'},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}},y1:{position:'right',beginAtZero:true,grid:{display:false},border:{display:false},ticks:{color:'#918DA6',font:{size:9}}}}}});
 }
 function syncRD(){
   var y=rdSyncYear();
@@ -1799,7 +1799,7 @@ function syncRD(){
   if(!rdHcEl.matches(':focus')) rdHcEl.value=Number.isFinite(rec.hc)?rec.hc:'';
   if(!rdSalEl.matches(':focus')) rdSalEl.value=Number.isFinite(rec.sal)?rec.sal:'';
   var pts=rdPoints();
-  $('rdSub').textContent=pts.length?('R&D staff count vs average annual compensation · '+pts.length+' year'+(pts.length===1?'':'s')+' on file'):'R&D staff count vs average annual compensation, by year';
+  $('rdSub').textContent=pts.length?('R&D headcount & R&D personnel cost per employee · annual R&D personnel compensation cost ÷ year-end R&D headcount · '+pts.length+' year'+(pts.length===1?'':'s')+' on file'):'R&D headcount & R&D personnel cost per employee · annual R&D personnel compensation cost ÷ year-end R&D headcount';
   updateRDChips();drawRD();
 }
 function updateRDChips(){
