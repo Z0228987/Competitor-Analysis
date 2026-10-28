@@ -1,6 +1,6 @@
 # AUMOVIO 竞争情报项目 — 完整知识文档
-> 最后更新：2026-10-27 | 适用于下次对话直接喂给 AI 使用
-> 本次更新：**Aumovio Operating Profit 口径修正**（IS_OP 从 EBIT 改为 Earnings before tax，对标 A股「营业利润」已扣财务费用的口径）、**Historical Trends 净利润口径统一**（A股/Aumovio 改用含少数股东的净利润，不再优先归母）；此前更新：**07 板块改名 Liquidity & Investment Intensity → Overhead**（仅文案，id/锚点/逻辑不变）；更早更新：全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
+> 最后更新：2026-10-28 | 适用于下次对话直接喂给 AI 使用
+> 本次更新：**R&D Headcount & R&D Personnel Cost per Employee 改名并明确公式**（全年研发人员薪酬成本÷年末研发人员数；拓普薪酬口径不一致，用户已删除其成本数据）；此前更新：**Aumovio Operating Profit 口径修正**（IS_OP 从 EBIT 改为 Earnings before tax，对标 A股「营业利润」已扣财务费用的口径）、**Historical Trends 净利润口径统一**（A股/Aumovio 改用含少数股东的净利润，不再优先归母）；此前更新：**07 板块改名 Liquidity & Investment Intensity → Overhead**（仅文案，id/锚点/逻辑不变）；更早更新：全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
 
 ---
 
@@ -71,7 +71,7 @@ PATH = {
 | 06 | Working Capital `working-capital` | fin | AR/AP/净营运资本 |
 | 07 | Overhead `liquidity` | fin | R&D to Revenue、Selling Expense、G&A Expense 三图（Current Ratio 卡已删，SG&A 拆分为两图；2026-10-26 板块名由「Liquidity & Investment Intensity」改为「Overhead」，id/锚点 `liquidity` 不变） |
 | 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 + A股底盘零部件行业 PE/PB 均值对比（见下方） |
-| 09 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成 + **Education Mix（学历构成饼图，2026-10-22 新增）** + **R&D Headcount & Compensation（研发人数+人均薪酬柱线图，2026-10-22 新增）** 四张图（手动录入，见 3.6 节） |
+| 09 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成 + **Education Mix（学历构成饼图，2026-10-22 新增）** + **R&D Headcount & R&D Personnel Cost per Employee（研发人数+研发人员人均成本柱线图，2026-10-22 新增）** 四张图（手动录入，见 3.6 节） |
 | 10 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + 毛利率（ASP 线与录入入口已删，price 列仅保留兼容） |
 | 11 | Annual Deep-Dive `annual-deep-dive` | **localStorage，2026-10-22 起支持从 `data/` 自动加载** | 年报口径四卡（见 3.5 节） |
 | 12 | Benchmark Table `heatmap` | fin | 6 项指标同业相对排名热力图（数据附录，收尾） |
@@ -214,9 +214,9 @@ PATH = {
 | equity 股权 | ≥5% 股东 + 其他，%；change=环比 pp（首期留空） | A股=东财十大股东；NASN 2026Q2=中报 p13-15 上市日（2026-08-07）结构，合计 59.54% |
 | headcount 员工 | **人数**（非 %），年报"专业构成"分类 | A股年报 PDF；NASN 2025=招股书 p157：生产143/销售12/研发150/行政59 |
 | education 学历 | **人数**（UNIT.edu='ppl'，非 %），占比由 doughnut 自动算 | 年报学历构成；NASN 仅研发团队披露（硕士及以上19/本科及以下131，name 带"(研发)"标注） |
-| rd 研发 | **hc=年报披露研发人员数；comp(人均薪酬)=年报附注「研发费用」中职工薪酬 ÷ 研发人数**（CNY k/yr）。⚠️ **不可用研发投入合计÷人数**（研发投入含材料/模具/折旧/外包）——用户明确口径 | 见下方分表 |
+| rd 研发 | **hc=年末研发人员数；comp(研发人员人均成本)=全年发生的研发人员薪酬成本 ÷ 年末研发人员数**（CNY k/人/年）。⚠️ 分子不得使用研发投入合计（其中含材料/模具/折旧/外包）；分母为年末人数，不是全年平均人数 | 见下方分表 |
 
-**rd comp 权威数据表（2026-10-25 定稿，源 PDF 存 `01_source_docs/annual_reports/`）**：
+**rd personnel cost per employee 权威数据表（2026-10-25 定稿，源 PDF 存 `01_source_docs/annual_reports/`）**：
 
 | 公司 | 2024 hc/comp | 2025 hc/comp | 薪酬出处 |
 |---|---|---|---|
@@ -224,7 +224,7 @@ PATH = {
 | Baolong | 1333 / 275.1 | 1499 / 269.8 | 年报附注65 职工薪酬（3.667/4.045 亿） |
 | HASCO | **6370** / 264.8 | **5895** / 390.0 | 附注65 开发人员支出（16.87/22.99 亿）；人数年报口径 13.33%/13.35%（旧值 11003/11326 无出处已废） |
 | Luxshare | 22583 / 210.0 | **34357** / 169.3 | 附注56 人员薪酬（47.43/58.17 亿）；人数=年报标准口径（48,765 是"专职研发人员"宣传口径，勿混用） |
-| Tuopu | 4159 / 136.1 | 4466 / 124.5 | H股招股书成本明细 员工福利开支（5.66/5.56 亿）；旧值 147.0 无出处已改 |
+| Tuopu | 4159 / — | 4466 / — | H股招股书薪酬披露口径与其他公司年报不一致，用户已删除拓普薪资数据；保留年末研发人数，不计算/展示人均成本 |
 | NASN | （无披露，行已删） | 150 / 326 | 招股书披露研发人员平均年薪 32.6 万（经媒体转引，终版无按职能薪酬表；如需第一手出处可置空或查 2026-04-29 申请版本） |
 
 - HASCO 员工数双口径并存（都正确勿"修"）：Annual 卡 Employees 79,409(2024)/81,306(2025)=**全球全口径**；headcount 卡明细合计≈54,621=**境内口径**
@@ -232,7 +232,7 @@ PATH = {
   - headcount 卡的"技术研发人员"来自年报**「员工情况·专业构成」表**——按人事岗位序列对期末全部在职员工分类，技术序列含研发管理/工艺/质量/测试/IT 等所有技术岗
   - rd 卡的 hc 来自年报**「研发投入·研发人员数量」表**——按是否实际从事研发活动统计，剔除研发管理、试制/量产工艺人员等，普遍小于专业构成数
   - 两者都不是"正式工 vs 外包"的区别（外包/派遣本来就不计入在职员工）
-  - 数字对照：BTL 1885/2140 vs 1250/1535；HASCO 13016/13281 vs 6370/5895（差距最大：研发分散在下属子公司，研发投入表只归集实际研发人员）；Tuopu 5870/5981 vs 4159/4466；**Baolong 两处恰好一致**（1333/1499）
+  - 数字对照：BTL 1885/2140 vs 1250/1535；HASCO 13016/13281 vs 6370/5895（差距最大：研发分散在下属子公司，研发投入表只归集实际研发人员）；Tuopu 5870/5981 vs 4159/4466（当前仅展示人数；人均成本因薪酬口径差异已删除）；**Baolong 两处恰好一致**（1333/1499）
   - 两卡各跟各的年报原表，均勿"修"；如需防读者误解可在卡片备注加一句说明
 
 #### 10b Product Line（localStorage + IMPORT_manual_all.csv，unit=百万 CNY）
@@ -318,21 +318,21 @@ productline,HASCO,2026Q2,热管理模块,,531.4,3760,
 - 生成脚本在本地 `.workbuddy/tmp/em/`（`build_equity.py` / `parse_hc.py` / `make_seed.py`），输出 `05_output/manual_blocks/manual_blocks_A股股权与员工.csv`（262行）+ `manual_blocks_template.csv`
 - MANUAL_SEED 直接内联在 index.html 里（`window.MANUAL_SEED`），**更新数据 = 重新生成 seed 并替换该行**
 
-### 3.6 Education Mix & R&D Headcount and Compensation（2026-10-22 新增）
+### 3.6 Education Mix & R&D Headcount & R&D Personnel Cost per Employee（2026-10-22 新增，2026-10-28 更名/口径明确）
 
 位置：Ownership & People 板块，紧跟 Shareholding Structure / Headcount Mix 之后，两张图并排。
 
 | 图表 | 画布 id | 类型 | 数据模型 key | 值结构 | 联动下拉 |
 |---|---|---|---|---|---|
 | Education Mix | `eduPie` | 环形图（Doughnut），风格与 Shareholding/Headcount 两张饼图一致 | `ciEducationMix` | `{"公司\|期间":[{n:"Bachelor",v:46},...]}`，`v`=占比%，默认4档 Below bachelor / Bachelor / Master / PhD，可在 Edit 面板增删改 | `annPeriod`（主） / `annPeriodEdu`（镜像，年度组 B） |
-| R&D Headcount & Compensation | `rdChart` | 柱状图(人数,左轴) + 折线图(人均薪酬,右轴) 组合图，复用 Product Line 板块 `plChart` 的双轴实现 | `ciRdHeadcount` | `{"公司\|期间":{headcount:1499, comp:270}}`，`headcount`=研发人数(人)，`comp`=人均薪酬(CNY 千元/年) | `ownPeriod`（主） / `ownPeriodRd`（镜像，季度组 A） |
+| R&D Headcount & R&D Personnel Cost per Employee | `rdChart` | 柱状图(年末研发人数,左轴) + 折线图(研发人员人均成本,右轴) 组合图 | `ciRdHeadcount` | `{"公司\|期间":{headcount:1499, comp:270}}`，`headcount`=年末研发人数(人)，`comp`=全年研发人员薪酬成本÷年末研发人数(CNY 千元/人/年)；拓普薪酬字段置空/删除，不绘制其成本线 | `ownPeriod`（主） / `ownPeriodRd`（镜像，季度组 A；该组名称仍为 R&D Headcount & R&D Personnel Cost per Employee） |
 
-- CSV 契约并入 3.2 节同一张导入表：`block` 新增 `education`（教育构成）/ `rd`（研发人数薪酬）两个取值（也接受中文别名）；`education` 行用 `name+value`（同 equity/headcount 的 `%`/人数填法），`rd` 行的 `name` 固定写 `headcount` 或 `comp`，`value` 填对应数字
+- CSV 契约并入 3.2 节同一张导入表：`block` 新增 `education`（教育构成）/`rd`（年末研发人数及研发人员人均成本）两个取值（也接受中文别名）；`education` 行用 `name+value`（同 equity/headcount 的 `%`/人数填法），`rd` 行的 `name` 固定写 `headcount` 或 `comp`，`value` 填对应数字；`comp` 公式为全年研发人员薪酬成本÷年末研发人数
 - `importData()`/`exportCsv()`/`TEMPLATE` 三处均已同步支持这两个新 block，Export 时会一并导出
 - 关键 bug 修复记录（2026-10-22）：
   1. `importData()` 最初完全不识别 `education`/`rd`，CSV 导入会被静默跳过 → 已修复
   2. `periodsAsc()`（R&D 图表的时间轴来源函数）最初没有扫描 `db.rd`，即使数据存进去了柱状图也拿不到横轴 → 已修复，现在会正确合并 `db.rd` 的所有历史期间
-- 真实数据来源：`Competitor Analysis for Reference/education-rd-import.csv`（逐字核对 4 家公司 PDF 原文：NASN/Baolong/Tuopu/BTL 的学历构成 + 研发人数/人均薪酬，Tuopu 因原文未披露具体研发人数，只有教育构成数据、未纳入 rd 行）
+- 真实数据来源：`Competitor Analysis for Reference/education-rd-import.csv`（学历及 R&D 手工数据）；**Tuopu 研发人员人均成本不再展示**：Tuopu 财报/招股书薪酬披露范围和口径与其他公司不同，用户已删除其薪资数据；保留其研发人数（如已录入），不画成本线
 
 ### 3.5 Annual Deep-Dive 年度深度板块（2026-10-19 新增，现位于 Product Line 之后、Benchmark Table 之前）
 
@@ -555,6 +555,13 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | Aumovio Operating Profit 改口径 | 原来 `IS_OP` 取的是 EBIT（息税前利润，未扣财务费用），和 A股「营业利润」（已扣财务费用）不是同一计算阶段，不可直接对标。改为 `IS_OP` 取 `Earnings before tax`（= EBIT + Financial result），EBIT 原始值改存 `IS_EBIT_RAW`（白名单外，仅追溯参考）。影响 `extract_aumovio.py` 映射表 + 4 期已提取数据的精确补丁（2025Q1/2025H1/2026Q1/2026H1）+ 重新生成的 `fact_financials_combined.csv` |
 | Historical Trends 净利润口径统一 | `fact_profit_history.csv`（Historical Trends 板块数据源）原来 A股/Aumovio 优先取归母净利润 `IS_NP_PARENT`，和 `fact_financials_combined.csv` 主表用的「净利润(含少数股东)」口径不一致。已改为统一用 `IS_NP`（A股/NASN）/`IS_NP_PROF_CONT_OPER`（Aumovio），两张表口径现已一致。Aumovio 2024FY/2025FY 两个手工历史年度值也相应从归母净利润（-289/-655）修正为净利润含少数股东（-272/-630，数据源 stockanalysis.com/S&P Global，经年报归母净利润反推验证） |
 
+### 2026-10-28（本轮：R&D 卡片命名、指标公式与 Tuopu 数据备注）
+
+| 改动 | 详情 |
+|---|---|
+| R&D 指标更名并明确公式 | `R&D Headcount & Compensation` 改为 `R&D Headcount & R&D Personnel Cost per Employee`；公式明确为全年发生的研发人员薪酬成本 ÷ 年末研发人员数。更新卡片副标题、图例、编辑字段标签及 tooltip；`comp` 单位仍为 CNY k/人/年 |
+| Tuopu 人均成本处理 | Tuopu 财报/招股书的薪酬披露范围和计算口径与其他公司不一致，用户已删除其薪资数据；不展示其人均成本/折线，可保留年末研发人数。2.1 节表格标记 Tuopu 2024/2025 comp 为 — 并注明原因 |
+
 ### 2026-10-26（本轮：板块改名）
 
 | 改动 | 详情 |
@@ -583,7 +590,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | Product Line 数据扩充 | +Luxshare 汽车电子 2021–2025（2021–2023 原名"汽车互联产品及精密组件"）；+Baolong TPMS 2021–2025、传感器 2022–2025；NASN 拆 **NBS/ESC/NBC** 三线（删旧汇总线"线控制动"及整体 ASP）；Luxshare 2021 各产品线 gm 按年报原文补齐（此前漏录非未披露）；**ASP 录入入口删除**（`.pl-price` CSS 类被薪酬卡复用勿删） |
 | 全局 Q2→H1 显示 | `pLabel`/`pL` 正则化：所有年份 Q2 显示 H1（2025H1/2024H1…），数据键不变 |
 | 负 P/B 保留显示 | `multTxt`/`fmtV`：PE/PB 负值原样显示（NASN −7.0x），仅 0/缺失 n/a；详细解释移入 Market Metrics Explained 卡（净负债状态/何时转正），顶部注释缩为一句话指向 Guide 卡。用户明确：负 PB 保留并人工解释，勿回退 |
-| rd 人均薪酬口径重定 | **comp = 年报附注研发费用-职工薪酬 ÷ 研发人数**（不可用研发投入÷人数，用户指正）；下载 4 家 2025 年报+NASN 招股书存 `01_source_docs/annual_reports/` 逐家解析附注；HASCO 研发人数修正 11003/11326→6370/5895（旧值无出处）；Luxshare 定 34,357（年报口径）；NASN 2023/2024 rd 行删除；权威数据表见 2.1 节 |
+| R&D 人均成本口径与标签更新 | 板块名改为 **R&D Headcount & R&D Personnel Cost per Employee**；指标公式明确为全年发生的研发人员薪酬成本 ÷ 年末研发人员数（CNY k/人/年）；不得以研发投入总额/全年平均人数替代。拓普财报薪酬披露口径与其他公司不一致，用户已删除拓普薪酬数据，仅保留人数、不显示其人均成本；权威数据表见 2.1 节 |
 | importData 残留键清理 | 种子 CSV 里删掉的键不会自动从 localStorage 消失，加了定向清理（NASN 2023/2024 rd、NASN"线控制动"pn/pd），勿回退 |
 | 全页体检 | Edge headless 逐段审查 12 板块：间距统一无重叠/截断/溢出；顺带抓到 NASN 毛利符号翻转 bug（见上） |
 | 误报澄清 | `periods()` 的"2027 定时炸弹"不成立：pk=YYYY×10+Q，20264/20271 均 ≥20261，无需改代码 |
@@ -603,7 +610,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 
 | 改动 | 详情 |
 |---|---|
-| Education Mix + R&D Headcount & Compensation 新图表 | Ownership & People 板块新增两张图：学历构成饼图（`eduPie`，`ciEducationMix`）+ 研发人数/人均薪酬柱线组合图（`rdChart`，`ciRdHeadcount`）；CSV 契约新增 `education`/`rd` 两个 block；真实数据见 `Competitor Analysis for Reference/education-rd-import.csv`（逐字核对 NASN/Baolong/Tuopu/BTL 四家 PDF 原文，Tuopu 研发人数未披露故未纳入）；详见 3.6 节 |
+| Education Mix + R&D Headcount & R&D Personnel Cost per Employee 新图表 | Ownership & People 板块新增两张图：学历构成饼图（`eduPie`，`ciEducationMix`）+ 年末研发人数/研发人员人均成本柱线组合图（`rdChart`，`ciRdHeadcount`）；CSV 契约新增 `education`/`rd` 两个 block；真实数据见 `Competitor Analysis for Reference/education-rd-import.csv`；详见 3.6 节。2026-10-28 按新标题/公式口径更新，Tuopu 人均成本已删除 |
 | 修复两个阻断性 bug | `importData()` 原不识别 `education`/`rd` block（CSV 导入被静默跳过）；`periodsAsc()` 原不扫描 `db.rd`（R&D 柱状图拿不到横轴数据）；两处均已修复，`exportCsv()`/`TEMPLATE` 同步支持 |
 | Annual Deep-Dive 自动从 `data/` 加载 | 页面加载时自动 `fetch('data/IMPORT_manual_all.csv')` + `fetch('data/IMPORT_annual_all.csv')` 并复用 `importData()`/`adImportData()` 自动灌入，不再需要每次手动点 Import；文件不存在时静默回退到手动 Import，不影响其他模块 |
 | Annual Deep-Dive 9 张卡片各配专属年份/季度下拉框 | 原先靠顶部统一下拉框控制全部卡片，上下滚动对照困难；改为逐卡片旁挂专属下拉框，分 3 组联动（季度组 A：Shareholding+R&D；年度组 B：Headcount+Education+Product Line；年度组 C：Profile+Customer+Region+Segment）；发现并修复了最初 6 个"镜像"下拉框只有 HTML 没有 JS 绑定、选中不生效的 bug，现在组内任一下拉框都真双向联动 |
