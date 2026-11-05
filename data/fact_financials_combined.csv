@@ -83,6 +83,17 @@ BTL,IS,2025Q2,IS_NP,净利润(净亏损以“-”号填列),Net Profit,525236137
 BTL,IS,2025Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,525236137.27,CNY
 BTL,IS,2025Q2,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,606405883.59,CNY
 BTL,IS,2025Q2,IS_REV,营业收入,Revenue,5163806310.09,CNY
+BTL,CF,2025Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,2693201640.46,CNY
+BTL,CF,2025Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-2761056001.48,CNY
+BTL,CF,2025Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,591072239.03,CNY
+BTL,IS,2025Q3,IS_COGS,营业成本,Operating Costs,6742444433.06,CNY
+BTL,IS,2025Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,217205669.06,CNY
+BTL,IS,2025Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,444359277.04,CNY
+BTL,IS,2025Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,39870587.61,CNY
+BTL,IS,2025Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,900127799.19,CNY
+BTL,IS,2025Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,900127799.19,CNY
+BTL,IS,2025Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,1042925863.98,CNY
+BTL,IS,2025Q3,IS_REV,营业收入,Revenue,8357282726.53,CNY
 BTL,BS,2025Q4,BS_CA_AR,应收账款,Accounts Receivable,3674089061.7,CNY
 BTL,BS,2025Q4,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,12987212847.3,CNY
 BTL,BS,2025Q4,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,2995825848.65,CNY
@@ -123,6 +134,23 @@ BTL,IS,2026Q2,IS_NP,净利润(净亏损以“-”号填列),Net Profit,634589563
 BTL,IS,2026Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,634589563.82,CNY
 BTL,IS,2026Q2,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,725311246.49,CNY
 BTL,IS,2026Q2,IS_REV,营业收入,Revenue,6271971694.77,CNY
+BTL,BS,2026Q3,BS_CA_AR,应收账款,Accounts Receivable,4601957048.81,CNY
+BTL,BS,2026Q3,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,15652462286.48,CNY
+BTL,BS,2026Q3,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,4139100770.2,CNY
+BTL,BS,2026Q3,BS_CL_TOTAL_CURR_LIAB,流动负债合计,Total Current Liabilities,8221145459.4,CNY
+BTL,BS,2026Q3,BS_TOTAL_ASSETS,资产总计,Total Assets,22514201114.89,CNY
+BTL,BS,2026Q3,BS_TOTAL_LIAB,负债合计,Total Liabilities,12542420061.42,CNY
+BTL,CF,2026Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,586861513.33,CNY
+BTL,CF,2026Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-1140508701.83,CNY
+BTL,CF,2026Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,767519421.61,CNY
+BTL,IS,2026Q3,IS_COGS,营业成本,Operating Costs,8458248320.64,CNY
+BTL,IS,2026Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,278246895.27,CNY
+BTL,IS,2026Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,565244115.68,CNY
+BTL,IS,2026Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,67283283.6,CNY
+BTL,IS,2026Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,1038718896.4,CNY
+BTL,IS,2026Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,1038718896.4,CNY
+BTL,IS,2026Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,1165479946.88,CNY
+BTL,IS,2026Q3,IS_REV,营业收入,Revenue,10546889758.09,CNY
 Baolong,CF,2025Q1,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,43073982.91,CNY
 Baolong,CF,2025Q1,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-579221596.73,CNY
 Baolong,CF,2025Q1,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,46103503.97,CNY
@@ -145,6 +173,17 @@ Baolong,IS,2025Q2,IS_NP,净利润(净亏损以“-”号填列),Net Profit,15859
 Baolong,IS,2025Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,158596676.17,CNY
 Baolong,IS,2025Q2,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,228904686.99,CNY
 Baolong,IS,2025Q2,IS_REV,营业收入,Revenue,3949720066.24,CNY
+Baolong,CF,2025Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,477826920.95,CNY
+Baolong,CF,2025Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-1609407283.55,CNY
+Baolong,CF,2025Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,294302412.34,CNY
+Baolong,IS,2025Q3,IS_COGS,营业成本,Operating Costs,4738404546.5,CNY
+Baolong,IS,2025Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,311661707.09,CNY
+Baolong,IS,2025Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,449650314.29,CNY
+Baolong,IS,2025Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,182790198.31,CNY
+Baolong,IS,2025Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,231244911.12,CNY
+Baolong,IS,2025Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,231244911.12,CNY
+Baolong,IS,2025Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,339676127.24,CNY
+Baolong,IS,2025Q3,IS_REV,营业收入,Revenue,6047568793.45,CNY
 Baolong,BS,2025Q4,BS_CA_AR,应收账款,Accounts Receivable,2385049624.0,CNY
 Baolong,BS,2025Q4,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,6607837746.17,CNY
 Baolong,BS,2025Q4,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,1772134355.76,CNY
@@ -185,6 +224,23 @@ Baolong,IS,2026Q2,IS_NP,净利润(净亏损以“-”号填列),Net Profit,29010
 Baolong,IS,2026Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,290109714.08,CNY
 Baolong,IS,2026Q2,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,362881601.39,CNY
 Baolong,IS,2026Q2,IS_REV,营业收入,Revenue,4684042754.59,CNY
+Baolong,BS,2026Q3,BS_CA_AR,应收账款,Accounts Receivable,2605172843.15,CNY
+Baolong,BS,2026Q3,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,8037560234.4,CNY
+Baolong,BS,2026Q3,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,2217192224.75,CNY
+Baolong,BS,2026Q3,BS_CL_TOTAL_CURR_LIAB,流动负债合计,Total Current Liabilities,7611722004.64,CNY
+Baolong,BS,2026Q3,BS_TOTAL_ASSETS,资产总计,Total Assets,13463270569.65,CNY
+Baolong,BS,2026Q3,BS_TOTAL_LIAB,负债合计,Total Liabilities,9809763293.73,CNY
+Baolong,CF,2026Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,896832692.17,CNY
+Baolong,CF,2026Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-786944759.39,CNY
+Baolong,CF,2026Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,220453002.95,CNY
+Baolong,IS,2026Q3,IS_COGS,营业成本,Operating Costs,5825492072.01,CNY
+Baolong,IS,2026Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,339566085.1,CNY
+Baolong,IS,2026Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,505319214.7,CNY
+Baolong,IS,2026Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,207033278.06,CNY
+Baolong,IS,2026Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,283947587.93,CNY
+Baolong,IS,2026Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,283947587.93,CNY
+Baolong,IS,2026Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,396746686.67,CNY
+Baolong,IS,2026Q3,IS_REV,营业收入,Revenue,7410315838.36,CNY
 HASCO,CF,2025Q1,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,-663941267.9,CNY
 HASCO,CF,2025Q1,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-530920149.63,CNY
 HASCO,CF,2025Q1,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,2062465613.85,CNY
@@ -207,6 +263,17 @@ HASCO,IS,2025Q2,IS_NP,净利润(净亏损以“-”号填列),Net Profit,3364988
 HASCO,IS,2025Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,3364988454.15,CNY
 HASCO,IS,2025Q2,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,3738377807.13,CNY
 HASCO,IS,2025Q2,IS_REV,营业收入,Revenue,85157466819.98,CNY
+HASCO,CF,2025Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,-5163824351.47,CNY
+HASCO,CF,2025Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-43532171.07,CNY
+HASCO,CF,2025Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,10002075493.78,CNY
+HASCO,IS,2025Q3,IS_COGS,营业成本,Operating Costs,116197153065.74,CNY
+HASCO,IS,2025Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,6069548927.72,CNY
+HASCO,IS,2025Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,4738357085.73,CNY
+HASCO,IS,2025Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,597647482.45,CNY
+HASCO,IS,2025Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,5423586428.33,CNY
+HASCO,IS,2025Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,5423586428.33,CNY
+HASCO,IS,2025Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,6238984389.96,CNY
+HASCO,IS,2025Q3,IS_REV,营业收入,Revenue,131749777750.67,CNY
 HASCO,BS,2025Q4,BS_CA_AR,应收账款,Accounts Receivable,50532053441.62,CNY
 HASCO,BS,2025Q4,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,134652179035.1,CNY
 HASCO,BS,2025Q4,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,63766378896.2,CNY
@@ -247,6 +314,23 @@ HASCO,IS,2026Q2,IS_NP,净利润(净亏损以“-”号填列),Net Profit,3018300
 HASCO,IS,2026Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,3018300007.58,CNY
 HASCO,IS,2026Q2,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,3501456698.0,CNY
 HASCO,IS,2026Q2,IS_REV,营业收入,Revenue,83938596743.94,CNY
+HASCO,BS,2026Q3,BS_CA_AR,应收账款,Accounts Receivable,51557284428.88,CNY
+HASCO,BS,2026Q3,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,127647970665.87,CNY
+HASCO,BS,2026Q3,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,63290394252.41,CNY
+HASCO,BS,2026Q3,BS_CL_TOTAL_CURR_LIAB,流动负债合计,Total Current Liabilities,117492026451.04,CNY
+HASCO,BS,2026Q3,BS_TOTAL_ASSETS,资产总计,Total Assets,198915139112.26,CNY
+HASCO,BS,2026Q3,BS_TOTAL_LIAB,负债合计,Total Liabilities,126579920866.85,CNY
+HASCO,CF,2026Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,-6483136869.74,CNY
+HASCO,CF,2026Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-8227715489.02,CNY
+HASCO,CF,2026Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,9356970038.2,CNY
+HASCO,IS,2026Q3,IS_COGS,营业成本,Operating Costs,113677541392.18,CNY
+HASCO,IS,2026Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,5775554348.38,CNY
+HASCO,IS,2026Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,5018235211.28,CNY
+HASCO,IS,2026Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,577343625.26,CNY
+HASCO,IS,2026Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,4846217359.53,CNY
+HASCO,IS,2026Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,4846217359.53,CNY
+HASCO,IS,2026Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,5736509730.6,CNY
+HASCO,IS,2026Q3,IS_REV,营业收入,Revenue,129467606057.91,CNY
 Luxshare,CF,2025Q1,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,22174993327.95,CNY
 Luxshare,CF,2025Q1,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-12690904851.38,CNY
 Luxshare,CF,2025Q1,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,-6691655420.46,CNY
@@ -267,6 +351,16 @@ Luxshare,IS,2025Q2,IS_COST_SELL_EXPE,销售费用,Selling Expenses,563980503.79,
 Luxshare,IS,2025Q2,IS_NP,净利润(净亏损以“—”号填列),Net Profit,7297694405.78,CNY
 Luxshare,IS,2025Q2,IS_OP,营业利润(亏损以“—”号填列),Operating Profit,8182414567.97,CNY
 Luxshare,IS,2025Q2,IS_REV,营业收入,Revenue,124503174115.6,CNY
+Luxshare,CF,2025Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,17305521370.3,CNY
+Luxshare,CF,2025Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-13856313159.5,CNY
+Luxshare,CF,2025Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,3478039289.23,CNY
+Luxshare,IS,2025Q3,IS_COGS,营业成本,Operating Costs,194076965965.0,CNY
+Luxshare,IS,2025Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,6454818411.47,CNY
+Luxshare,IS,2025Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,8170442258.71,CNY
+Luxshare,IS,2025Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,1043997143.84,CNY
+Luxshare,IS,2025Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,12728228875.81,CNY
+Luxshare,IS,2025Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,13866594874.55,CNY
+Luxshare,IS,2025Q3,IS_REV,营业收入,Revenue,220914627539.37,CNY
 Luxshare,BS,2025Q4,BS_CA_AR,应收账款,Accounts Receivable,48438796114.12,CNY
 Luxshare,BS,2025Q4,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,196016976966.32,CNY
 Luxshare,BS,2025Q4,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,80910608802.62,CNY
@@ -290,12 +384,12 @@ Luxshare,IS,2026Q1,IS_NP,净利润(净亏损以“-”号填列),Net Profit,3967
 Luxshare,IS,2026Q1,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,3967636788.13,CNY
 Luxshare,IS,2026Q1,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,4284053402.5,CNY
 Luxshare,IS,2026Q1,IS_REV,营业收入,Revenue,83888491960.13,CNY
-Luxshare,BS,2026Q2,BS_CA_AR,应收账款,Accounts Receivable,47666294604.5,CNY
-Luxshare,BS,2026Q2,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,225257701524.12,CNY
-Luxshare,BS,2026Q2,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,74533334608.19,CNY
-Luxshare,BS,2026Q2,BS_CL_TOTAL_CURR_LIAB,流动负债合计,Total Current Liabilities,199112606536.62,CNY
-Luxshare,BS,2026Q2,BS_TOTAL_ASSETS,资产总计,Total Assets,349889629015.27,CNY
-Luxshare,BS,2026Q2,BS_TOTAL_LIAB,负债合计,Total Liabilities,235963762191.32,CNY
+Luxshare,BS,2026Q2,BS_CA_AR,应收账款,Accounts Receivable,48438796114.12,CNY
+Luxshare,BS,2026Q2,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,196016976966.32,CNY
+Luxshare,BS,2026Q2,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,80910608802.62,CNY
+Luxshare,BS,2026Q2,BS_CL_TOTAL_CURR_LIAB,流动负债合计,Total Current Liabilities,176488135187.01,CNY
+Luxshare,BS,2026Q2,BS_TOTAL_ASSETS,资产总计,Total Assets,306537675786.42,CNY
+Luxshare,BS,2026Q2,BS_TOTAL_LIAB,负债合计,Total Liabilities,202517443006.8,CNY
 Luxshare,CF,2026Q2,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,44938572381.66,CNY
 Luxshare,CF,2026Q2,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-29393362934.65,CNY
 Luxshare,CF,2026Q2,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,-2445863006.32,CNY
@@ -307,102 +401,144 @@ Luxshare,IS,2026Q2,IS_NP,净利润(净亏损以“—”号填列),Net Profit,85
 Luxshare,IS,2026Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“—”号填列),Net Profit from Continuing Operations,8525673665.38,CNY
 Luxshare,IS,2026Q2,IS_OP,营业利润(亏损以“—”号填列),Operating Profit,9491550185.07,CNY
 Luxshare,IS,2026Q2,IS_REV,营业收入,Revenue,174504335921.25,CNY
-NASN,BS,2023Q4,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,605762000.0,HKD
-NASN,BS,2023Q4,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,1476530000.0,HKD
-NASN,BS,2023Q4,BS_TOTAL_ASSETS,资产总值,Total Assets,755043000.0,HKD
-NASN,CF,2023Q4,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,-9037000.0,HKD
-NASN,CF,2023Q4,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,5776000.0,HKD
-NASN,CF,2023Q4,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-88875000.0,HKD
-NASN,IS,2023Q4,IS_COGS,销售成本,Operating Costs,269104000.0,HKD
-NASN,IS,2023Q4,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,40270000.0,HKD
-NASN,IS,2023Q4,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,96547000.0,HKD
-NASN,IS,2023Q4,IS_SELLING_MARKETING_EXP,销售及营销开支,Selling and Marketing Expenses,4824000.0,HKD
-NASN,IS,2023Q4,IS_GROSS_PROFIT,毛利,Gross Profit,3113000.0,HKD
-NASN,IS,2023Q4,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,200823000.0,HKD
-NASN,IS,2023Q4,IS_REV,收益,Revenue,272217000.0,HKD
-NASN,BS,2024Q4,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,902420000.0,HKD
-NASN,BS,2024Q4,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,1963521000.0,HKD
-NASN,BS,2024Q4,BS_TOTAL_ASSETS,资产总值,Total Assets,1078257000.0,HKD
-NASN,CF,2024Q4,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,279055000.0,HKD
-NASN,CF,2024Q4,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,-254590000.0,HKD
-NASN,CF,2024Q4,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,25338000.0,HKD
-NASN,IS,2024Q4,IS_COGS,销售成本,Operating Costs,348807000.0,HKD
-NASN,IS,2024Q4,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,32571000.0,HKD
-NASN,IS,2024Q4,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,87580000.0,HKD
-NASN,IS,2024Q4,IS_SELLING_MARKETING_EXP,销售及营销开支,Selling and Marketing Expenses,5326000.0,HKD
-NASN,IS,2024Q4,IS_GROSS_PROFIT,毛利,Gross Profit,41930000.0,HKD
-NASN,IS,2024Q4,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,169521000.0,HKD
-NASN,IS,2024Q4,IS_REV,收益,Revenue,390737000.0,HKD
-NASN,CF,2025Q1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,-1880000.0,HKD
-NASN,CF,2025Q1,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,215123000.0,HKD
-NASN,CF,2025Q1,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-128335000.0,HKD
-NASN,IS,2025Q1,IS_COGS,销售成本,Operating Costs,95337000.0,HKD
-NASN,IS,2025Q1,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,6970000.0,HKD
-NASN,IS,2025Q1,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,17376000.0,HKD
-NASN,IS,2025Q1,IS_SELLING_MARKETING_EXP,销售及营销开支,Selling and Marketing Expenses,1042000.0,HKD
-NASN,IS,2025Q1,IS_GROSS_PROFIT,毛利,Gross Profit,7328000.0,HKD
-NASN,IS,2025Q1,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,39964000.0,HKD
-NASN,IS,2025Q1,IS_REV,收益,Revenue,102665000.0,HKD
-NASN,BS,2025Q2,BS_CA_AR,应收贸易账款及票据,Trade and Bills Receivables,384438000.0,HKD
-NASN,BS,2025Q2,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,948750000.0,HKD
-NASN,BS,2025Q2,BS_CL_ACCO_PAYA,应付贸易账款及票据,Trade and Bills Payables,234261000.0,HKD
-NASN,BS,2025Q2,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2231629000.0,HKD
-NASN,CF,2025Q2,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,916000.0,HKD
-NASN,CF,2025Q2,CF_INV_NET,投资活动现金流量净额,Net Cash Flows Generated from Investing Activities,237139000.0,HKD
-NASN,CF,2025Q2,CF_OP_NET,经营活动现金流量净额,Net Cash Flows from Operating Activities,-212451000.0,HKD
-NASN,IS,2025Q2,IS_COGS,销售成本,Operating Costs,233728000.0,HKD
-NASN,IS,2025Q2,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,19669000.0,HKD
-NASN,IS,2025Q2,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,37283000.0,HKD
-NASN,IS,2025Q2,IS_SELLING_MARKETING_EXP,销售及营销开支,Selling and Marketing Expenses,3893000.0,HKD
-NASN,IS,2025Q2,IS_GROSS_PROFIT,毛利,Gross Profit,35513000.0,HKD
-NASN,IS,2025Q2,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,70177000.0,HKD
-NASN,IS,2025Q2,IS_NP,净利润,Net Profit,-70177000.0,HKD
-NASN,IS,2025Q2,IS_OP,营业利润,Operating Profit,-7751000.0,HKD
-NASN,IS,2025Q2,IS_REV,收益,Revenue,269241000.0,HKD
-NASN,BS,2025Q4,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,948750000.0,HKD
-NASN,BS,2025Q4,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2231629000.0,HKD
-NASN,BS,2025Q4,BS_TOTAL_ASSETS,资产总值,Total Assets,1218745000.0,HKD
-NASN,CF,2025Q4,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,96044000.0,HKD
-NASN,CF,2025Q4,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,52127000.0,HKD
-NASN,CF,2025Q4,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-164614000.0,HKD
-NASN,IS,2025Q4,IS_COGS,销售成本,Operating Costs,530891000.0,HKD
-NASN,IS,2025Q4,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,62379000.0,HKD
-NASN,IS,2025Q4,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,82959000.0,HKD
-NASN,IS,2025Q4,IS_SELLING_MARKETING_EXP,销售及营销开支,Selling and Marketing Expenses,14248000.0,HKD
-NASN,IS,2025Q4,IS_GROSS_PROFIT,毛利,Gross Profit,83615000.0,HKD
-NASN,IS,2025Q4,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,189524000.0,HKD
-NASN,IS,2025Q4,IS_REV,收益,Revenue,614506000.0,HKD
-NASN,BS,2026Q1,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,833979000.0,HKD
-NASN,BS,2026Q1,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2206437000.0,HKD
-NASN,BS,2026Q1,BS_TOTAL_ASSETS,资产总值,Total Assets,1140805000.0,HKD
-NASN,CF,2026Q1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,-1282000.0,HKD
-NASN,CF,2026Q1,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,75850000.0,HKD
-NASN,CF,2026Q1,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-19078000.0,HKD
-NASN,IS,2026Q1,IS_COGS,销售成本,Operating Costs,135555000.0,HKD
-NASN,IS,2026Q1,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,11998000.0,HKD
-NASN,IS,2026Q1,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,23616000.0,HKD
-NASN,IS,2026Q1,IS_SELLING_MARKETING_EXP,销售及营销开支,Selling and Marketing Expenses,5861000.0,HKD
-NASN,IS,2026Q1,IS_GROSS_PROFIT,毛利,Gross Profit,15261000.0,HKD
-NASN,IS,2026Q1,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,54882000.0,HKD
-NASN,IS,2026Q1,IS_REV,收益,Revenue,150816000.0,HKD
-NASN,BS,2026Q2,BS_CA_AR,应收贸易账款及票据,Trade and Bills Receivables,413304000.0,HKD
-NASN,BS,2026Q2,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,843891000.0,HKD
-NASN,BS,2026Q2,BS_CL_ACCO_PAYA,应付贸易账款及票据,Trade and Bills Payables,226246000.0,HKD
-NASN,BS,2026Q2,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2282674000.0,HKD
-NASN,BS,2026Q2,BS_TOTAL_ASSETS,资产总值,Total Assets,1170570000.0,HKD
-NASN,BS,2026Q2,BS_TOTAL_LIAB,负债合计,Total Liabilities,2328751000.0,HKD
-NASN,CF,2026Q2,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,3455000.0,HKD
-NASN,CF,2026Q2,CF_INV_NET,投资活动现金流量净额,Net Cash Flows Generated from Investing Activities,92218000.0,HKD
-NASN,CF,2026Q2,CF_OP_NET,经营活动现金流量净额,Net Cash Flows from Operating Activities,-131108000.0,HKD
-NASN,IS,2026Q2,IS_COGS,销售成本,Operating Costs,319051000.0,HKD
-NASN,IS,2026Q2,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,32883000.0,HKD
-NASN,IS,2026Q2,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,49731000.0,HKD
-NASN,IS,2026Q2,IS_SELLING_MARKETING_EXP,销售及营销开支,Selling and Marketing Expenses,14931000.0,HKD
-NASN,IS,2026Q2,IS_GROSS_PROFIT,毛利,Gross Profit,49258000.0,HKD
-NASN,IS,2026Q2,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,109630000.0,HKD
-NASN,IS,2026Q2,IS_NP,净利润,Net Profit,-109630000.0,HKD
-NASN,IS,2026Q2,IS_OP,营业利润,Operating Profit,-38224000.0,HKD
-NASN,IS,2026Q2,IS_REV,收益,Revenue,368309000.0,HKD
+Luxshare,BS,2026Q3,BS_CA_AR,应收账款,Accounts Receivable,69072512210.15,CNY
+Luxshare,BS,2026Q3,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,283349138341.31,CNY
+Luxshare,BS,2026Q3,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,98841678146.8,CNY
+Luxshare,BS,2026Q3,BS_CL_TOTAL_CURR_LIAB,流动负债合计,Total Current Liabilities,233030372504.89,CNY
+Luxshare,BS,2026Q3,BS_TOTAL_ASSETS,资产总计,Total Assets,411742847599.84,CNY
+Luxshare,BS,2026Q3,BS_TOTAL_LIAB,负债合计,Total Liabilities,270284223013.3,CNY
+Luxshare,CF,2026Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,73716846544.23,CNY
+Luxshare,CF,2026Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-57176213935.84,CNY
+Luxshare,CF,2026Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,-6434382948.25,CNY
+Luxshare,IS,2026Q3,IS_COGS,营业成本,Operating Costs,251074040438.6,CNY
+Luxshare,IS,2026Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,8732665833.38,CNY
+Luxshare,IS,2026Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,10549516992.38,CNY
+Luxshare,IS,2026Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,1561584001.03,CNY
+Luxshare,IS,2026Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,14225221771.8,CNY
+Luxshare,IS,2026Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,14225221771.8,CNY
+Luxshare,IS,2026Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,15964801955.66,CNY
+Luxshare,IS,2026Q3,IS_REV,营业收入,Revenue,285011774242.68,CNY
+NASN,BS,2023Q4,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,605762000.0,CNY
+NASN,BS,2023Q4,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,1476530000.0,CNY
+NASN,BS,2023Q4,BS_TOTAL_ASSETS,资产总值,Total Assets,755043000.0,CNY
+NASN,CF,2023Q4,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,-9037000.0,CNY
+NASN,CF,2023Q4,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,5776000.0,CNY
+NASN,CF,2023Q4,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-88875000.0,CNY
+NASN,IS,2023Q4,IS_COGS,销售成本,Operating Costs,269104000.0,CNY
+NASN,IS,2023Q4,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,40270000.0,CNY
+NASN,IS,2023Q4,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,96547000.0,CNY
+NASN,IS,2023Q4,IS_GROSS_PROFIT,毛利,Gross Profit,3113000.0,CNY
+NASN,IS,2023Q4,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,200823000.0,CNY
+NASN,IS,2023Q4,IS_REV,收益,Revenue,272217000.0,CNY
+NASN,BS,2024Q4,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,902420000.0,CNY
+NASN,BS,2024Q4,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,1963521000.0,CNY
+NASN,BS,2024Q4,BS_TOTAL_ASSETS,资产总值,Total Assets,1078257000.0,CNY
+NASN,CF,2024Q4,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,279055000.0,CNY
+NASN,CF,2024Q4,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,-254590000.0,CNY
+NASN,CF,2024Q4,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,25338000.0,CNY
+NASN,IS,2024Q4,IS_COGS,销售成本,Operating Costs,348807000.0,CNY
+NASN,IS,2024Q4,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,32571000.0,CNY
+NASN,IS,2024Q4,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,87580000.0,CNY
+NASN,IS,2024Q4,IS_GROSS_PROFIT,毛利,Gross Profit,41930000.0,CNY
+NASN,IS,2024Q4,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,169521000.0,CNY
+NASN,IS,2024Q4,IS_REV,收益,Revenue,390737000.0,CNY
+NASN,BS,2025H1,BS_CA_AR,应收贸易账款及票据,Trade and Bills Receivables,384438000.0,CNY
+NASN,BS,2025H1,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,948750000.0,CNY
+NASN,BS,2025H1,BS_CL_ACCO_PAYA,应付贸易账款及票据,Trade and Bills Payables,234261000.0,CNY
+NASN,BS,2025H1,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2231629000.0,CNY
+NASN,CF,2025H1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,916000.0,CNY
+NASN,CF,2025H1,CF_INV_NET,投资活动现金流量净额,Net Cash Flows Generated from Investing Activities,237139000.0,CNY
+NASN,CF,2025H1,CF_OP_NET,经营活动现金流量净额,Net Cash Flows from Operating Activities,-212451000.0,CNY
+NASN,IS,2025H1,IS_COGS,销售成本,Operating Costs,233728000.0,CNY
+NASN,IS,2025H1,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,19669000.0,CNY
+NASN,IS,2025H1,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,37283000.0,CNY
+NASN,IS,2025H1,IS_GROSS_PROFIT,毛利,Gross Profit,35513000.0,CNY
+NASN,IS,2025H1,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,70177000.0,CNY
+NASN,IS,2025H1,IS_NP,净利润,Net Profit,-70177000.0,CNY
+NASN,IS,2025H1,IS_OP,营业利润,Operating Profit,-7751000.0,CNY
+NASN,IS,2025H1,IS_REV,收益,Revenue,269241000.0,CNY
+NASN,CF,2025Q1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,-1880000.0,CNY
+NASN,CF,2025Q1,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,215123000.0,CNY
+NASN,CF,2025Q1,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-128335000.0,CNY
+NASN,IS,2025Q1,IS_COGS,销售成本,Operating Costs,95337000.0,CNY
+NASN,IS,2025Q1,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,6970000.0,CNY
+NASN,IS,2025Q1,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,17376000.0,CNY
+NASN,IS,2025Q1,IS_GROSS_PROFIT,毛利,Gross Profit,7328000.0,CNY
+NASN,IS,2025Q1,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,39964000.0,CNY
+NASN,IS,2025Q1,IS_REV,收益,Revenue,102665000.0,CNY
+NASN,BS,2025Q2,BS_CA_AR,应收贸易账款及票据,Trade and Bills Receivables,384438000.0,CNY
+NASN,BS,2025Q2,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,948750000.0,CNY
+NASN,BS,2025Q2,BS_CL_ACCO_PAYA,应付贸易账款及票据,Trade and Bills Payables,234261000.0,CNY
+NASN,BS,2025Q2,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2231629000.0,CNY
+NASN,CF,2025Q2,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,916000.0,CNY
+NASN,CF,2025Q2,CF_INV_NET,投资活动现金流量净额,Net Cash Flows Generated from Investing Activities,237139000.0,CNY
+NASN,CF,2025Q2,CF_OP_NET,经营活动现金流量净额,Net Cash Flows from Operating Activities,-212451000.0,CNY
+NASN,IS,2025Q2,IS_COGS,销售成本,Operating Costs,233728000.0,CNY
+NASN,IS,2025Q2,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,19669000.0,CNY
+NASN,IS,2025Q2,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,37283000.0,CNY
+NASN,IS,2025Q2,IS_GROSS_PROFIT,毛利,Gross Profit,35513000.0,CNY
+NASN,IS,2025Q2,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,70177000.0,CNY
+NASN,IS,2025Q2,IS_NP,净利润,Net Profit,-70177000.0,CNY
+NASN,IS,2025Q2,IS_OP,营业利润,Operating Profit,-7751000.0,CNY
+NASN,IS,2025Q2,IS_REV,收益,Revenue,269241000.0,CNY
+NASN,BS,2025Q4,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,948750000.0,CNY
+NASN,BS,2025Q4,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2231629000.0,CNY
+NASN,BS,2025Q4,BS_TOTAL_ASSETS,资产总值,Total Assets,1218745000.0,CNY
+NASN,CF,2025Q4,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,96044000.0,CNY
+NASN,CF,2025Q4,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,52127000.0,CNY
+NASN,CF,2025Q4,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-164614000.0,CNY
+NASN,IS,2025Q4,IS_COGS,销售成本,Operating Costs,530891000.0,CNY
+NASN,IS,2025Q4,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,62379000.0,CNY
+NASN,IS,2025Q4,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,82959000.0,CNY
+NASN,IS,2025Q4,IS_GROSS_PROFIT,毛利,Gross Profit,83615000.0,CNY
+NASN,IS,2025Q4,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,189524000.0,CNY
+NASN,IS,2025Q4,IS_REV,收益,Revenue,614506000.0,CNY
+NASN,BS,2026H1,BS_CA_AR,应收贸易账款及票据,Trade and Bills Receivables,413304000.0,CNY
+NASN,BS,2026H1,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,843891000.0,CNY
+NASN,BS,2026H1,BS_CL_ACCO_PAYA,应付贸易账款及票据,Trade and Bills Payables,226246000.0,CNY
+NASN,BS,2026H1,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2282674000.0,CNY
+NASN,BS,2026H1,BS_TOTAL_ASSETS,资产总值,Total Assets,1170570000.0,CNY
+NASN,BS,2026H1,BS_TOTAL_LIAB,负债合计,Total Liabilities,2328751000.0,CNY
+NASN,CF,2026H1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,3455000.0,CNY
+NASN,CF,2026H1,CF_INV_NET,投资活动现金流量净额,Net Cash Flows Generated from Investing Activities,92218000.0,CNY
+NASN,CF,2026H1,CF_OP_NET,经营活动现金流量净额,Net Cash Flows from Operating Activities,-131108000.0,CNY
+NASN,IS,2026H1,IS_COGS,销售成本,Operating Costs,319051000.0,CNY
+NASN,IS,2026H1,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,32883000.0,CNY
+NASN,IS,2026H1,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,49731000.0,CNY
+NASN,IS,2026H1,IS_GROSS_PROFIT,毛利,Gross Profit,49258000.0,CNY
+NASN,IS,2026H1,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,109630000.0,CNY
+NASN,IS,2026H1,IS_NP,净利润,Net Profit,-109630000.0,CNY
+NASN,IS,2026H1,IS_OP,营业利润,Operating Profit,-38224000.0,CNY
+NASN,IS,2026H1,IS_REV,收益,Revenue,368309000.0,CNY
+NASN,BS,2026Q1,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,833979000.0,CNY
+NASN,BS,2026Q1,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2206437000.0,CNY
+NASN,BS,2026Q1,BS_TOTAL_ASSETS,资产总值,Total Assets,1140805000.0,CNY
+NASN,CF,2026Q1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,-1282000.0,CNY
+NASN,CF,2026Q1,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,75850000.0,CNY
+NASN,CF,2026Q1,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-19078000.0,CNY
+NASN,IS,2026Q1,IS_COGS,销售成本,Operating Costs,135555000.0,CNY
+NASN,IS,2026Q1,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,11998000.0,CNY
+NASN,IS,2026Q1,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,23616000.0,CNY
+NASN,IS,2026Q1,IS_GROSS_PROFIT,毛利,Gross Profit,15261000.0,CNY
+NASN,IS,2026Q1,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,54882000.0,CNY
+NASN,IS,2026Q1,IS_REV,收益,Revenue,150816000.0,CNY
+NASN,BS,2026Q2,BS_CA_AR,应收贸易账款及票据,Trade and Bills Receivables,413304000.0,CNY
+NASN,BS,2026Q2,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,843891000.0,CNY
+NASN,BS,2026Q2,BS_CL_ACCO_PAYA,应付贸易账款及票据,Trade and Bills Payables,226246000.0,CNY
+NASN,BS,2026Q2,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2282674000.0,CNY
+NASN,BS,2026Q2,BS_TOTAL_ASSETS,资产总值,Total Assets,1170570000.0,CNY
+NASN,BS,2026Q2,BS_TOTAL_LIAB,负债合计,Total Liabilities,2328751000.0,CNY
+NASN,CF,2026Q2,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,3455000.0,CNY
+NASN,CF,2026Q2,CF_INV_NET,投资活动现金流量净额,Net Cash Flows Generated from Investing Activities,92218000.0,CNY
+NASN,CF,2026Q2,CF_OP_NET,经营活动现金流量净额,Net Cash Flows from Operating Activities,-131108000.0,CNY
+NASN,IS,2026Q2,IS_COGS,销售成本,Operating Costs,319051000.0,CNY
+NASN,IS,2026Q2,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,32883000.0,CNY
+NASN,IS,2026Q2,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,49731000.0,CNY
+NASN,IS,2026Q2,IS_GROSS_PROFIT,毛利,Gross Profit,49258000.0,CNY
+NASN,IS,2026Q2,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,109630000.0,CNY
+NASN,IS,2026Q2,IS_NP,净利润,Net Profit,-109630000.0,CNY
+NASN,IS,2026Q2,IS_OP,营业利润,Operating Profit,-38224000.0,CNY
+NASN,IS,2026Q2,IS_REV,收益,Revenue,368309000.0,CNY
 Tuopu,CF,2025Q1,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,-45793125.47,CNY
 Tuopu,CF,2025Q1,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-1110753735.12,CNY
 Tuopu,CF,2025Q1,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,887754726.36,CNY
@@ -425,6 +561,17 @@ Tuopu,IS,2025Q2,IS_NP,净利润(净亏损以“-”号填列),Net Profit,1295943
 Tuopu,IS,2025Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,1295943360.47,CNY
 Tuopu,IS,2025Q2,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,1460008947.55,CNY
 Tuopu,IS,2025Q2,IS_REV,营业收入,Revenue,12934627599.03,CNY
+Tuopu,CF,2025Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,-663043246.35,CNY
+Tuopu,CF,2025Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-2586657937.29,CNY
+Tuopu,CF,2025Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,2971006171.39,CNY
+Tuopu,IS,2025Q3,IS_COGS,营业成本,Operating Costs,16909002037.78,CNY
+Tuopu,IS,2025Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,583884596.74,CNY
+Tuopu,IS,2025Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,1084638063.14,CNY
+Tuopu,IS,2025Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,200456123.02,CNY
+Tuopu,IS,2025Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,1969291235.87,CNY
+Tuopu,IS,2025Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,1969291235.87,CNY
+Tuopu,IS,2025Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,2244039443.29,CNY
+Tuopu,IS,2025Q3,IS_REV,营业收入,Revenue,20928194722.65,CNY
 Tuopu,BS,2025Q4,BS_CA_AR,应收账款,Accounts Receivable,7325793120.79,CNY
 Tuopu,BS,2025Q4,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,23444609108.56,CNY
 Tuopu,BS,2025Q4,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,7479896927.88,CNY
@@ -465,3 +612,20 @@ Tuopu,IS,2026Q2,IS_NP,净利润(净亏损以“-”号填列),Net Profit,1023243
 Tuopu,IS,2026Q2,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,1023243876.6,CNY
 Tuopu,IS,2026Q2,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,1184976633.6,CNY
 Tuopu,IS,2026Q2,IS_REV,营业收入,Revenue,14199245308.27,CNY
+Tuopu,BS,2026Q3,BS_CA_AR,应收账款,Accounts Receivable,6770795072.97,CNY
+Tuopu,BS,2026Q3,BS_CA_TOTAL_CURR_ASSE,流动资产合计,Total Current Assets,22599010466.61,CNY
+Tuopu,BS,2026Q3,BS_CL_ACCO_PAYA,应付账款,Accounts Payable,7454985873.06,CNY
+Tuopu,BS,2026Q3,BS_CL_TOTAL_CURR_LIAB,流动负债合计,Total Current Liabilities,17138104139.46,CNY
+Tuopu,BS,2026Q3,BS_TOTAL_ASSETS,资产总计,Total Assets,43549954500.11,CNY
+Tuopu,BS,2026Q3,BS_TOTAL_LIAB,负债合计,Total Liabilities,18767769731.24,CNY
+Tuopu,CF,2026Q3,CF_FIN_NET,筹资活动产生的现金流量净额,Net Cash from Financing Activities,-411271121.26,CNY
+Tuopu,CF,2026Q3,CF_INV_NET,投资活动产生的现金流量净额,Net Cash from Investing Activities,-2591797842.67,CNY
+Tuopu,CF,2026Q3,CF_OP_NET,经营活动产生的现金流量净额,Net Cash from Operating Activities,2976409922.88,CNY
+Tuopu,IS,2026Q3,IS_COGS,营业成本,Operating Costs,18421164463.19,CNY
+Tuopu,IS,2026Q3,IS_COST_ADMI_EXPE,管理费用,Administrative Expenses,610619105.44,CNY
+Tuopu,IS,2026Q3,IS_COST_RESE_DEVE_EXPE,研发费用,Research and Development Expenses,1220509036.01,CNY
+Tuopu,IS,2026Q3,IS_COST_SELL_EXPE,销售费用,Selling Expenses,202029695.04,CNY
+Tuopu,IS,2026Q3,IS_NP,净利润(净亏损以“-”号填列),Net Profit,1665438506.94,CNY
+Tuopu,IS,2026Q3,IS_NP_PROF_CONT_OPER,持续经营净利润(净亏损以“-”号填列),Net Profit from Continuing Operations,1665438506.94,CNY
+Tuopu,IS,2026Q3,IS_OP,营业利润(亏损以“-”号填列),Operating Profit,1879850438.59,CNY
+Tuopu,IS,2026Q3,IS_REV,营业收入,Revenue,22615225256.89,CNY
