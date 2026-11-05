@@ -1,6 +1,19 @@
 # AUMOVIO 竞争情报项目 — 完整知识文档
-> 最后更新：2026-10-28 | 适用于下次对话直接喂给 AI 使用
-> 本次更新：**R&D Headcount & R&D Personnel Cost per Employee 改名并明确公式**（全年研发人员薪酬成本÷年末研发人员数；拓普薪酬口径不一致，用户已删除其成本数据）；此前更新：**Aumovio Operating Profit 口径修正**（IS_OP 从 EBIT 改为 Earnings before tax，对标 A股「营业利润」已扣财务费用的口径）、**Historical Trends 净利润口径统一**（A股/Aumovio 改用含少数股东的净利润，不再优先归母）；此前更新：**07 板块改名 Liquidity & Investment Intensity → Overhead**（仅文案，id/锚点/逻辑不变）；更早更新：全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
+> 最后更新：2026-11-05 | 适用于下次对话直接喂给 AI 使用
+>
+> **本次更新（2026Q3 完整更新轮，详见九章变更记录）：**
+>
+> 1. **修复 3 个真实缺陷**
+>    - 立讯 Q3 把标题写成「合并*年初到报告期末*利润表」，`extract_szse_00.py` 精确匹配不中即**静默跳过整张表**（流水线仍报成功），IS/CF 全丢 → 改为别名列表匹配，全表匹配率 90.1% → **99.9%**
+>    - `build_dashboard_tables.py` 的 `load_fact()` 只读会被覆盖的当季表，Trend 图丢失 5 家 A 股的 Q1/H1 柱子 → 增读 `_history/` 归档（**A2 归档步骤由此才真正生效**）
+>    - NASN 币种默认值在两个脚本里回归 HKD（低估 ~14.5%）、期间键误写成 `H1`（下拉出现两个重复 H1）→ 均已修，并清理 32 行历史残留
+> 2. **新增 8.2 节「手工数据的双源验证规范」**——确立「任何手工数据须经两源交叉验证方可入库」；记录东财 F10 接口正确调用方式（`filter` 必须手工 percent-encode，否则 400）、**全部股东榜 vs 无限售流通股东榜的口径区别**、change 字段计算规则（含残差项留空）、2026Q3 验证留痕（50 项比对 47 项一致）
+> 3. **删除一条不存在的流程**——知识库 4 处记载「Capital Markets 需每季度手工填行业 PE/PB」，经全文检索确认该卡片在 `index.html` 中**零命中**，P/E、P/B 实际由 workflow 每日自动更新，已全部清理
+> 4. **更正 venv 误判**——此前「venv 指向的基础解释器已失效」是错误结论；实测 venv 完全正常、依赖齐全，直接用 `venv\Scripts\python.exe` 即可，**不需要** PYTHONPATH 绕行
+> 5. **8.1 节（同轮稍早）**——A股三季报 IS/CF 对比列是上年同期（可自动补回 2025Q3），BS 对比列是上年度末（补不出，Working Capital 该期只能看 QoQ）；巨潮下载走 `static.cninfo.com.cn` 直链（`www` 域名会 404）；`_history` 归档**用复制不用剪切**（`fact_nasn.csv`/`*_eur.csv` 仍被下游依赖）
+>
+> 配套文档：`QUARTERLY_CHECKLIST.md`（A–G 七阶段打勾清单；本轮新增 Trend 表验收标准 C4/C5、推送后线上核对 D2b，阶段 F 重写）
+> 此前更新：**R&D Headcount & R&D Personnel Cost per Employee 改名并明确公式**（全年研发人员薪酬成本÷年末研发人员数；拓普薪酬口径不一致，用户已删除其成本数据）；此前更新：**Aumovio Operating Profit 口径修正**（IS_OP 从 EBIT 改为 Earnings before tax，对标 A股「营业利润」已扣财务费用的口径）、**Historical Trends 净利润口径统一**（A股/Aumovio 改用含少数股东的净利润，不再优先归母）；此前更新：**07 板块改名 Liquidity & Investment Intensity → Overhead**（仅文案，id/锚点/逻辑不变）；更早更新：全看板数据口径总表定稿（见 2.1 节，逐板块逐指标）、SG&A 拆分（Selling/G&A 两图）、Cloud Sync · GitHub 跨设备同步（含评论 ciPartNote 动态键）、NASN 数据链路重建（xlsx 中期列 → convert_nasn → patch 全量重建，修符号/白名单/精度三个 bug）、NASN Annual Deep-Dive 数据补全、Product Line 补 Luxshare/Baolong 历史线 + NASN 拆 NBS/ESC/NBC + 删 ASP 入口、全局 Q2→H1 显示、负 P/B 保留显示、rd 人均薪酬口径重定（年报附注职工薪酬÷研发人数）
 
 ---
 
@@ -70,7 +83,7 @@ PATH = {
 | 05 | Cash Flow `cashflow` | fin | **合并单图**：OCF/ICF/融资现金流柱（左轴 CNY bn）+ OCF/自由现金流利润率线（右轴 % of revenue） |
 | 06 | Working Capital `working-capital` | fin | AR/AP/净营运资本 |
 | 07 | Overhead `liquidity` | fin | R&D to Revenue、Selling Expense、G&A Expense 三图（Current Ratio 卡已删，SG&A 拆分为两图；2026-10-26 板块名由「Liquidity & Investment Intensity」改为「Overhead」，id/锚点 `liquidity` 不变） |
-| 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势 + A股底盘零部件行业 PE/PB 均值对比（见下方） |
+| 08 | Capital Markets `capital-market` | market+marketHistory | 股价、市值、PE、PB、YTD、近1月趋势（**全部由 workflow 每日自动更新，无手工项**） |
 | 09 | Ownership & People `ownership` | **localStorage + MANUAL_SEED** | 股权结构 + 员工构成 + **Education Mix（学历构成饼图，2026-10-22 新增）** + **R&D Headcount & R&D Personnel Cost per Employee（研发人数+研发人员人均成本柱线图，2026-10-22 新增）** 四张图（手动录入，见 3.6 节） |
 | 10 | Product Line `product-line` | **localStorage** | 关注产品线的营收柱 + 毛利率（ASP 线与录入入口已删，price 列仅保留兼容） |
 | 11 | Annual Deep-Dive `annual-deep-dive` | **localStorage，2026-10-22 起支持从 `data/` 自动加载** | 年报口径四卡（见 3.5 节） |
@@ -82,18 +95,19 @@ PATH = {
 > - **年度组 C**：`adYear`（Company Profile）↔ `adYearCustomer`（Customer Concentration）↔ `adYearRegion`（Regional Performance）↔ `adYearSegment`（Product Segment P&L）
 > 同组内任一下拉框都是真实双向联动（选项列表、当前值、`change` 事件三者都同步），不是摆设镜像；每次 `boot()`/`render()` 都会重新同步一次。
 
-### Capital Markets · 行业 PE/PB 均值对比卡（2026-10-19 新增）
+### ~~Capital Markets · 行业 PE/PB 均值对比卡~~（已废弃，2026-11-05 核实不存在）
 
-- 位置：Capital Markets 区块内，紧跟 Peer Market Snapshot / Market Metrics Explained 两张卡之后，Share Price Trend 之前
-- 卡片 id：`industryBenchCard`，4 个指标格 + 1 行手动输入区：
-  - **Peer Avg P/E / P/B**：自动计算，取 `market_data_verified.csv` 中 5 家 A 股标的（BTL、Baolong、HASCO、Luxshare、Tuopu，**不含 Aumovio 和 NASN**）当期 pe/pb 的简单平均，随 CSV 更新自动刷新，无需手动维护
-  - **Industry Avg P/E / P/B**：手动录入的"A股底盘与汽车零部件行业"整体估值均值（例如申万行业指数或东方财富板块估值），每个报告期录入一次即可，不随公司切换变化
-- 手动录入方式：在 `industryPeInput` / `industryPbInput` 两个输入框填数字，点击 Save；存入 `localStorage['ciIndustryBench_<period>']`（如 `ciIndustryBench_2026Q2`），按报告期隔离，不同季度互不覆盖
-- 实现要点：
-  - JS 函数 `renderIndustryBench()`：在 `renderMarket()` 末尾调用，随公司/期间切换、FX 调整自动重新计算 Peer Avg 并读取该期已存的 Industry Avg
-  - `avg(arr)`：简单平均工具函数
-  - 不进流水线、不进 CSV、不影响 `market_data_verified.csv` 的数据契约——这是看板本地展示层的手动基准线，和股权/员工/产品线手动板块同一思路（localStorage，按期间 key 隔离）
-- 每季度维护：打开 Capital Markets 卡片，手动从行业数据源（申万/东财等）查到当季度底盘与汽车零部件行业平均 PE、PB，填入两个输入框并点 Save
+> ⚠️ **本节原记载的手动录入卡在 `index.html` 中并不存在，相关说明已作废。**
+>
+> 2026-11-05 全文检索确认：`industryBenchCard`、`industryPeInput`、`industryPbInput`、
+> `ciIndustryBench`、`renderIndustryBench` 在 `index.html` 中**全部零命中**。
+> 该卡片要么从未落地，要么后续改版时被移除，但知识库未同步。
+>
+> **实际情况：Capital Markets 的 P/E、P/B 全部来自 `market_data_verified.csv`，
+> 由 GitHub workflow 每日自动抓取更新，不需要任何手工录入。**
+>
+> 因此：**每季度操作中没有"填行业 PE/PB"这一步**。
+> 若将来确实需要行业基准线，应另行设计，不要照抄本节已废弃的实现描述。
 
 ### Historical Trends · Revenue/Profit Trend 的 QoQ 环比箭头（2026-10-22 新增）
 
@@ -503,11 +517,17 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 3. 双击 run.bat（Step 0 加 --download 参数才会自动下载 PDF）
 4. 检查 terminal 输出，确认各 Step 正常完成
 5. 推送 data/ 三个财务 CSV 到 GitHub；workflow 自动更新股价
-6. 手动板块数据（股权/员工）：新季度直接在看板上选公司+季度录入，
-   或更新 MANUAL_SEED + 重新生成 CSV；录完 Export CSV 留备份
-6b. Capital Markets 行业 PE/PB：打开看板 Capital Markets 区块，在"A-Share Chassis & Auto-Parts Industry Benchmark"卡片填入当季度行业平均 PE/PB（来源如申万行业指数/东方财富板块估值），点 Save（存 localStorage，按季度隔离，不随 CSV 更新）
+6. 手动板块数据：**本季只需更新 equity（股权）**，其余 block 为年度口径
+   → 更新仓库 data/IMPORT_manual_all.csv，或在看板上选公司+季度录入后 Export 备份
+   → 股权数据必须经双源验证（官方季报 PDF + 东财 F10），见 8.2 节
 7. index.html 有改动时一并推送根目录
 ```
+
+> ℹ️ Capital Markets 的 P/E、P/B **无需任何手工操作**——`market_data_verified.csv`
+> 由 GitHub workflow 每日自动抓取。知识库早期记载的"行业 PE/PB 手动录入卡"
+> 经 2026-11-05 核实在 `index.html` 中并不存在，已作废（见二章对应小节）。
+
+> 详细分阶段清单见 `QUARTERLY_CHECKLIST.md`（A–G 七阶段，含验收标准与常见坑）。
 
 ---
 
@@ -517,13 +537,19 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 
 | 问题 | 状态 | 说明 |
 |---|---|---|
-| `venv` 指向旧项目 | ⚠️ | 跑脚本用 `PYTHONPATH=旧venv/Lib/site-packages` + 管理版 python |
+| ~~`venv` 指向旧项目~~ | ✅误判，已澄清 | **2026-11-05 实测：venv 完全正常**（Python 3.12.6，基础解释器 `C:\LegacyApp\Python\Python312` 真实存在，pandas/pdfplumber/selenium/openpyxl 等依赖齐全）。直接用 `venv\Scripts\python.exe` 即可，**不需要** PYTHONPATH 绕行。camelot/fitz 未装但全项目无脚本引用。若看到 `No Python at '"C:\...`（注意多余引号），那是终端/沙箱的路径引号处理问题，换后台进程执行即正常 |
 | mapping 中 row_type='header' 不一定是真标题 | ✅已处理 | 标准化代码只删无数值的 header 行，勿回退 |
 | A股 Q1 对比列是上年同期数但列头写期末日期 | ✅已处理 | 非 BS 报表强制 derive_comparison_period |
 | 半年度列头（"2026年半年度"→Q2）解析 | ✅已处理 | 否则 IS/CF 期间整体左移一期 |
-| combined 表期间覆盖不全 | ⚠️待补 | 缺 2025Q3/2024 全年；A股Q1 数据看板未同步 |
+| combined 表期间覆盖不全 | ✅大部已解决 | 2026-11-05 跑完 Q3 后，combined 含 2023Q4/2024Q4/2025FY/2025Q1-Q4/2026Q1-Q3 共 598 行。**2025Q3 的 IS/CF 已由 2026Q3 季报对比列自动补回（346 行），BS 仍缺，见 8.1 节** |
+| **Trend 表（sales/profit history）丢失历史期** | ✅已修（2026-11-05） | `build_dashboard_tables.py` 的 `load_fact()` 原来只读 `final_facts/` 当季表，而该表每次运行被整体覆盖、只留「本季+对比期」，导致 5 家 A 股的 Q1/H1 柱子消失。已改为增读 `_history/*/fact_financials_all_*.csv`。**A2 归档步骤由此才真正生效** |
+| **A股季报标题写法会变，解析静默跳过** | ✅已修（2026-11-05） | 立讯 Q3 写成「合并**年初到报告期末**利润表」，`find_title_page()` 精确匹配不中即跳过整表，**流水线仍报成功**。`extract_szse_00.py` 的 `STATEMENTS` 已改为别名列表。⚠️ 这类缺陷不会报错，只能靠核对行数发现；建议后续给提取脚本加「单份 PDF 未集齐 BS/IS/CF 三表即告警」的硬检查 |
+| **A股三季报对比列：IS/CF 是上年同期、BS 是上年度末** | ⚠️口径事实（非 bug） | 见下方 8.1 节 |
 | NASN 中期数据 | ✅已解决（方案A） | 2026Q2/2025Q2 走 NASN_table.xlsx 中期列 → convert_nasn → patch 重建；2025Q2 BS 为真实缺口（原为错标的 2025 年末值，已剔除）；以后新增中期 = xlsx 加列后按 convert_nasn.py → patch_nasn_selling.py 顺序重跑 |
-| 净利润口径 | ⚠️ | combined 主表 IS_NP（含少数股东）vs 历史表归母优先，两处不同口径 |
+| 净利润口径 | ✅已统一 | 2026-10-27 起两表统一用含少数股东口径（A股/NASN `IS_NP`、Aumovio `IS_NP_PROF_CONT_OPER`），历史表不再优先取归母 |
+| **NASN 期间键误写成 H1** | ✅已修（2026-11-05） | `convert_nasn.py` 的 `PERIOD_MAP` 把第二季度映射成 `2026H1`，与「数据键写 Q2、前端 `pLabel` 显示为 H1」的约定冲突，导致期间下拉出现两个重复 H1。已改为 `Q2`，累积表残留 32 行旧 H1 经校验后清除 |
+| **NASN 币种默认值回归 HKD** | ✅已修（2026-11-05） | 2026-10-19 修了底表，但 `filter_dashboard_fields.py` / `archive_dashboard_history.py` 两处 `COMPANY_CURRENCY*` 默认值漏改，跑 Q3 时 NASN 121 行又被标成 HKD（低估 ~14.5%）。已改为 CNY 并加防回退注释 |
+| `qa_spot_check.py` / `patch_nasn_selling.py` 本机缺失 | ⚠️ | 两个脚本在另一台机器上，`03_scripts/` 下没有。质检替代方案：会计恒等式自校（资产=负债+权益、利润总额勾稽、净利润两种拆分、经营现金流、现金余额），容差 1%，不依赖第三方源反而更硬。见 `QUARTERLY_CHECKLIST.md` C2 |
 | CCC 分析层（DSO/DPO/DIO） | 📝设计稿 | `05_output/analysis_layer_design.md`；依赖的 BS_CA_INV 等不在 19 个 item_code 白名单，落地需先扩白名单 |
 | `00_source_registry/mdna_notes.csv` / `product_lines.csv` | ⚠️ | 实为 xlsx 改后缀，CSV 读取会报错 |
 | 知了财报 | 🚫 | 有人机验证墙，抓不到，用东财 F10 + 巨潮/东财年报 PDF 替代 |
@@ -531,6 +557,41 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | A股 Q1 资产负债表列序 | ⚠️待修 | 立讯 2026Q1 的 6 个 BS 科目全部取到了上期（2025-12-31）列，已按官方 PDF 手工更正；根因在列序判定（期末列在左仍取错），重跑流水线可能复发，建议加回归用例 |
 | 自动抽查覆盖盲区 | ℹ️ | Aumovio 全部科目、NASN 现金流量表没有结构化第三方源，`qa_spot_check.py` 不纳入；这两类只能靠 `--official`/人工看 PDF |
 | NASN 报表币种 | ✅已修 | 报表以人民币列示（东财港股 F10 CURRENCY=CNY；营收 6.15 亿元与证券时报/中国商报/cibo 口径一致；上市/交易货币为港元是另一回事）。2026-10-19 底表 HKD→CNY，并同步修前端 `companyRate`：NASN 且 `currency=CNY` 返回 1 不再折算（此前一律 ×0.855，低估 ~14.5%） |
+
+### 8.1 A股三季报的对比列口径：2025Q3 能补 IS/CF，不能补 BS（2026-11-05 核实）
+
+> 背景：归档 2026Q2 时发现底表 `fact_financials_all.csv` 期间为
+> 2023Q4 / 2024Q4 / 2025Q1 / 2025Q2 / 2025Q4 / 2026Q1 / 2026Q2，**缺 2025Q3**，
+> 导致 2026Q3 入库后同比（YoY）无基数。
+> 核对 BTL 2026Q3 季报原文（`01_raw_data_600/603596_BTL_2026_Q3.pdf`，p9–p13）后确认如下。
+
+**三张报表的对比列不是同一个期间**（A股准则规定，不是解析 bug）：
+
+| 报表 | 2026Q3 季报里的对比列列头 | 对应期间 | 能否补出 2025Q3 |
+|---|---|---|---|
+| 合并利润表 | 「2025 年前三季度（1-9 月）」 | 2025Q3 | ✅ 能 |
+| 合并现金流量表 | 「2025 年前三季度（1-9 月）」 | 2025Q3 | ✅ 能 |
+| 合并资产负债表 | 「2025 年 12 月 31 日」 | **2025Q4（上年度末）** | ❌ 不能 |
+
+**对看板的影响**（补完 IS/CF 后，2026Q3 各板块 YoY 是否可算）：
+
+| 板块 | 依赖报表 | Q3 YoY |
+|---|---|---|
+| 02 Historical Trends（营收/净利润） | IS | ✅ |
+| 03 Profitability（毛利率/营业利润率/净利率） | IS | ✅ |
+| 05 Cash Flow（OCF/ICF/FCF margin） | CF | ✅ |
+| 07 Overhead（R&D / Selling / G&A 费用率） | IS | ✅ |
+| 06 Working Capital（AR/AP/净营运资本） | **BS** | ❌ 仍缺 2025Q3 |
+| 01 Executive Signals 的 Working capital 卡 | **BS** | ❌ 仍缺 |
+
+**处理方式**：
+- IS/CF 的 2025Q3 **由流水线自动补**——`derive_comparison_period` 对非 BS 报表强制按上年同期解析对比列，
+  跑 `run.bat` 时会把对比列单独落成 2025Q3 行，无需手工录入。
+- BS 的对比列会被正确标成 2025Q4（**不要**改成 Q3；NASN 曾因把上年度末错标为中期而产生假数据，已剔除）。
+- 若确实需要 2025Q3 的 BS，只能单独下载 2025 年三季报 PDF 重跑一次，或接受 Working Capital 板块该期只有 QoQ。
+- ⚠️ 跑完 Step 4 后必须验证：`fact_financials_all.csv` 中应出现 `period=2025Q3` 的 IS/CF 行。
+  若没出现，说明列头「2025 年前三季度（1-9 月）」这种写法不在现有正则里，
+  需要给 `derive_comparison_period` 补一条规则（已知可解析的写法：Q1 的期末日期式列头、「2026年半年度」式半年报列头）。
 
 ### index.html 前端坑（改版时注意）
 
@@ -546,7 +607,116 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 
 ---
 
+### 8.2 手工数据的双源验证规范（2026-11-05 建立）
+
+**原则：任何手工录入的数据，必须经两个独立来源交叉验证后才可入库。单源数据一律标记为"待验证"，不得直接推送看板。**
+
+#### 8.2.1 股权数据（equity block）
+
+| 角色 | 来源 | 说明 |
+|---|---|---|
+| **源 A（第一手，以此为准）** | 官方季报 PDF「前 10 名股东持股情况表」 | 本地 `01_raw_data_600/` `01_raw_data_00/` 已有，无需另外下载 |
+| **源 B（交叉验证）** | 东财 F10 `RPT_F10_EH_FREEHOLDERS` | 结构化 JSON，便于程序比对 |
+
+**东财接口调用方式**（踩过坑，照抄）：
+
+```
+https://datacenter-web.eastmoney.com/api/data/v1/get
+  ?reportName=RPT_F10_EH_FREEHOLDERS
+  &columns=ALL
+  &filter=<percent-encoded>(SECUCODE="603596.SH")</percent-encoded>
+  &pageNumber=1&pageSize=50
+  &sortColumns=END_DATE%2CHOLD_NUM&sortTypes=-1%2C-1
+  &source=HSF10&client=PC
+```
+
+- ⚠️ `filter` 必须用 `urllib.parse.quote(..., safe="")` **手工 percent-encode**。
+  用 `urlencode()` 会因引号/括号转义方式不同导致 **HTTP 400**。
+- 需带 `User-Agent` 与 `Referer: https://emweb.securities.eastmoney.com/`。
+- 返回含多个报告期，取 `max(END_DATE)` 并按 `HOLDER_RANK` 排序。
+- 关键字段：`HOLD_NUM`（股数）、`HOLD_RATIO`（比例%）、`END_DATE`（报告期）。
+
+**⚠️ 两个接口口径不同，不要混用：**
+
+| 接口 / PDF 表 | 口径 | 是否含限售股 |
+|---|---|---|
+| PDF「前 10 名股东持股情况」 | **全部股东** | ✅ 含 |
+| PDF「前 10 名无限售条件股东持股情况」 | 无限售流通股东 | ❌ 不含 |
+| 东财 `EH_FREEHOLDERS` | 无限售流通股东 | ❌ 不含 |
+
+**看板统一采用「全部股东」口径**（与历史数据一致）。两源出现差异时，先核对是否正好等于限售股数——若是，属口径差异而非错误。
+
+#### 8.2.2 change 字段计算规则
+
+| 情形 | change 取值 |
+|---|---|
+| 该股东上期也在前五 | 本期% − 上期%，保留 2 位，带正负号 |
+| 该股东上期未进前五 | **留空**（不可按 0 计算，会把"新进"误判为"增持"） |
+| 首期数据 | 留空 |
+| 「其他股东」残差项 | **仅当前五名单与上期完全相同时才计算**，名单有变动一律留空 |
+
+> 残差项留空的原因：前五名单换人会让「其他股东」剧烈跳动。
+> 例：HASCO 2026Q3 前五换了 4 家，残差项算出 −14.83pp，完全是假象，不是真实减持。
+
+#### 8.2.3 CSV 写入注意
+
+- **股东名含逗号必须加双引号**，否则列错位。典型：`"YUAN,YONGBIN"`。
+- 六行合计必须 = 100.00%（前五 + 其他股东）。
+- 股东简称沿用既有 CSV 中的写法，保持跨期连续性（如统一用「陆股通·香港结算」而非「香港中央结算有限公司」）。
+
+#### 8.2.4 验证留痕：2026Q3（50 项比对，47 项一致）
+
+| 公司 | 结果 | 备注 |
+|---|---|---|
+| BTL | 10/10 ✅ | |
+| HASCO | 10/10 ✅ | |
+| Tuopu | 10/10 ✅ | |
+| Luxshare | 10/10 ✅ | |
+| Baolong | 7/10 ⚠️ | 冯美来/陈洪泉/陈旭琳 3 人差额 = 各自限售股 5万/5万/3万股，**口径差异非错误**，已采用 PDF 全部持股口径 |
+
+本期真实变动（已双源确认）：
+
+| 公司 | 变动 |
+|---|---|
+| Luxshare | 立讯有限公司 37.32 → 35.28%（−2.04pp）、陆股通 −1.38pp；HKSCC 名义持有人 5.11% 新进 —— **H 股发行稀释** |
+| BTL | 陆股通 1.92 → 2.76%（+0.84pp），北向回补 |
+| HASCO | 陆股通 5.10 → 5.37%（+0.27pp）；上汽集团 58.32% 稳定 |
+| Tuopu | 陆股通 2.73 → 2.12%（−0.61pp），北向减持 |
+| Baolong | 基本不动（±0.02pp） |
+
+#### 8.2.5 其他手工板块的更新频率
+
+| block | 频率 | 季度更新时是否要动 |
+|---|---|---|
+| `equity` 股权 | **每季度** | ✅ 要 |
+| `headcount` 员工 | 年度 | ❌ 年报季才动 |
+| `education` 学历 | 年度 | ❌ |
+| `rd` 研发人数/人均成本 | 年度 | ❌ |
+| `productline` 产品线 | 年度 | ❌ |
+| `IMPORT_annual_all.csv`（customer/region/segment/profile） | 年度 | ❌ |
+| P/E、P/B、股价、市值 | 每日自动 | ❌ **完全无需手工**，workflow 更新 `market_data_verified.csv` |
+
+> ⚠️ 早期版本曾记载「行业 PE/PB 需每季度手工填入 Capital Markets 卡片」，
+> 2026-11-05 核实该卡片在 `index.html` 中并不存在，该步骤已从流程中删除。
+
+---
+
 ## 九、变更记录
+
+### 2026-11-05（本轮：2026Q3 更新 + 4 个脚本缺陷修复 + 双源验证规范）
+
+| 改动 | 详情 |
+|---|---|
+| **立讯 IS/CF 整表漏提（真 bug）** | 立讯 Q3 季报把标题写成「合并**年初到报告期末**利润表／现金流量表」，`extract_szse_00.py` 的 `find_title_page()` 做精确子串匹配，匹配不中就 `continue` 跳过整张表，**而流水线仍报 Step 2 成功**。结果 Luxshare 2026Q3 只有 BS 138 行、IS/CF 各 0 行，全表匹配率仅 90.1%。修复：`STATEMENTS` 由单一字符串改为**别名列表**，同步改造 `find_title_page` / `extract_statement_rows` / `_next_boundary_top`，新增 `_titles_top()`；`PARENT_TITLES` 一并补齐对应别名（否则母公司报表边界识别不到，会把母公司数据混进合并表）。修复后 Luxshare BS 60/IS 42/CF 36，匹配率 **99.9%**，未匹配行 150 → 1 |
+| **Trend 表丢失 Q1/H1（潜伏缺陷）** | `build_dashboard_tables.py` 的 `load_fact()` 只读 `final_facts/` 当季大表，而该表每次运行被 Step 4 整体覆盖、只保留「本季+对比期」。跑完 Q3 后 5 家 A 股的 Q1/H1 柱子从 Historical Trends 全部消失（AUMOVIO/NASN 因走各自数据源才幸存）。修复：`load_fact()` 增读 `final_facts/_history/*/fact_financials_all_*.csv`。修复后 sales/profit history 各 50 → **70 行**，5 家 A 股每家 11 行齐全。**这也让 A2 归档步骤真正发挥作用——此前归档了但无人读取** |
+| **NASN 币种回归 HKD** | `filter_dashboard_fields.py` 的 `COMPANY_CURRENCY_DEFAULT` 与 `archive_dashboard_history.py` 的 `COMPANY_CURRENCY` 仍把 NASN 默认币种写成 HKD，前端 `companyRate` 再 ×0.855，**NASN 全部财务数据低估约 14.5%**。2026-10-19 曾修过底表，但这两处默认值漏改。已统一改为 CNY 并加防回退注释 |
+| **期间下拉出现两个 H1** | `convert_nasn.py` 的 `PERIOD_MAP` 把「第二季度」映射成 `2026H1`／`2025H1`，与项目约定（数据键写 Q2、由前端 `pLabel` 显示为 H1）冲突，导致 combined 里 Q2 与 H1 两键并存（值完全相同），去重键因 period 不同拦不住。已改为 `Q2`；累积表中残留的 32 行旧 H1 经逐条校验（确认在对应 Q2 下均有同值副本）后一次性清除，630 → 598 行。质量报告「非标准 period 131 行」WARN 同步消除，现为 **PASS** |
+| **新增 8.2 节：手工数据双源验证规范** | 确立「任何手工数据须经两源交叉验证方可入库」原则；记录东财 F10 接口正确调用方式（`filter` 必须手工 percent-encode，否则 400）、全部股东榜 vs 无限售流通股东榜的口径区别、change 字段计算规则（含残差项留空规则）、2026Q3 验证留痕 |
+| **venv 误判更正** | 此前判定「venv 指向的基础解释器已失效」是**错误结论**。实测 `C:\LegacyApp\Python\Python312\python.exe` 真实存在，venv 正常运行（3.12.6），依赖齐全；camelot/fitz 未装但全项目无任何脚本引用。原报错 `No Python at '"C:\...` 来自前台沙箱的路径引号处理，与 venv 无关。第八节原「venv 指向旧项目」警告已过时，反而误导排查方向 |
+| 2026Q3 数据落库 | 5 家 A 股全部入库（Aumovio/NASN 本季无数据）。2025Q3 的 IS/CF 对比期由 `derive_comparison_period` 兜底自动生成（346 行），**无需补 `parse_period_from_header` 正则**；BS 对比列正确标为 2025Q4 未误标。58 项会计恒等式勾稽全部通过 |
+| **删除不存在的「行业 PE/PB 手动录入」步骤** | 知识库 4 处记载 Capital Markets 有一张 `industryBenchCard` 需每季度手工填行业 PE/PB。2026-11-05 全文检索 `index.html` 确认 `industryBenchCard`/`industryPeInput`/`industryPbInput`/`ciIndustryBench`/`renderIndustryBench` **全部零命中**——该卡从未落地或已被移除。P/E、P/B 实际全部来自 workflow 每日自动更新的 `market_data_verified.csv`。已清理二章小节、2.x 板块表、七章操作手册 6b 步、8.2.5 频率表、2026-10-19 变更记录共 5 处 |
+| 文档 | `QUARTERLY_CHECKLIST.md` 新增 C4（Trend 表验收标准）、C5（Step 4d 单步重生成）、D1 强化「三个文件缺一不可」、D2b（推送后核对线上 CSV 实际内容）、G1b；常见坑表新增 4 行；删除 F3 行业 PE/PB 步骤 |
+| 2026Q3 股权数据 | 5 家 A 股双源验证通过（官方季报 PDF × 东财 F10，50 项比对 47 项一致，保隆 3 项为限售股口径差异）。已追加 30 行到 `05_output/IMPORT_manual_all.csv`（372 → 402 行），各公司合计均 100.00% |
 
 ### 2026-10-27（本轮：Aumovio Operating Profit 口径修正 + 净利润历史口径统一）
 
@@ -661,7 +831,7 @@ company | statement_type | period | item_code | item | item_en | value | currenc
 | CSV 导入体验修复 | 导入后自动切到有数据的公司+最新期间并滚动定位；公司 chips 一览数据覆盖；toast 提示；空态提示该公司其他有数据期间；GBK/UTF-8 自动识别；`#company` 空时兜底填充 |
 | 隐藏 bug 修复 | `function kpis` 与 `id="kpis"` 同名导致 KPI 从未渲染；`.pie-empty[hidden]` 失效；Total 行错位；首期假变动 +18.24 |
 | 股价趋势图坐标/图例修复 | 趋势图 tick/标题/图例原为白色（深色卡遗留）在浅色卡上不可见 → 改主题色 `#6E6B84` + 网格 `rgba(83,74,183,.10)` + 坐标轴线；Chart.js 内置图例换成图表下方 HTML 网格图例（3 列、色条对齐、点击显示/隐藏数据集、选中公司高亮，状态存 `window.__trendHidden`）；tooltip 补 titleColor/bodyColor |
-| Capital Markets 新增行业 PE/PB 均值卡 | `industryBenchCard`：自动算 5 家 A 股同业（BTL/Baolong/HASCO/Luxshare/Tuopu）PE/PB 简单平均，并提供两个输入框手动录入"行业整体"PE/PB 均值（每季度一次，存 `localStorage['ciIndustryBench_<period>']`）；不进 CSV、不进流水线，纯前端展示层 |
+| ~~Capital Markets 新增行业 PE/PB 均值卡~~ | ⚠️ **2026-11-05 核实：该卡在 `index.html` 中不存在**（`industryBenchCard`/`industryPeInput`/`ciIndustryBench` 全部零命中），本条记载作废。P/E、P/B 实际全部来自 workflow 每日更新的 `market_data_verified.csv`，无手工录入环节 |
 | Cash Flow 双图合并 | Cash Flow Benchmark（OCF/ICF/融资现金流柱）与 Cash Conversion Benchmark（OCF/FCF 利润率柱）信息重复 → 合并为一张全宽组合图：3 组柱（左轴 CNY bn）+ OCF margin 实线 / Free CF margin 虚线（右轴 %）；删除第二张画布与 `cashFlowStructureChart/cfb/cfs`，改用 `cashFlowChart`+`charts.cf` |
 | 新增随机抽查质检 | `03_scripts/qa_spot_check.py`：每家公司随机抽格 → 对照东财 F10（独立链路）→ 不一致时自动给巨潮官方 PDF 链接并可下载定位页码；带覆盖台账与日志，退出码可接 CI |
 | 修正 NASN 币种标注 | 底表/销售历史/利润历史里 NASN 89+8+7 行 currency 由 HKD 改为 **CNY**（报表以人民币列示，数值与东财港股 F10 完全一致）；此前前端按 0.855 折算，导致 NASN 全部财务数字被低估约 14.5% |
