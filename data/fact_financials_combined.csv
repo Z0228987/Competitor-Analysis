@@ -442,21 +442,6 @@ NASN,IS,2024Q4,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expe
 NASN,IS,2024Q4,IS_GROSS_PROFIT,毛利,Gross Profit,41930000.0,CNY
 NASN,IS,2024Q4,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,169521000.0,CNY
 NASN,IS,2024Q4,IS_REV,收益,Revenue,390737000.0,CNY
-NASN,BS,2025H1,BS_CA_AR,应收贸易账款及票据,Trade and Bills Receivables,384438000.0,CNY
-NASN,BS,2025H1,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,948750000.0,CNY
-NASN,BS,2025H1,BS_CL_ACCO_PAYA,应付贸易账款及票据,Trade and Bills Payables,234261000.0,CNY
-NASN,BS,2025H1,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2231629000.0,CNY
-NASN,CF,2025H1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,916000.0,CNY
-NASN,CF,2025H1,CF_INV_NET,投资活动现金流量净额,Net Cash Flows Generated from Investing Activities,237139000.0,CNY
-NASN,CF,2025H1,CF_OP_NET,经营活动现金流量净额,Net Cash Flows from Operating Activities,-212451000.0,CNY
-NASN,IS,2025H1,IS_COGS,销售成本,Operating Costs,233728000.0,CNY
-NASN,IS,2025H1,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,19669000.0,CNY
-NASN,IS,2025H1,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,37283000.0,CNY
-NASN,IS,2025H1,IS_GROSS_PROFIT,毛利,Gross Profit,35513000.0,CNY
-NASN,IS,2025H1,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,70177000.0,CNY
-NASN,IS,2025H1,IS_NP,净利润,Net Profit,-70177000.0,CNY
-NASN,IS,2025H1,IS_OP,营业利润,Operating Profit,-7751000.0,CNY
-NASN,IS,2025H1,IS_REV,收益,Revenue,269241000.0,CNY
 NASN,CF,2025Q1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,-1880000.0,CNY
 NASN,CF,2025Q1,CF_INV_NET,投资活动所得╱所用现金流量净额,Net Cash Flows Generated from / Used in Investing Activities,215123000.0,CNY
 NASN,CF,2025Q1,CF_OP_NET,经营活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Operating Activities,-128335000.0,CNY
@@ -493,23 +478,6 @@ NASN,IS,2025Q4,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expe
 NASN,IS,2025Q4,IS_GROSS_PROFIT,毛利,Gross Profit,83615000.0,CNY
 NASN,IS,2025Q4,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,189524000.0,CNY
 NASN,IS,2025Q4,IS_REV,收益,Revenue,614506000.0,CNY
-NASN,BS,2026H1,BS_CA_AR,应收贸易账款及票据,Trade and Bills Receivables,413304000.0,CNY
-NASN,BS,2026H1,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,843891000.0,CNY
-NASN,BS,2026H1,BS_CL_ACCO_PAYA,应付贸易账款及票据,Trade and Bills Payables,226246000.0,CNY
-NASN,BS,2026H1,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2282674000.0,CNY
-NASN,BS,2026H1,BS_TOTAL_ASSETS,资产总值,Total Assets,1170570000.0,CNY
-NASN,BS,2026H1,BS_TOTAL_LIAB,负债合计,Total Liabilities,2328751000.0,CNY
-NASN,CF,2026H1,CF_FIN_NET,融资活动所用╱所得现金流量净额,Net Cash Flows Used in / Generated from Financing Activities,3455000.0,CNY
-NASN,CF,2026H1,CF_INV_NET,投资活动现金流量净额,Net Cash Flows Generated from Investing Activities,92218000.0,CNY
-NASN,CF,2026H1,CF_OP_NET,经营活动现金流量净额,Net Cash Flows from Operating Activities,-131108000.0,CNY
-NASN,IS,2026H1,IS_COGS,销售成本,Operating Costs,319051000.0,CNY
-NASN,IS,2026H1,IS_COST_ADMI_EXPE,行政开支,Administrative Expenses,32883000.0,CNY
-NASN,IS,2026H1,IS_COST_RESE_DEVE_EXPE,研发开支,Research and Development Expenses,49731000.0,CNY
-NASN,IS,2026H1,IS_GROSS_PROFIT,毛利,Gross Profit,49258000.0,CNY
-NASN,IS,2026H1,IS_LOSS_BEFORE_TAX,除税前亏损,Loss Before Tax,109630000.0,CNY
-NASN,IS,2026H1,IS_NP,净利润,Net Profit,-109630000.0,CNY
-NASN,IS,2026H1,IS_OP,营业利润,Operating Profit,-38224000.0,CNY
-NASN,IS,2026H1,IS_REV,收益,Revenue,368309000.0,CNY
 NASN,BS,2026Q1,BS_CA_TOTAL_CURR_ASSE,流动资产总值,Total Current Assets,833979000.0,CNY
 NASN,BS,2026Q1,BS_CL_TOTAL_CURR_LIAB,流动负债总额,Total Current Liabilities,2206437000.0,CNY
 NASN,BS,2026Q1,BS_TOTAL_ASSETS,资产总值,Total Assets,1140805000.0,CNY
