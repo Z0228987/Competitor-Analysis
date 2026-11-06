@@ -83,48 +83,54 @@ equity,Baolong,2026Q2,先进制造产业基金二期,4.23,,,,-0.01
 equity,Baolong,2026Q2,冯美来,1.70,,,,+0.02
 equity,Baolong,2026Q2,陈洪泉,1.45,,,,+0.02
 equity,Baolong,2026Q2,其他股东,66.68,,,,-0.12
-equity,HASCO,2024Q4,均胜集团,36.73,,,,
-equity,HASCO,2024Q4,王剑峰,2.49,,,,
-equity,HASCO,2024Q4,陆股通·香港结算,1.21,,,,
-equity,HASCO,2024Q4,中证500 ETF,0.99,,,,
-equity,HASCO,2024Q4,谢科鸟,0.81,,,,
-equity,HASCO,2024Q4,其他股东,57.77,,,,
-equity,HASCO,2025Q1,均胜集团,36.73,,,,
-equity,HASCO,2025Q1,陆股通·香港结算,3.99,,,,+2.78
-equity,HASCO,2025Q1,王剑峰,2.49,,,,
-equity,HASCO,2025Q1,中证500 ETF,0.90,,,,-0.09
-equity,HASCO,2025Q1,张振,0.89,,,,+0.18
-equity,HASCO,2025Q1,其他股东,55.00,,,,-2.77
-equity,HASCO,2025Q2,均胜集团,36.83,,,,+0.10
-equity,HASCO,2025Q2,陆股通·香港结算,4.74,,,,+0.75
-equity,HASCO,2025Q2,王剑峰,2.52,,,,+0.03
-equity,HASCO,2025Q2,中证500 ETF,1.04,,,,+0.14
-equity,HASCO,2025Q2,张振,0.89,,,,
-equity,HASCO,2025Q2,其他股东,53.98,,,,-1.02
-equity,HASCO,2025Q3,均胜集团,37.31,,,,+0.48
-equity,HASCO,2025Q3,陆股通·香港结算,6.66,,,,+1.92
-equity,HASCO,2025Q3,王剑峰,2.54,,,,+0.02
-equity,HASCO,2025Q3,张建成,1.10,,,,
-equity,HASCO,2025Q3,中证500 ETF,1.03,,,,-0.01
-equity,HASCO,2025Q3,其他股东,51.36,,,,-2.62
-equity,HASCO,2025Q4,均胜集团,33.57,,,,-3.74
-equity,HASCO,2025Q4,HKSCC 名义持有人,10.00,,,,
-equity,HASCO,2025Q4,陆股通·香港结算,4.63,,,,-2.03
-equity,HASCO,2025Q4,王剑峰,2.29,,,,-0.25
-equity,HASCO,2025Q4,中证500 ETF,0.93,,,,-0.10
-equity,HASCO,2025Q4,其他股东,48.58,,,,-2.78
-equity,HASCO,2026Q1,均胜集团,33.57,,,,
-equity,HASCO,2026Q1,HKSCC 名义持有人,10.00,,,,
-equity,HASCO,2026Q1,陆股通·香港结算,3.75,,,,-0.88
-equity,HASCO,2026Q1,王剑峰,2.29,,,,
-equity,HASCO,2026Q1,易方达AI ETF,0.56,,,,+0.05
-equity,HASCO,2026Q1,其他股东,49.83,,,,+1.25
-equity,HASCO,2026Q2,均胜集团,33.57,,,,
-equity,HASCO,2026Q2,HKSCC 名义持有人,10.00,,,,
-equity,HASCO,2026Q2,陆股通·香港结算,5.10,,,,+1.35
-equity,HASCO,2026Q2,王剑峰,2.30,,,,+0.01
-equity,HASCO,2026Q2,谢科鸟,0.48,,,,
-equity,HASCO,2026Q2,其他股东,48.55,,,,-1.28
+equity,HASCO,2024Q4,上汽集团,58.32,,,,
+equity,HASCO,2024Q4,陆股通·香港结算,3.80,,,,
+equity,HASCO,2024Q4,证金公司,2.99,,,,
+equity,HASCO,2024Q4,国泰沪深300ETF,0.86,,,,
+equity,HASCO,2024Q4,全国社保基金101组合,0.82,,,,
+equity,HASCO,2024Q4,其他股东,33.21,,,,
+equity,HASCO,2025Q1,上汽集团,58.32,,,,
+equity,HASCO,2025Q1,陆股通·香港结算,3.67,,,,-0.13
+equity,HASCO,2025Q1,证金公司,2.99,,,,
+equity,HASCO,2025Q1,全国社保基金101组合,0.83,,,,+0.01
+equity,HASCO,2025Q1,国泰沪深300ETF,0.82,,,,-0.04
+equity,HASCO,2025Q1,其他股东,33.37,,,,+0.16
+equity,HASCO,2025Q2,上汽集团,58.32,,,,
+equity,HASCO,2025Q2,陆股通·香港结算,4.42,,,,+0.75
+equity,HASCO,2025Q2,证金公司,2.99,,,,
+equity,HASCO,2025Q2,大成高鑫股票型证券投资基金,1.02,,,,
+equity,HASCO,2025Q2,国泰沪深300ETF,0.89,,,,+0.07
+equity,HASCO,2025Q2,其他股东,32.36,,,,
+equity,HASCO,2025Q3,上汽集团,58.32,,,,
+equity,HASCO,2025Q3,陆股通·香港结算,5.21,,,,+0.79
+equity,HASCO,2025Q3,证金公司,2.99,,,,
+equity,HASCO,2025Q3,大成高鑫股票型证券投资基金,0.90,,,,-0.12
+equity,HASCO,2025Q3,国泰沪深300ETF,0.85,,,,-0.04
+equity,HASCO,2025Q3,其他股东,31.73,,,,-0.63
+equity,HASCO,2025Q4,上汽集团,58.32,,,,
+equity,HASCO,2025Q4,陆股通·香港结算,6.74,,,,+1.53
+equity,HASCO,2025Q4,证金公司,2.99,,,,
+equity,HASCO,2025Q4,大成高鑫股票型证券投资基金,0.94,,,,+0.04
+equity,HASCO,2025Q4,国泰沪深300ETF,0.83,,,,-0.02
+equity,HASCO,2025Q4,其他股东,30.18,,,,-1.55
+equity,HASCO,2026Q1,上汽集团,58.32,,,,
+equity,HASCO,2026Q1,陆股通·香港结算,7.32,,,,+0.58
+equity,HASCO,2026Q1,证金公司,2.64,,,,-0.35
+equity,HASCO,2026Q1,大成高鑫股票型证券投资基金,0.91,,,,-0.03
+equity,HASCO,2026Q1,全国社保基金101组合,0.70,,,,
+equity,HASCO,2026Q1,其他股东,30.11,,,,
+equity,HASCO,2026Q2,上汽集团,58.32,,,,
+equity,HASCO,2026Q2,陆股通·香港结算,6.79,,,,-0.53
+equity,HASCO,2026Q2,全国社保基金101组合,0.65,,,,-0.05
+equity,HASCO,2026Q2,基本养老保险808组合,0.57,,,,
+equity,HASCO,2026Q2,国泰海通证券,0.57,,,,
+equity,HASCO,2026Q2,其他股东,33.10,,,,
+equity,HASCO,2026Q3,上汽集团,58.32,,,,
+equity,HASCO,2026Q3,陆股通·香港结算,5.37,,,,-1.42
+equity,HASCO,2026Q3,国信证券,1.06,,,,
+equity,HASCO,2026Q3,人保财险·自有资金,0.87,,,,
+equity,HASCO,2026Q3,易方达国证价值100ETF,0.66,,,,
+equity,HASCO,2026Q3,其他股东,33.72,,,,
 equity,Luxshare,2024Q4,立讯有限公司,37.74,,,,
 equity,Luxshare,2024Q4,陆股通·香港结算,6.28,,,,
 equity,Luxshare,2024Q4,华泰柏瑞沪深300ETF,1.21,,,,
@@ -354,12 +360,6 @@ equity,Baolong,2026Q3,先进制造产业基金二期,4.23,,,,
 equity,Baolong,2026Q3,冯美来,1.68,,,,-0.02
 equity,Baolong,2026Q3,陈洪泉,1.45,,,,
 equity,Baolong,2026Q3,其他股东,66.70,,,,+0.02
-equity,HASCO,2026Q3,上汽集团,58.32,,,,
-equity,HASCO,2026Q3,陆股通·香港结算,5.37,,,,+0.27
-equity,HASCO,2026Q3,国信证券,1.06,,,,
-equity,HASCO,2026Q3,人保财险·自有资金,0.87,,,,
-equity,HASCO,2026Q3,易方达国证价值100ETF,0.66,,,,
-equity,HASCO,2026Q3,其他股东,33.72,,,,
 equity,Luxshare,2026Q3,立讯有限公司,35.28,,,,-2.04
 equity,Luxshare,2026Q3,陆股通·香港结算,6.52,,,,-1.38
 equity,Luxshare,2026Q3,HKSCC 名义持有人,5.11,,,,
